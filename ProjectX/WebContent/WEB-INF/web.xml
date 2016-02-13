@@ -10,6 +10,6 @@
 </servlet>
 <servlet-mapping>
 <servlet-name>LoginServlet</servlet-name>
-<url-pattern>/home</url-pattern>
+<url-pattern>/myprojects</url-pattern>
 </servlet-mapping>
 </web-app>
