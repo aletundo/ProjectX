@@ -15,7 +15,7 @@
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="#">My Projects</a></li>
-				<li><a href="/logout">Logout</a></li>
+				<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
 			</ul>
 		</div>
 		<!--/.nav-collapse -->

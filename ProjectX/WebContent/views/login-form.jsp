@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<form class="form center-block" action="/projectx/myprojects"
+<form class="form center-block" action="${pageContext.request.contextPath}/myprojects"
 	method="POST" autocomplete="off">
 	<div class="form-group input-group">
             <span class="input-group-addon"><i class="fa fa-user"></i></span>

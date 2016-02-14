@@ -10,10 +10,7 @@
 <jsp:include page="/views/navbar.jsp" />
 <%
 //Check session exists
-String user = null;
-if(session.getAttribute("user") == null){
-    response.sendRedirect("/projectx/index.jsp");
-}else user = (String) session.getAttribute("user");
+String user = (String) session.getAttribute("user");
 String sessionID = null;
 Cookie[] cookies = request.getCookies();
 if(cookies !=null){

@@ -45,13 +45,12 @@ public class LoginServlet extends HttpServlet {
 	        
 		}
 	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//No possibility to get the resources before login
+		response.sendRedirect(request.getContextPath());
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher dispatcher =
-				getServletContext().getRequestDispatcher("/views/myprojects.jsp");
-				dispatcher.forward(request, response);
 	}
-
 }
