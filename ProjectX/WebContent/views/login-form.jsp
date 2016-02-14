@@ -4,12 +4,12 @@
 	method="POST" autocomplete="off">
 	<div class="form-group input-group">
             <span class="input-group-addon"><i class="fa fa-user"></i></span>
-            <input class="form-control input-lg" type="text" name='user' placeholder="Username" required autofocus/>          
+            <input class="form-control input-lg" type="text" name='user' placeholder="Username" required/>          
           </div>
 	<div class="form-group input-group">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
 		<input class="form-control input-lg" name="pw"
-			placeholder="Password" type="password" autofocus required>
+			placeholder="Password" type="password" required>
 	</div>
 	<div class="form-group">
 			<button class="btn btn-success btn-lg btn-block" type="submit">
