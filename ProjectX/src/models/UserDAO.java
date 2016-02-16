@@ -61,11 +61,19 @@ public class UserDAO {
 		return stored;
 	}
 
+	/**
+	 * Validate a user comparing his stored hash pw with an hash calculated at
+	 * runtime with the user's pw and the stored random salt
+	 * 
+	 * @param user,
+	 *            a bean which contains user's username and pw to be validated
+	 * @return isAuthenticated
+	 */
 	public boolean validateUser(UserBean user) {
 
 		Connection currentConn = DbConnection.connect();
-		PreparedStatement statement;
-		ResultSet rs;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
 		Boolean isAuthenticated = false;
 
 		if (currentConn != null) {
@@ -86,9 +94,13 @@ public class UserDAO {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace(); // TODO Handle with a Logger
+			}finally {
+			    try { rs.close(); } catch (Exception e) { /* ignored */ }
+			    try { statement.close(); } catch (Exception e) { /* ignored */ }
+			    DbConnection.disconnect(currentConn);
 			}
+
 		}
-		DbConnection.disconnect(currentConn);
 
 		String saltedPassword = user.getSalt() + user.getPw();
 		String hashedPassword = generateHash(saltedPassword);
@@ -104,13 +116,24 @@ public class UserDAO {
 		}
 		return isAuthenticated;
 	}
+	
+	/*public List<Projects> getProjects(UserBean user) {
+		
+	}*/
 
-	private static String generateHash(String input) {
+	/**
+	 * Generate a SHA-256 hash
+	 * 
+	 * @param saltedPw,
+	 *            a string composed by a random salt and user's pw
+	 * @return hash, a string hashed with SHA-256
+	 */
+	private static String generateHash(String saltedPw) {
 		StringBuilder hash = new StringBuilder();
 
 		try {
-			MessageDigest sha = MessageDigest.getInstance("SHA-256");
-			byte[] hashedBytes = sha.digest(input.getBytes());
+			MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			byte[] hashedBytes = sha256.digest(saltedPw.getBytes());
 			char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 			for (int idx = 0; idx < hashedBytes.length; ++idx) {
 				byte b = hashedBytes[idx];
@@ -123,4 +146,6 @@ public class UserDAO {
 
 		return hash.toString();
 	}
+	
+	
 }

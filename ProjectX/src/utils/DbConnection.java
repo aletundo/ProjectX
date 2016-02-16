@@ -55,8 +55,7 @@ public class DbConnection {
 			if (conn != null)
 				conn.close();
 		} catch (SQLException se) {
-			//TODO Handles errors in a Logger
-			se.printStackTrace();
+			//Ignored
 		}
 	}
 }

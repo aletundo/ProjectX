@@ -20,31 +20,40 @@ public class LoginServlet extends HttpServlet {
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		//Get query parameters
 		String username = request.getParameter("user");
 		String pw = request.getParameter("pw");
+		RequestDispatcher dispatcher;
 		
+		//Set a user bean
 		UserBean user = new UserBean();
 		user.setPw(pw);
 		user.setUsername(username);
 		System.out.println("Username: " + user.getUsername());
 		
+		//Validate user
 		boolean userValid = UserDAO.getInstance().validateUser(user);
 		
 		System.out.println(userValid);
 		
+		//If the user inserts a valid username and pw, create a session, a cookie
+		//and give to him his projects
 		if(userValid){
-
+			
+			//UserDAO.getInstance().getProjects(user);
 	        HttpSession session = request.getSession();  
 	        session.setAttribute("user", username);
-	        //Setting session to expiry in 30 mins
+	        //Setting session to expiry in 30 minuntes
             session.setMaxInactiveInterval(30*60);
             Cookie userName = new Cookie("user", username);
             userName.setMaxAge(30*60);
             response.addCookie(userName);
-	        RequestDispatcher dispatcher =
-					getServletContext().getRequestDispatcher("/views/myprojects.jsp");
+            
+	        dispatcher = getServletContext().getRequestDispatcher("/views/myprojects.jsp");
 			dispatcher.forward(request, response);
-	        
+		} else{
+			//Redirect to home(login page)
+			response.sendRedirect(request.getContextPath());
 		}
 	}
 	
