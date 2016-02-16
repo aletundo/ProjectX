@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <jsp:include page="/views/head-imports.jsp" />
@@ -24,7 +23,9 @@
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
 			<div id="projects-panel" class="panel panel-primary">
-				<div class="panel-heading">Your projects</div>
+				<div class="panel-heading">
+					<h3 class="panel-title">Your projects</h3>
+				</div>
 
 				<div class="panel-body">
 					<p>
@@ -35,9 +36,9 @@
 
 				<table class="table">
 					<tr>
-						<th>Project Name</th>
-						<th>Client</th>
-						<th>Project Manager</th>
+						<th><i class="fa fa-tag"></i>&nbsp;Project Name</th>
+						<th><i class="fa fa-user"></i>&nbsp;Client</th>
+						<th><i class="fa fa-magic"></i>&nbsp;Project Manager</th>
 					</tr>
 
 					<c:forEach items="${requestScope.projects}" var="project">
@@ -54,7 +55,9 @@
 			</div>
 		</div>
 		<div class="col-md-3 col-xs-12">
-			Your Session ID=<%=sessionID%>
+			<jsp:include page="/views/sidebar-project-manager.jsp" />
+			<p>
+				Your Session ID=<%=sessionID%></p>
 		</div>
 	</div>
 	<jsp:include page="/views/footer.jsp" />

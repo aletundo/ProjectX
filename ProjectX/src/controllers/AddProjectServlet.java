@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,9 +21,7 @@ import models.ProjectDAO;
 public class AddProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		ProjectBean project = new ProjectBean();
@@ -38,11 +38,11 @@ public class AddProjectServlet extends HttpServlet {
 		double budget = Double.parseDouble(request.getParameter("budget"));
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");
-		String clientName = request.getParameter("clientName");
-		String clientMail = request.getParameter("clientMail");
-		String subjectAreas = request.getParameter("subjectAreas");
-		int estimatedDuration = Integer.parseInt(request.getParameter("estimatedDuration"));
-		double estimatedCosts = Double.parseDouble(request.getParameter("estimatedCosts"));
+		String clientName = request.getParameter("client-name");
+		String clientMail = request.getParameter("client-mail");
+		String subjectAreas = request.getParameter("subject-areas");
+		int estimatedDuration = Integer.parseInt(request.getParameter("estimated-duration"));
+		double estimatedCosts = Double.parseDouble(request.getParameter("estimated-costs"));
 		String deadline = request.getParameter("deadline"); //yyyy-MM-dd
 		
 		project.setName(name);
@@ -61,6 +61,14 @@ public class AddProjectServlet extends HttpServlet {
 		project.setIdClient(idClient);
 		boolean added = ProjectDAO.getInstance().addProject(project);	
 		System.out.println(added);
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
+		dispatcher.forward(request, response);
 	}
 
 }

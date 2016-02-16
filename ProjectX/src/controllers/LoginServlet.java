@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("username", username);
 			session.setAttribute("idUser", user.getIdUser());
 			session.setAttribute("userType", user.getType());
-			// Setting session to expiry in 30 minuntes
+			// Setting session to expires in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
 			Cookie userName = new Cookie("user", username);
 			userName.setMaxAge(30 * 60);
@@ -66,8 +66,19 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// No possibility to get the resources before login
-		response.sendRedirect(request.getContextPath());
+		if(request.getSession().isNew())
+			response.sendRedirect(request.getContextPath());
+		else{
+			Integer idUser = (Integer) request.getSession().getAttribute("idUser");
+			UserBean user = new UserBean();
+			user.setIdUser(idUser);
+			List<ProjectBean> projects = ProjectDAO.getInstance().getUserProjects(user);
+			if (!projects.isEmpty()) {
+				request.setAttribute("projects", projects);
+			}
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/myprojects.jsp");
+			dispatcher.forward(request, response);
+		}
 
 	}
 }

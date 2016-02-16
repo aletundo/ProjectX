@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import utils.DbConnection;
 
@@ -20,6 +22,47 @@ public class ClientDAO {
 
 		return INSTANCE;
 
+	}
+	
+	public List<ClientBean> getRelatedClients(String subjectArea)
+	{
+		List<ClientBean> clients = new ArrayList<ClientBean>();
+		Connection currentConn = DbConnection.connect();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		
+		if (currentConn != null) {
+			final String getRelatedClientsQuery = "SELECT * FROM Client AS C "
+					+ "JOIN Project AS P ON C.idClient = P.idClient WHERE P.subjectAres LIKE '%?%'";
+			try {
+				statement = currentConn.prepareStatement(getRelatedClientsQuery);
+				statement.setString(1, subjectArea);
+				rs = statement.executeQuery();
+
+				while (rs.next()){
+					ClientBean client = new ClientBean();
+					client.setIdClient(rs.getInt("IdClient"));
+					client.setName(rs.getString("Name"));
+					client.setMail(rs.getString("Mail"));
+					clients.add(client);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				try {
+					rs.close();
+				} catch (Exception e) {
+					/* ignored */ }
+				try {
+					statement.close();
+				} catch (Exception e) {
+					/* ignored */ }
+				DbConnection.disconnect(currentConn);
+			}
+		}
+		
+		return clients;
 	}
 
 	public int addClient(ClientBean client) {

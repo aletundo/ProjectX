@@ -19,7 +19,6 @@ public class LogoutServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// Invalidate current HTTP session.
-		// Will call JAAS LoginModule logout() method
 		request.getSession().invalidate();
 
 		// Redirect the user to the secure web page.
