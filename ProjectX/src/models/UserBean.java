@@ -2,7 +2,7 @@ package models;
 
 public class UserBean {
 	
-	private int id;
+	private int idUser;
 	private String username;
 	private String hashPw;
 	private String salt;
@@ -16,7 +16,7 @@ public class UserBean {
 	}
 
 	public int getId() {
-		return id;
+		return idUser;
 	}
 
 	public String getPw() {
@@ -27,8 +27,8 @@ public class UserBean {
 		this.pw = pw;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
 	}
 
 	public String getUsername() {

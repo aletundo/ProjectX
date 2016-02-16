@@ -77,7 +77,7 @@ public class UserDAO {
 		Boolean isAuthenticated = false;
 
 		if (currentConn != null) {
-			String validateQuery = "SELECT U.idUser AS Id, U.salt as Salt, U.hashPw as HashPw FROM User AS U WHERE U.username LIKE ?";
+			String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw as HashPw FROM User AS U WHERE U.username LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(validateQuery);
 				String username = user.getUsername();
@@ -87,7 +87,7 @@ public class UserDAO {
 				System.out.println(validateQuery);
 
 				while (rs.next()) {
-					user.setId(rs.getInt("Id"));
+					user.setIdUser(rs.getInt("IdUser"));
 					System.out.println(rs.getString("Salt"));
 					user.setSalt(rs.getString("Salt"));
 					user.setHashPw(rs.getString("HashPw"));
