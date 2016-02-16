@@ -15,7 +15,25 @@ public class ProjectBean {
 	private double estimatedCosts;
 	private Date deadline;
 	private int estimatedDuration;
+	private String pmName;
+	private String clientName;
 	
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getPmName() {
+		return pmName;
+	}
+
+	public void setPmName(String pmName) {
+		this.pmName = pmName;
+	}
+
 	public ProjectBean(){
 		
 	}

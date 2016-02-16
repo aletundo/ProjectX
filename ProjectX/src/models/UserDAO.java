@@ -38,8 +38,8 @@ public class UserDAO {
 		if (currentConn != null) {
 			// String signUpQuery = "INSERT INTO User(username, salt, hashpw)
 			// VALUES(?, ?, ?)";
-			String signUpQuery = "INSERT INTO User(username, salt, hashpw) VALUES('" + user.getUsername() + "','"
-					+ user.getSalt() + "','" + user.getHashPw() + "')";
+			String signUpQuery = "INSERT INTO User(username, name, salt, hashpw, type) VALUES('" + user.getUsername() + "','" + user.getName()
+			+ "','" + user.getSalt() + "','" + user.getHashPw() + "','" + user.getType() + "')";
 			try {
 				/*
 				 * statement = currentConn.prepareStatement(signUpQuery);
@@ -77,7 +77,7 @@ public class UserDAO {
 		Boolean isAuthenticated = false;
 
 		if (currentConn != null) {
-			String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw as HashPw FROM User AS U WHERE U.username LIKE ?";
+			String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw AS HashPW, U.type As Type FROM User AS U WHERE U.username LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(validateQuery);
 				String username = user.getUsername();
@@ -91,6 +91,7 @@ public class UserDAO {
 					System.out.println(rs.getString("Salt"));
 					user.setSalt(rs.getString("Salt"));
 					user.setHashPw(rs.getString("HashPw"));
+					user.setType(rs.getString("Type"));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace(); // TODO Handle with a Logger

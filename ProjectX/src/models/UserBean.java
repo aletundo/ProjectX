@@ -15,7 +15,7 @@ public class UserBean {
 		
 	}
 
-	public int getId() {
+	public int getIdUser() {
 		return idUser;
 	}
 
