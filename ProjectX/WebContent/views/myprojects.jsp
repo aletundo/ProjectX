@@ -11,7 +11,7 @@
 	<jsp:include page="/views/navbar.jsp" />
 	<%
 		//Check session exists
-		String user = (String) session.getAttribute("user");
+		String user = (String) session.getAttribute("username");
 		String sessionID = null;
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {

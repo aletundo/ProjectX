@@ -48,7 +48,6 @@ public class UserDAO {
 				 * statement.setString(3, user.getHashPw());
 				 */
 				statement = currentConn.prepareStatement(signUpQuery);
-				System.out.println(statement.toString());
 
 				statement.executeUpdate(signUpQuery);
 				stored = true;
@@ -84,11 +83,8 @@ public class UserDAO {
 				statement.setString(1, username);
 				rs = statement.executeQuery();
 
-				System.out.println(validateQuery);
-
 				while (rs.next()) {
 					user.setIdUser(rs.getInt("IdUser"));
-					System.out.println(rs.getString("Salt"));
 					user.setSalt(rs.getString("Salt"));
 					user.setHashPw(rs.getString("HashPw"));
 					user.setType(rs.getString("Type"));
@@ -106,10 +102,7 @@ public class UserDAO {
 		String saltedPassword = user.getSalt() + user.getPw();
 		String hashedPassword = generateHash(saltedPassword);
 		String storedPasswordHash = user.getHashPw();
-
-		System.out.println("Salted " + saltedPassword);
-		System.out.println("HashedStored " + storedPasswordHash);
-		System.out.println("Salt " + user.getSalt());
+		
 		if (hashedPassword.equals(storedPasswordHash)) {
 			isAuthenticated = true;
 		} else {
@@ -117,10 +110,6 @@ public class UserDAO {
 		}
 		return isAuthenticated;
 	}
-	
-	/*public List<Projects> getProjects(UserBean user) {
-		
-	}*/
 
 	/**
 	 * Generate a SHA-256 hash

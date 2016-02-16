@@ -28,4 +28,12 @@
     <servlet-name>SignUpServlet</servlet-name>
     <url-pattern>/SignUp</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AddProjectServlet</servlet-name>
+    <servlet-class>controllers.AddProjectServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddProjectServlet</servlet-name>
+    <url-pattern>/addproject</url-pattern>
+  </servlet-mapping>
 </web-app>

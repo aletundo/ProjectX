@@ -1,7 +1,5 @@
 package models;
 
-import java.sql.Date;
-
 public class ProjectBean {
 	
 	private int idProject;
@@ -13,7 +11,7 @@ public class ProjectBean {
 	private String requirements;
 	private String subjectAreas;
 	private double estimatedCosts;
-	private Date deadline;
+	private String deadline;
 	private int estimatedDuration;
 	private String pmName;
 	private String clientName;
@@ -110,11 +108,11 @@ public class ProjectBean {
 		this.estimatedCosts = estimatedCosts;
 	}
 
-	public Date getDeadline() {
+	public String getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(Date deadline) {
+	public void setDeadline(String deadline) {
 		this.deadline = deadline;
 	}
 

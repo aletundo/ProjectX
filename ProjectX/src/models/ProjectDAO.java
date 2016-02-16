@@ -20,6 +20,48 @@ public class ProjectDAO {
 
 	}
 
+	public boolean addProject(ProjectBean project) {
+		Connection currentConn = DbConnection.connect();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		boolean added = false;
+
+		if (currentConn != null) {
+			final String addClientQuery = "INSERT INTO Project (name, budget, goals, requirements, subjectAreas, "
+					+ "estimatedDuration, estimatedCosts, deadline, idProjectManager, idClient) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			try {
+				statement = currentConn.prepareStatement(addClientQuery);
+				statement.setString(1, project.getName());
+				statement.setDouble(2, project.getBudget());
+				statement.setString(3, project.getGoals());
+				statement.setString(4, project.getRequirements());
+				statement.setString(5, project.getSubjectAreas());
+				statement.setInt(6, project.getEstimatedDuration());
+				statement.setDouble(7, project.getEstimatedCosts());
+				statement.setString(8, project.getDeadline());
+				statement.setInt(9, project.getIdProjectManager());
+				statement.setInt(10, project.getIdClient());
+				System.out.println(addClientQuery);
+				statement.executeUpdate();
+				added = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				try {
+					rs.close();
+				} catch (Exception e) {
+					/* ignored */ }
+				try {
+					statement.close();
+				} catch (Exception e) {
+					/* ignored */ }
+				DbConnection.disconnect(currentConn);
+			}
+		}
+		return added;
+	}
+
 	public List<ProjectBean> getUserProjects(UserBean user) {
 		List<ProjectBean> projectList = new ArrayList<ProjectBean>();
 		Connection currentConn = DbConnection.connect();
