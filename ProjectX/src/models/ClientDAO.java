@@ -23,23 +23,23 @@ public class ClientDAO {
 		return INSTANCE;
 
 	}
-	
-	public List<ClientBean> getRelatedClients(String subjectArea)
-	{
+
+	public List<ClientBean> getRelatedClients(String subjectArea) {
 		List<ClientBean> clients = new ArrayList<ClientBean>();
-		Connection currentConn = DbConnection.connect();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		
+		Connection currentConn = DbConnection.connect();
+
 		if (currentConn != null) {
-			final String getRelatedClientsQuery = "SELECT * FROM Client AS C "
-					+ "JOIN Project AS P ON C.idClient = P.idClient WHERE P.subjectAres LIKE '%?%'";
+			final String getRelatedClientsQuery = "SELECT C.idClient AS IdClient, C.name AS Name, C.mail As Mail "
+					+ "FROM Client AS C "
+					+ "JOIN Project AS P ON C.idClient = P.idClient WHERE P.subjectAreas LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(getRelatedClientsQuery);
-				statement.setString(1, subjectArea);
+				statement.setString(1, "%" + subjectArea + "%");
 				rs = statement.executeQuery();
 
-				while (rs.next()){
+				while (rs.next()) {
 					ClientBean client = new ClientBean();
 					client.setIdClient(rs.getInt("IdClient"));
 					client.setName(rs.getString("Name"));
@@ -61,7 +61,7 @@ public class ClientDAO {
 				DbConnection.disconnect(currentConn);
 			}
 		}
-		
+
 		return clients;
 	}
 
