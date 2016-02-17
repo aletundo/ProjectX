@@ -109,4 +109,46 @@ public class ProjectDAO {
 		}
 		return projectList;
 	}
+	
+	public List<ProjectBean> searchProjects(String subjectArea) {
+		List<ProjectBean> projectList = new ArrayList<ProjectBean>();
+		Connection currentConn = DbConnection.connect();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+
+		if (currentConn != null) {
+			final String getProjectQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager"
+					+ "FROM Project AS P JOIN User AS U ON P.idProjectManager = U.idUser"
+					+ "WHERE P.subjectAreas = '?'"
+					;
+			try {
+				statement = currentConn.prepareStatement(getProjectQuery);
+				
+				statement.setString(1, subjectArea);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					ProjectBean project = new ProjectBean();
+					project.setIdProject(rs.getInt("IdProject"));
+					project.setName(rs.getString("Name"));
+					project.setPmName(rs.getString("ProjectManager"));
+					projectList.add(project);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				try {
+					rs.close();
+				} catch (Exception e) {
+					/* ignored */ }
+				try {
+					statement.close();
+				} catch (Exception e) {
+					/* ignored */ }
+				DbConnection.disconnect(currentConn);
+			}
+		}
+		return projectList;
+	}
 }
