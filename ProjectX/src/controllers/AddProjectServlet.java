@@ -37,7 +37,8 @@ public class AddProjectServlet extends HttpServlet {
 			Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
 			String userType = request.getSession().getAttribute("userType").toString();
 
-			if (!userType.equals("ProjectManager")) {
+			
+			if (!"ProjectManager".equals(userType)) {
 				// MUST BE DECIDED WHERE REDIRECT THE USER!!!!!!!!!!!!
 				response.sendRedirect(request.getContextPath());
 			}
