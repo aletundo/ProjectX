@@ -67,8 +67,11 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(request.getSession().isNew())
+		HttpSession session = request.getSession(false);
+		if(session == null || session.getAttribute("idUser") == null)
+		{
 			response.sendRedirect(request.getContextPath());
+		}
 		else{
 			Integer idUser = (Integer) request.getSession().getAttribute("idUser");
 			UserBean user = new UserBean();

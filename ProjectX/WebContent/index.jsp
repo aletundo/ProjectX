@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>Project X - where project management becomes a breeze</title>
-<jsp:include page="/views/head-imports.jsp" />
+<jsp:include page="/views/sharable/head-imports.jsp" />
 </head>
 <body>
 	<div class="container">

@@ -37,11 +37,27 @@
     <url-pattern>/addproject</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>AddStagesServlet</servlet-name>
+    <servlet-class>controllers.AddStagesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddStagesServlet</servlet-name>
+    <url-pattern>/addstages</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>SearchClientsServlet</servlet-name>
     <servlet-class>controllers.SearchClientsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>SearchClientsServlet</servlet-name>
     <url-pattern>/searchclients</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SearchProjectsServlet</servlet-name>
+    <servlet-class>controllers.SearchProjectsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SearchProjectsServlet</servlet-name>
+    <url-pattern>/searchprojects</url-pattern>
   </servlet-mapping>
 </web-app>

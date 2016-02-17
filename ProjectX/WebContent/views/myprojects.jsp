@@ -3,11 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<jsp:include page="/views/head-imports.jsp" />
+<jsp:include page="/views/sharable/head-imports.jsp" />
 <title>ProjectX - My Projects</title>
 </head>
 <body>
-	<jsp:include page="/views/navbar.jsp" />
+	<jsp:include page="/views/sharable/navbar.jsp" />
 	<%
 		//Check session exists
 		String user = (String) session.getAttribute("username");
@@ -60,6 +60,6 @@
 				Your Session ID=<%=sessionID%></p>
 		</div>
 	</div>
-	<jsp:include page="/views/footer.jsp" />
+	<jsp:include page="/views/sharable/footer.jsp" />
 </body>
 </html>

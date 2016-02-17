@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import models.ClientBean;
 import models.ClientDAO;
@@ -16,36 +17,41 @@ import models.ClientDAO;
 /**
  * Servlet implementation class SearchClients
  */
-@WebServlet(name = "SearchClientsServlet", urlPatterns = {"/searchclients"})
+@WebServlet(name = "SearchClientsServlet", urlPatterns = { "/searchclients" })
 public class SearchClientsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().isNew())
-		{
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
-		}else{
+		}
+		
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/search-clients.jsp");
 			dispatcher.forward(request, response);
-		}
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		if(request.getSession().isNew())
-		{
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
-		}else{
-			String subjectArea = request.getParameter("subject-area");
-			List<ClientBean> clients = ClientDAO.getInstance().getRelatedClients(subjectArea);
-			request.setAttribute("clients", clients);
-			request.setAttribute("subjectArea", subjectArea);
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/related-clients.jsp");
-			dispatcher.forward(request, response);
 		}
+		String subjectArea = request.getParameter("subject-area");
+		List<ClientBean> clients = ClientDAO.getInstance().getRelatedClients(subjectArea);
+		RequestDispatcher dispatcher;
+		if (clients.isEmpty()) {
+			request.setAttribute("noMatchFound", "No related clients found! Sorry, try again :(");
+		} else {
+			request.setAttribute("clients", clients);
+		}
+		request.setAttribute("subjectArea", subjectArea);
+		dispatcher = getServletContext().getRequestDispatcher("/views/related-clients.jsp");
+		dispatcher.forward(request, response);
 	}
 
 }

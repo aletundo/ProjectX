@@ -20,17 +20,16 @@ public class ProjectDAO {
 
 	}
 
-	public boolean addProject(ProjectBean project) {
-		Connection currentConn = DbConnection.connect();
+	public int addProject(ProjectBean project) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		boolean added = false;
+		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
 			final String addClientQuery = "INSERT INTO Project (name, budget, goals, requirements, subjectAreas, "
 					+ "estimatedDuration, estimatedCosts, deadline, idProjectManager, idClient) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			try {
-				statement = currentConn.prepareStatement(addClientQuery);
+				statement = currentConn.prepareStatement(addClientQuery, Statement.RETURN_GENERATED_KEYS);
 				statement.setString(1, project.getName());
 				statement.setDouble(2, project.getBudget());
 				statement.setString(3, project.getGoals());
@@ -41,9 +40,11 @@ public class ProjectDAO {
 				statement.setString(8, project.getDeadline());
 				statement.setInt(9, project.getIdProjectManager());
 				statement.setInt(10, project.getIdClient());
-				System.out.println(addClientQuery);
 				statement.executeUpdate();
-				added = true;
+				rs = statement.getGeneratedKeys();
+				while (rs.next())
+					project.setIdProject(rs.getInt(1));
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 				// TODO Handle with a Logger
@@ -59,7 +60,7 @@ public class ProjectDAO {
 				DbConnection.disconnect(currentConn);
 			}
 		}
-		return added;
+		return project.getIdProject();
 	}
 
 	public List<ProjectBean> getUserProjects(UserBean user) {
@@ -112,19 +113,17 @@ public class ProjectDAO {
 	
 	public List<ProjectBean> searchProjects(String subjectArea) {
 		List<ProjectBean> projectList = new ArrayList<ProjectBean>();
-		Connection currentConn = DbConnection.connect();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getProjectQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager"
-					+ "FROM Project AS P JOIN User AS U ON P.idProjectManager = U.idUser"
-					+ "WHERE P.subjectAreas = '?'"
-					;
+			final String getRelatedProjectsQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager "
+					+ "FROM Project AS P JOIN User AS U ON P.idProjectManager = U.idUser "
+					+ "WHERE P.subjectAreas LIKE ?";
 			try {
-				statement = currentConn.prepareStatement(getProjectQuery);
-				
-				statement.setString(1, subjectArea);
+				statement = currentConn.prepareStatement(getRelatedProjectsQuery);
+				statement.setString(1, "%" + subjectArea + "%");
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					ProjectBean project = new ProjectBean();

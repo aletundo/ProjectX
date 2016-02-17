@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
-<title>ProjectX - Related clients</title>
+<title>ProjectX - Related projects</title>
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
@@ -22,18 +22,17 @@
 	%>
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
-		Here's your client research by key
+			Here's your project research by key
 			<hr>
 			<div id="projects-panel" class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Clients</h3>
+					<h3 class="panel-title">Projects</h3>
 				</div>
 				<c:choose>
 					<c:when test="${requestScope.noMatchFound!=null}">
 						<div class="panel-body">
 							Results for: <strong><c:out
-									value="${requestScope.subjectArea}"></c:out></strong> <br>
-							<br>
+									value="${requestScope.subjectArea}"></c:out></strong> <br> <br>
 							<div class="alert alert-warning" role="alert">
 								<i class="fa fa-exclamation-triangle"></i>&nbsp;<em><c:out
 										value="${requestScope.noMatchFound}"></c:out></em>
@@ -49,18 +48,18 @@
 						<table class="table">
 							<tr>
 								<th><i class="fa fa-key"></i>&nbsp;Id</th>
-								<th><i class="fa fa-user"></i>&nbsp;Name</th>
-								<th><i class="fa fa-at"></i>&nbsp;Mail</th>
+								<th><i class="fa fa-tag"></i>&nbsp;Name</th>
+								<th><i class="fa fa-magic"></i>&nbsp;Project Manager</th>
 							</tr>
 
-							<c:forEach items="${requestScope.clients}" var="client">
+							<c:forEach items="${requestScope.projects}" var="project">
 								<tr>
 									<td><a href="#"><strong><c:out
-													value="${client.idClient}"></c:out></strong></a></td>
+													value="${project.idProject}"></c:out></strong></a></td>
 									<td><span class="label label-success"><c:out
-												value="${client.name}"></c:out></span></td>
+												value="${project.name}"></c:out></span></td>
 									<td><span class="label label-warning"><c:out
-												value="${client.mail}"></c:out></span></td>
+												value="${project.pmName}"></c:out></span></td>
 								</tr>
 							</c:forEach>
 						</table>
@@ -68,9 +67,7 @@
 				</c:choose>
 			</div>
 		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sidebar-project-manager.jsp" />
-		</div>
+		<div class="col-md-3 col-xs-12">DECIDERE COSA METTERE</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />
 </body>

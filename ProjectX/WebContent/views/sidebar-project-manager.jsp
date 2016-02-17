@@ -17,7 +17,7 @@
 				<i class="fa fa-search"></i>&nbsp;Search <span class="caret"></span>
 			</div>
 			<ul class="dropdown-menu">
-				<li><a href="#">Related projects</a></li>
+				<li><a href="${pageContext.request.contextPath}/searchprojects">Related projects</a></li>
 				<li><a href="${pageContext.request.contextPath}/searchclients">Related clients</a></li>
 			</ul>
 		</div>

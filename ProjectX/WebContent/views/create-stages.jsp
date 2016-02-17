@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
-<title>ProjectX - Create a project</title>
+<title>ProjectX - Create stages</title>
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
@@ -22,19 +22,16 @@
 	%>
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
-			Create a project is very <i><b>easy</b></i>! A step-by-step procedure is going to
-			help you.
+			<strong>Perfect!</strong> Now you can divide your project into stages.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addproject" method="POST" role="form"
+				action="${pageContext.request.contextPath}/addstages" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
 						class="form-control" placeholder="Insert the name" name="name" />
 				</div>
-
 				<br>
-
 				<div class="input-group">
 					<span class="input-group-addon">Goals</span>
 					<textarea class="form-control" placeholder="Insert the goals"
@@ -48,34 +45,15 @@
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Budget</span> <input type="text"
-						class="form-control" name="budget" placeholder="Insert the budget" />
-					<span class="input-group-addon">&euro;</span>
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Estimated costs</span> <input
-						type="text" class="form-control" name="estimated-costs"
-						placeholder="Insert the estimated costs" /> <span
-						class="input-group-addon">&euro;</span>
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Client</span> <input
+					<span class="input-group-addon">Start day</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the name of the client" name="client-name" />
+						placeholder="Insert the start day (YYYY-mm-DD)" name="deadline" />
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Client mail</span> <input
+					<span class="input-group-addon">Finish day</span> <input
 						class="form-control" type="text"
-						placeholder="client@domain.example" name="client-mail" />
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Deadline</span> <input
-						class="form-control" type="text"
-						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline" />
+						placeholder="Insert the finish day (YYYY-mm-DD)" name="deadline" />
 				</div>
 				<br>
 				<div class="input-group">
@@ -84,13 +62,8 @@
 						placeholder="Insert the estimated duration (weeks)"
 						name="estimated-duration" />
 				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Subject areas</span> <input
-						type="text" class="form-control"
-						placeholder="Insert the subjet areas (preferably splitted by a comma)"
-						name="subject-areas" />
-				</div>
+				
+				<input type="hidden" value="${param.idProject}" name="id-project"/>
 				<br> <br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">

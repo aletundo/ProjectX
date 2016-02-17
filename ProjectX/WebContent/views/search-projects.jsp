@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
-<title>ProjectX - Related clients</title>
+<title>ProjectX - Related projects</title>
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
@@ -12,12 +12,12 @@
 		<div class="col-md-9 col-xs-12">
 			<form class="from col-md-12 center-block" role="search"
 				autocomplete="off" method="POST"
-				action="${pageContext.request.contextPath}/searchclients">
+				action="${pageContext.request.contextPath}/searchprojects">
 				<jsp:include page="/views/sharable/search-form-input.jsp" />
 			</form>
 		</div>
 		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sidebar-project-manager.jsp" />
+			DECIDERE COSA METTERCI
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

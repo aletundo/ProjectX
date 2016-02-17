@@ -19,8 +19,10 @@ public class LogoutServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// Invalidate current HTTP session.
+		request.removeAttribute("username");
+		request.removeAttribute("userType");
+		request.removeAttribute("idUser");
 		request.getSession().invalidate();
-
 		// Redirect the user to the secure web page.
 		// Since the user is now logged out the
 		// authentication form will be shown
