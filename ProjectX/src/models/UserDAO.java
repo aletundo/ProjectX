@@ -53,9 +53,10 @@ public class UserDAO {
 				stored = true;
 			} catch (SQLException e) {
 				e.printStackTrace(); // TODO Handle with a Logger
+			}finally{
+				DbConnection.disconnect(currentConn, statement);
 			}
 		}
-		DbConnection.disconnect(currentConn);
 
 		return stored;
 	}
@@ -92,17 +93,7 @@ public class UserDAO {
 			} catch (SQLException e) {
 				e.printStackTrace(); // TODO Handle with a Logger
 			} finally {
-				try {
-					if(null != rs){
-						rs.close();
-					}
-				} catch (SQLException e) {
-					/* ignored */ }
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					/* ignored */ }
-			    DbConnection.disconnect(currentConn);
+				DbConnection.disconnect(currentConn, rs, statement);
 			}
 
 		}

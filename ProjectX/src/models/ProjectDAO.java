@@ -49,7 +49,7 @@ public class ProjectDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				closeAll(statement, rs, currentConn);
+				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
 		return project.getIdProject();
@@ -89,7 +89,7 @@ public class ProjectDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				closeAll(statement, rs, currentConn);
+				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
 		return projectList;
@@ -121,21 +121,9 @@ public class ProjectDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				closeAll(statement, rs, currentConn);
+				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
 		return projectList;
-	}
-
-	public void closeAll(PreparedStatement statement, ResultSet rs, Connection currentConn) {
-		try {
-			rs.close();
-		} catch (SQLException e) {
-			/* ignored */ }
-		try {
-			statement.close();
-		} catch (SQLException e) {
-			/* ignored */ }
-		DbConnection.disconnect(currentConn);
 	}
 }

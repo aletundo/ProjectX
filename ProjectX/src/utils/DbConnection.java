@@ -3,7 +3,11 @@ package utils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 import utils.GetDbConnProperties;
 
 public class DbConnection {
@@ -49,8 +53,41 @@ public class DbConnection {
 
 	}
 
-	public static void disconnect(Connection conn) {
-
+	public static void disconnect(Connection conn, ResultSet rs, PreparedStatement statement) {
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			/* ignored */ }
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			/* ignored */ }
+		try {
+			if (conn != null)
+				conn.close();
+		} catch (SQLException se) {
+			//Ignored
+		}
+	}
+	
+	public static void disconnect(Connection conn, PreparedStatement statement) {
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			/* ignored */ }
+		try {
+			if (conn != null)
+				conn.close();
+		} catch (SQLException se) {
+			//Ignored
+		}
+	}
+	
+	public static void disconnect(Connection conn, Statement statement) {
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			/* ignored */ }
 		try {
 			if (conn != null)
 				conn.close();

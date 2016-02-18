@@ -50,15 +50,7 @@ public class ClientDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					/* ignored */ }
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					/* ignored */ }
-				DbConnection.disconnect(currentConn);
+				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
 
@@ -84,15 +76,7 @@ public class ClientDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				try {
-					rs.close();
-				} catch (NullPointerException | SQLException e) {
-					/* ignored */ }
-				try {
-					statement.close();
-				} catch (NullPointerException | SQLException e) {
-					/* ignored */ }
-				DbConnection.disconnect(currentConn);
+				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
 		System.out.println(client.getIdClient());
