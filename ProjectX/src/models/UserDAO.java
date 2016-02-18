@@ -22,13 +22,41 @@ public class UserDAO {
 
 		return INSTANCE;
 	}
-	
-	public List<UserBean> getCadidateSupervisor(){
-		List<UserBean> cadidates = new ArrayList<UserBean>();
+
+	public List<UserBean> getCadidateSupervisor() {
+		List<UserBean> candidates = new ArrayList<UserBean>();
 		ResultSet rs = null;
-		PreparedStatement statement = null;
-		
-		return cadidates;
+		Statement statement = null;
+		Connection currentConn = DbConnection.connect();
+		if (currentConn != null) {
+			final String createView = "CREATE VIEW BusyUsers AS SELECT DISTINCT U.idUser AS IdUser FROM "
+					+ "User AS U JOIN Project AS P ON U.idUser = P.idProjectManager "
+					+ "UNION SELECT DISTINCT U.idUser AS IdUser "
+					+ "FROM User AS U JOIN Stage AS S ON U.idUser = S.idSupervisor";
+			final String dropView = "DROP VIEW BusyUsers";
+			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.name AS Name, U.type AS Type FROM User AS U WHERE U.type NOT LIKE 'Junior' AND U.idUser NOT IN(SELECT B.IdUser FROM BusyUsers AS B)";
+			try {
+				statement = currentConn.createStatement();
+				statement.executeUpdate(createView);
+				//statement = currentConn.prepareStatement(cadidatesQuery);
+				rs = statement.executeQuery(cadidatesQuery);
+				while (rs.next()) {
+					UserBean user = new UserBean();
+					user.setIdUser(rs.getInt("IdUser"));
+					user.setName(rs.getString("Name"));
+					user.setType(rs.getString("Type"));
+					candidates.add(user);
+				}
+				statement.executeUpdate(dropView);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+
+		return candidates;
 	}
 
 	public boolean signUpUser(UserBean user) {
@@ -49,8 +77,10 @@ public class UserDAO {
 		if (currentConn != null) {
 			// String signUpQuery = "INSERT INTO User(username, salt, hashpw)
 			// VALUES(?, ?, ?)";
-			String signUpQuery = "INSERT INTO User(username, name, surname, mail, skills, salt, hashpw, type) VALUES('" + user.getUsername() + "','" + user.getName()
-			+ "','" + user.getSurname() + "','" + user.getMail()+ "','" + user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','" + user.getType() + "')";
+			final String signUpQuery = "INSERT INTO User(username, name, surname, mail, skills, salt, hashpw, type) VALUES('"
+					+ user.getUsername() + "','" + user.getName() + "','" + user.getSurname() + "','" + user.getMail()
+					+ "','" + user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','"
+					+ user.getType() + "')";
 			try {
 				/*
 				 * statement = currentConn.prepareStatement(signUpQuery);
@@ -64,7 +94,7 @@ public class UserDAO {
 				stored = true;
 			} catch (SQLException e) {
 				e.printStackTrace(); // TODO Handle with a Logger
-			}finally{
+			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
 		}
@@ -88,7 +118,7 @@ public class UserDAO {
 		Boolean isAuthenticated = false;
 
 		if (currentConn != null) {
-			String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw AS HashPW, U.type As Type FROM User AS U WHERE U.username LIKE ?";
+			final String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw AS HashPW, U.type As Type FROM User AS U WHERE U.username LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(validateQuery);
 				String username = user.getUsername();
@@ -112,7 +142,7 @@ public class UserDAO {
 		String saltedPassword = user.getSalt() + user.getPw();
 		String hashedPassword = generateHash(saltedPassword);
 		String storedPasswordHash = user.getHashPw();
-		
+
 		if (hashedPassword.equals(storedPasswordHash)) {
 			isAuthenticated = true;
 		} else {
@@ -146,6 +176,5 @@ public class UserDAO {
 
 		return hash.toString();
 	}
-	
-	
+
 }

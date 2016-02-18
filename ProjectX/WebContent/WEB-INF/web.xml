@@ -60,4 +60,12 @@
     <servlet-name>SearchProjectsServlet</servlet-name>
     <url-pattern>/searchprojects</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AddSupervisorServlet</servlet-name>
+    <servlet-class>controllers.AddSupervisorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddSupervisorServlet</servlet-name>
+    <url-pattern>/addsupervisor</url-pattern>
+  </servlet-mapping>
 </web-app>

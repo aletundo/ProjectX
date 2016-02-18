@@ -26,10 +26,10 @@ public class ProjectDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String addClientQuery = "INSERT INTO Project (name, budget, goals, requirements, subjectAreas, "
-					+ "estimatedDuration, estimatedCosts, deadline, idProjectManager, idClient) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			final String addProjectQuery = "INSERT INTO Project (name, budget, goals, requirements, subjectAreas, "
+					+ "estimatedDuration, estimatedCosts, start, deadline, idProjectManager, idClient) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			try {
-				statement = currentConn.prepareStatement(addClientQuery, Statement.RETURN_GENERATED_KEYS);
+				statement = currentConn.prepareStatement(addProjectQuery, Statement.RETURN_GENERATED_KEYS);
 				statement.setString(1, project.getName());
 				statement.setDouble(2, project.getBudget());
 				statement.setString(3, project.getGoals());
@@ -37,9 +37,10 @@ public class ProjectDAO {
 				statement.setString(5, project.getSubjectAreas());
 				statement.setInt(6, project.getEstimatedDuration());
 				statement.setDouble(7, project.getEstimatedCosts());
-				statement.setString(8, project.getDeadline().toString());
-				statement.setInt(9, project.getIdProjectManager());
-				statement.setInt(10, project.getIdClient());
+				statement.setString(8, project.getStart());
+				statement.setString(9, project.getDeadline());
+				statement.setInt(10, project.getIdProjectManager());
+				statement.setInt(11, project.getIdClient());
 				statement.executeUpdate();
 				rs = statement.getGeneratedKeys();
 				while (rs.next())

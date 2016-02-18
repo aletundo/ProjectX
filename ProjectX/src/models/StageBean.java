@@ -1,9 +1,5 @@
 package models;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class StageBean {
 	
 	private int idStage;
@@ -12,9 +8,9 @@ public class StageBean {
 	private int idSupervisor;
 	private String goals;
 	private String requirements;
-	private Date startDay;
-	private Date finishDay;
-	private int duration;
+	private String startDay;
+	private String finishDay;
+	private int estimatedDuration;
 	
 	public StageBean(){
 		
@@ -55,39 +51,23 @@ public class StageBean {
 	public void setRequirements(String requirements) {
 		this.requirements = requirements;
 	}
-	public Date getStartDay() {
+	public String getStartDay() {
 		return startDay;
 	}
 	public void setStartDay(String startDay) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = null;
-		try {
-			date = formatter.parse(startDay);
-		} catch (ParseException e) {
-			// TODO Handle with a Logger
-			e.printStackTrace();
-		}
-		this.startDay = date;
+		this.startDay = startDay;
 	}
-	public Date getFinishDay() {
+	public String getFinishDay() {
 		return finishDay;
 	}
 	public void setFinishDay(String finishDay) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = null;
-		try {
-			date = formatter.parse(finishDay);
-		} catch (ParseException e) {
-			// TODO Handle with a Logger
-			e.printStackTrace();
-		}
-		this.finishDay = date;
+		this.finishDay = finishDay;
 	}
-	public int getDuration() {
-		return duration;
+	public int getEstimatedDuration() {
+		return estimatedDuration;
 	}
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public void setEstimatedDuration(int duration) {
+		this.estimatedDuration = duration;
 	}
 	
 	

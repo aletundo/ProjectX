@@ -99,4 +99,18 @@ public class DbConnection {
 			//Ignored
 		}
 	}
+	
+	public static void disconnect(Connection conn, ResultSet rs, Statement statement) {
+		try {
+			if(statement != null)
+				statement.close();
+		} catch (SQLException e) {
+			/* ignored */ }
+		try {
+			if (conn != null)
+				conn.close();
+		} catch (SQLException se) {
+			//Ignored
+		}
+	}
 }

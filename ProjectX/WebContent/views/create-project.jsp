@@ -73,6 +73,12 @@
 				</div>
 				<br>
 				<div class="input-group">
+					<span class="input-group-addon">Start</span> <input
+						class="form-control" type="text"
+						placeholder="Insert the start (YYYY-mm-DD)" name="start" />
+				</div>
+				<br>
+				<div class="input-group">
 					<span class="input-group-addon">Deadline</span> <input
 						class="form-control" type="text"
 						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline" />
