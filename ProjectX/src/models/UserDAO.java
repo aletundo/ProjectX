@@ -38,8 +38,8 @@ public class UserDAO {
 		if (currentConn != null) {
 			// String signUpQuery = "INSERT INTO User(username, salt, hashpw)
 			// VALUES(?, ?, ?)";
-			String signUpQuery = "INSERT INTO User(username, name, salt, hashpw, type) VALUES('" + user.getUsername() + "','" + user.getName()
-			+ "','" + user.getSalt() + "','" + user.getHashPw() + "','" + user.getType() + "')";
+			String signUpQuery = "INSERT INTO User(username, name, surname, mail, skills, salt, hashpw, type) VALUES('" + user.getUsername() + "','" + user.getName()
+			+ "','" + user.getSurname() + "','" + user.getMail()+ "','" + user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','" + user.getType() + "')";
 			try {
 				/*
 				 * statement = currentConn.prepareStatement(signUpQuery);

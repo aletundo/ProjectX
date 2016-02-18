@@ -17,15 +17,6 @@ import models.UserDAO;
 public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SignUpServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -36,6 +27,9 @@ public class SignUpServlet extends HttpServlet {
 		String pw = request.getParameter("pw");
 		String type = request.getParameter("type");
 		String name = request.getParameter("name");
+		String surname = request.getParameter("surname");
+		String mail = request.getParameter("mail");
+		String skills = request.getParameter("skills");
 		
 		
 		UserBean user = new UserBean();
@@ -43,6 +37,9 @@ public class SignUpServlet extends HttpServlet {
 		user.setPw(pw);
 		user.setName(name);
 		user.setType(type);
+		user.setSurname(surname);
+		user.setSkills(skills);
+		user.setMail(mail);
 		
 		boolean saved = UserDAO.getInstance().signUpUser(user);
 		System.out.println("stored? " + saved);//NOPMD

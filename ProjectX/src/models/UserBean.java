@@ -10,6 +10,8 @@ public class UserBean {
 	private String name;
 	private String surname;
 	private String type; //TODO correct with enum ProjecManager, Senior, Junior
+	private String skills;
+	private String mail;
 	
 	public UserBean(){
 		
@@ -77,5 +79,21 @@ public class UserBean {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getSkills() {
+		return skills;
+	}
+
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 }
