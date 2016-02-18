@@ -1,7 +1,11 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ProjectBean {
-	
+
 	private int idProject;
 	private String name;
 	private int idProjectManager;
@@ -10,12 +14,17 @@ public class ProjectBean {
 	private String goals;
 	private String requirements;
 	private String subjectAreas;
+	private Date start;
 	private double estimatedCosts;
-	private String deadline;
+	private Date deadline;
 	private int estimatedDuration;
 	private String pmName;
 	private String clientName;
-	
+
+	public ProjectBean() {
+
+	}
+
 	public String getClientName() {
 		return clientName;
 	}
@@ -30,10 +39,6 @@ public class ProjectBean {
 
 	public void setPmName(String pmName) {
 		this.pmName = pmName;
-	}
-
-	public ProjectBean(){
-		
 	}
 
 	public int getIdProject() {
@@ -108,12 +113,20 @@ public class ProjectBean {
 		this.estimatedCosts = estimatedCosts;
 	}
 
-	public String getDeadline() {
+	public Date getDeadline() {
 		return deadline;
 	}
 
 	public void setDeadline(String deadline) {
-		this.deadline = deadline;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = formatter.parse(deadline);
+		} catch (ParseException e) {
+			// TODO Handle with a Logger
+			e.printStackTrace();
+		}
+		this.deadline = date;
 	}
 
 	public int getEstimatedDuration() {
@@ -123,8 +136,21 @@ public class ProjectBean {
 	public void setEstimatedDuration(int estimatedDuration) {
 		this.estimatedDuration = estimatedDuration;
 	}
-	
-	
-	
+
+	public Date getStart() {
+		return start;
+	}
+
+	public void setStart(String start) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = formatter.parse(start);
+		} catch (ParseException e) {
+			// TODO Handle with a Logger
+			e.printStackTrace();
+		}
+		this.start = date;
+	}
 
 }

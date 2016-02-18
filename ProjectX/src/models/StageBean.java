@@ -1,6 +1,8 @@
 package models;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StageBean {
 	
@@ -56,14 +58,30 @@ public class StageBean {
 	public Date getStartDay() {
 		return startDay;
 	}
-	public void setStartDay(Date startDay) {
-		this.startDay = startDay;
+	public void setStartDay(String startDay) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = formatter.parse(startDay);
+		} catch (ParseException e) {
+			// TODO Handle with a Logger
+			e.printStackTrace();
+		}
+		this.startDay = date;
 	}
 	public Date getFinishDay() {
 		return finishDay;
 	}
-	public void setFinishDay(Date finishDay) {
-		this.finishDay = finishDay;
+	public void setFinishDay(String finishDay) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = formatter.parse(finishDay);
+		} catch (ParseException e) {
+			// TODO Handle with a Logger
+			e.printStackTrace();
+		}
+		this.finishDay = date;
 	}
 	public int getDuration() {
 		return duration;

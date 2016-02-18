@@ -4,6 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import models.UserBean;
 import utils.DbConnection;
 
@@ -18,6 +21,14 @@ public class UserDAO {
 	public static UserDAO getInstance() {
 
 		return INSTANCE;
+	}
+	
+	public List<UserBean> getCadidateSupervisor(){
+		List<UserBean> cadidates = new ArrayList<UserBean>();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		
+		return cadidates;
 	}
 
 	public boolean signUpUser(UserBean user) {

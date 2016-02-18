@@ -37,7 +37,7 @@ public class ProjectDAO {
 				statement.setString(5, project.getSubjectAreas());
 				statement.setInt(6, project.getEstimatedDuration());
 				statement.setDouble(7, project.getEstimatedCosts());
-				statement.setString(8, project.getDeadline());
+				statement.setString(8, project.getDeadline().toString());
 				statement.setInt(9, project.getIdProjectManager());
 				statement.setInt(10, project.getIdClient());
 				statement.executeUpdate();
