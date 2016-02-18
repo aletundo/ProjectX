@@ -91,9 +91,17 @@ public class UserDAO {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace(); // TODO Handle with a Logger
-			}finally {
-			    try { rs.close(); } catch (Exception e) { /* ignored */ }
-			    try { statement.close(); } catch (Exception e) { /* ignored */ }
+			} finally {
+				try {
+					if(null != rs){
+						rs.close();
+					}
+				} catch (SQLException e) {
+					/* ignored */ }
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					/* ignored */ }
 			    DbConnection.disconnect(currentConn);
 			}
 

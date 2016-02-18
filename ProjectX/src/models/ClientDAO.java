@@ -52,11 +52,11 @@ public class ClientDAO {
 			} finally {
 				try {
 					rs.close();
-				} catch (Exception e) {
+				} catch (SQLException e) {
 					/* ignored */ }
 				try {
 					statement.close();
-				} catch (Exception e) {
+				} catch (SQLException e) {
 					/* ignored */ }
 				DbConnection.disconnect(currentConn);
 			}
@@ -86,11 +86,11 @@ public class ClientDAO {
 			} finally {
 				try {
 					rs.close();
-				} catch (Exception e) {
+				} catch (NullPointerException | SQLException e) {
 					/* ignored */ }
 				try {
 					statement.close();
-				} catch (Exception e) {
+				} catch (NullPointerException | SQLException e) {
 					/* ignored */ }
 				DbConnection.disconnect(currentConn);
 			}

@@ -49,15 +49,7 @@ public class ProjectDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				try {
-					rs.close();
-				} catch (Exception e) {
-					/* ignored */ }
-				try {
-					statement.close();
-				} catch (Exception e) {
-					/* ignored */ }
-				DbConnection.disconnect(currentConn);
+				closeAll(statement, rs, currentConn);
 			}
 		}
 		return project.getIdProject();
@@ -97,15 +89,7 @@ public class ProjectDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				try {
-					rs.close();
-				} catch (Exception e) {
-					/* ignored */ }
-				try {
-					statement.close();
-				} catch (Exception e) {
-					/* ignored */ }
-				DbConnection.disconnect(currentConn);
+				closeAll(statement, rs, currentConn);
 			}
 		}
 		return projectList;
@@ -137,17 +121,21 @@ public class ProjectDAO {
 				e.printStackTrace();
 				// TODO Handle with a Logger
 			} finally {
-				try {
-					rs.close();
-				} catch (Exception e) {
-					/* ignored */ }
-				try {
-					statement.close();
-				} catch (Exception e) {
-					/* ignored */ }
-				DbConnection.disconnect(currentConn);
+				closeAll(statement, rs, currentConn);
 			}
 		}
 		return projectList;
+	}
+
+	public void closeAll(PreparedStatement statement, ResultSet rs, Connection currentConn) {
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			/* ignored */ }
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			/* ignored */ }
+		DbConnection.disconnect(currentConn);
 	}
 }

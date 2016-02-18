@@ -16,6 +16,7 @@ import models.UserDAO;
 @WebServlet(name = "SignUpServlet", urlPatterns = {"/SignUp"})
 public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -28,6 +29,7 @@ public class SignUpServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String username = request.getParameter("user");
@@ -43,7 +45,7 @@ public class SignUpServlet extends HttpServlet {
 		user.setType(type);
 		
 		boolean saved = UserDAO.getInstance().signUpUser(user);
-		System.out.println("stored? " + saved);
+		System.out.println("stored? " + saved);//NOPMD
 	}
 
 }
