@@ -69,7 +69,7 @@ public class AddSupervisorServlet extends HttpServlet {
 			} else if (request.getParameter("completed") == null) {
 				response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
 			} else {
-				response.sendRedirect(request.getContextPath() + "/myprojects");
+				response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
 			}
 		}
 	}

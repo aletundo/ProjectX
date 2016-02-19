@@ -1,6 +1,9 @@
 package models;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import utils.DbConnection;
 
 public class StageDAO {
@@ -15,7 +18,60 @@ public class StageDAO {
 
 		return INSTANCE;
 	}
+	
+	public boolean addPrecedences(int idStage, List<StageBean> precedences){
+		boolean added = false;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String addPrecedencesQuery = "INSERT INTO precedences (idStage, idPrecedence) VALUES (?, ?)";
+			try{
+				for(StageBean p : precedences){
+					statement = currentConn.prepareStatement(addPrecedencesQuery);
+					statement.setInt(1, idStage);
+					statement.setInt(2, p.getIdStage());
+					statement.executeUpdate();
+				}
+				added = true;
+			}catch(SQLException e){
+				
+			}finally{
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+		return added;
+	}
 
+	public List<StageBean> getStages(int idProject){
+		List<StageBean> stages = new ArrayList<StageBean>();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name"
+					+ " FROM stage AS S WHERE S.idProject = ?";
+			try{
+				statement = currentConn.prepareStatement(getStagesQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while(rs.next()){
+					StageBean stage = new StageBean();
+					stage.setIdStage(rs.getInt("IdStage"));
+					stage.setName(rs.getString("Name"));
+					stages.add(stage);
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a Logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return stages;
+	}
 	public boolean addSupervisor(StageBean stage) {
 		PreparedStatement statement = null;
 		boolean updated = false;
