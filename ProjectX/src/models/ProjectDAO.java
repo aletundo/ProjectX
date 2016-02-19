@@ -26,7 +26,7 @@ public class ProjectDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String addProjectQuery = "INSERT INTO Project (name, budget, goals, requirements, subjectAreas, "
+			final String addProjectQuery = "INSERT INTO project (name, budget, goals, requirements, subjectAreas, "
 					+ "estimatedDuration, estimatedCosts, start, deadline, idProjectManager, idClient) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			try {
 				statement = currentConn.prepareStatement(addProjectQuery, Statement.RETURN_GENERATED_KEYS);
@@ -63,14 +63,14 @@ public class ProjectDAO {
 		ResultSet rs = null;
 
 		if (currentConn != null) {
-			final String getProjectQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS Client "
-					+ "FROM Project AS P JOIN User AS U ON P.idProjectManager = U.idUser JOIN Client AS C ON P.idClient = C.idClient "
+			final String getProjectQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS client "
+					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser JOIN client AS C ON P.idClient = C.idClient "
 					+ "WHERE P.idProject =(SELECT P2.idProject AS IdProject2 "
-					+ "FROM User AS U2 JOIN Stage AS S ON U2.idUser = S.idSupervisor JOIN Project AS P2 ON S.idProject = P2.idProject "
+					+ "FROM user AS U2 JOIN stage AS S ON U2.idUser = S.idSupervisor JOIN project AS P2 ON S.idProject = P2.idProject "
 					+ "WHERE U2.idUser = ?) " + "UNION "
-					+ "(SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS Client "
-					+ "FROM Project AS P JOIN User AS U ON P.idProjectManager = U.idUser "
-					+ "JOIN Client AS C ON P.idClient = C.idClient WHERE U.idUser = ?)";
+					+ "(SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS client "
+					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser "
+					+ "JOIN client AS C ON P.idClient = C.idClient WHERE U.idUser = ?)";
 			try {
 				statement = currentConn.prepareStatement(getProjectQuery);
 				int idUser = user.getIdUser();
@@ -104,7 +104,7 @@ public class ProjectDAO {
 
 		if (currentConn != null) {
 			final String getRelatedProjectsQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager "
-					+ "FROM Project AS P JOIN User AS U ON P.idProjectManager = U.idUser "
+					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser "
 					+ "WHERE P.subjectAreas LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(getRelatedProjectsQuery);

@@ -23,18 +23,18 @@ public class UserDAO {
 		return INSTANCE;
 	}
 
-	public List<UserBean> getCadidateSupervisor() {
+	public List<UserBean> getCandidateSupervisors() {
 		List<UserBean> candidates = new ArrayList<UserBean>();
 		ResultSet rs = null;
 		Statement statement = null;
 		Connection currentConn = DbConnection.connect();
 		if (currentConn != null) {
-			final String createView = "CREATE VIEW BusyUsers AS SELECT DISTINCT U.idUser AS IdUser FROM "
-					+ "User AS U JOIN Project AS P ON U.idUser = P.idProjectManager "
+			final String createView = "CREATE VIEW busyusers AS SELECT DISTINCT U.idUser AS IdUser FROM "
+					+ "user AS U JOIN project AS P ON U.idUser = P.idProjectManager "
 					+ "UNION SELECT DISTINCT U.idUser AS IdUser "
-					+ "FROM User AS U JOIN Stage AS S ON U.idUser = S.idSupervisor";
-			final String dropView = "DROP VIEW BusyUsers";
-			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.name AS Name, U.type AS Type FROM User AS U WHERE U.type NOT LIKE 'Junior' AND U.idUser NOT IN(SELECT B.IdUser FROM BusyUsers AS B)";
+					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor";
+			final String dropView = "DROP VIEW busyusers";
+			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.name AS Name, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'Junior' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)";
 			try {
 				statement = currentConn.createStatement();
 				statement.executeUpdate(createView);
@@ -77,7 +77,7 @@ public class UserDAO {
 		if (currentConn != null) {
 			// String signUpQuery = "INSERT INTO User(username, salt, hashpw)
 			// VALUES(?, ?, ?)";
-			final String signUpQuery = "INSERT INTO User(username, name, surname, mail, skills, salt, hashpw, type) VALUES('"
+			final String signUpQuery = "INSERT INTO user(username, name, surname, mail, skills, salt, hashpw, type) VALUES('"
 					+ user.getUsername() + "','" + user.getName() + "','" + user.getSurname() + "','" + user.getMail()
 					+ "','" + user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','"
 					+ user.getType() + "')";
@@ -118,7 +118,7 @@ public class UserDAO {
 		Boolean isAuthenticated = false;
 
 		if (currentConn != null) {
-			final String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw AS HashPW, U.type As Type FROM User AS U WHERE U.username LIKE ?";
+			final String validateQuery = "SELECT U.idUser AS IdUser, U.salt as Salt, U.hashPw AS HashPW, U.type As Type FROM user AS U WHERE U.username LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(validateQuery);
 				String username = user.getUsername();

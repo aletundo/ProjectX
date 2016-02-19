@@ -11,6 +11,9 @@ public class StageBean {
 	private String startDay;
 	private String finishDay;
 	private int estimatedDuration;
+	private boolean outsourcing;
+	private String companyName;
+	private String companyMail;
 	
 	public StageBean(){
 		
@@ -68,6 +71,24 @@ public class StageBean {
 	}
 	public void setEstimatedDuration(int duration) {
 		this.estimatedDuration = duration;
+	}
+	public boolean isOutsourcing() {
+		return outsourcing;
+	}
+	public void setOutsourcing(boolean outsourcing) {
+		this.outsourcing = outsourcing;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	public String getCompanyMail() {
+		return companyMail;
+	}
+	public void setCompanyMail(String companyMail) {
+		this.companyMail = companyMail;
 	}
 	
 	

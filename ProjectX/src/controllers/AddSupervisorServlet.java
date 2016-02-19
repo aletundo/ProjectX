@@ -28,8 +28,13 @@ public class AddSupervisorServlet extends HttpServlet {
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
 		} else {
-			List<UserBean> candidates = UserDAO.getInstance().getCadidateSupervisor();
-			request.setAttribute("candidates", candidates);
+			List<UserBean> candidates = UserDAO.getInstance().getCandidateSupervisors();
+			if(candidates.isEmpty())
+			{
+				request.setAttribute("outsourcing", true);
+			}else{
+				request.setAttribute("candidates", candidates);
+			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-supervisor.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -42,14 +47,21 @@ public class AddSupervisorServlet extends HttpServlet {
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
 		} else {
-
 			StageBean stage = new StageBean();
 			int idStage = Integer.parseInt(request.getParameter("id-stage"));
 			int idProject = Integer.parseInt(request.getParameter("id-project"));
-			int idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
-
+			int idSupervisor;
+			if(request.getParameter("company-name") != null){
+				String companyName = request.getParameter("company-name");
+				String companyMail = request.getParameter("company-mail");
+				stage.setOutsourcing(true);
+				stage.setCompanyName(companyName);
+				stage.setCompanyMail(companyMail);
+			}else{
+				idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
+				stage.setIdSupervisor(idSupervisor);
+			}
 			stage.setIdStage(idStage);
-			stage.setIdSupervisor(idSupervisor);
 			stage.setIdProject(idProject);
 			boolean updated = StageDAO.getInstance().addSupervisor(stage);
 			if (!updated) {

@@ -32,8 +32,8 @@ public class ClientDAO {
 
 		if (currentConn != null) {
 			final String getRelatedClientsQuery = "SELECT C.idClient AS IdClient, C.name AS Name, C.mail As Mail "
-					+ "FROM Client AS C "
-					+ "JOIN Project AS P ON C.idClient = P.idClient WHERE P.subjectAreas LIKE ?";
+					+ "FROM client AS C "
+					+ "JOIN project AS P ON C.idClient = P.idClient WHERE P.subjectAreas LIKE ?";
 			try {
 				statement = currentConn.prepareStatement(getRelatedClientsQuery);
 				statement.setString(1, "%" + subjectArea + "%");
@@ -63,7 +63,7 @@ public class ClientDAO {
 		ResultSet rs = null;
 
 		if (currentConn != null) {
-			final String addClientQuery = "INSERT INTO Client (name, mail) VALUES(?, ?)";
+			final String addClientQuery = "INSERT INTO client (name, mail) VALUES(?, ?)";
 			try {
 				statement = currentConn.prepareStatement(addClientQuery, Statement.RETURN_GENERATED_KEYS);
 				statement.setString(1, client.getName());
