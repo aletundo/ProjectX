@@ -59,17 +59,7 @@ public class DbConnection {
 				rs.close();
 		} catch (SQLException e) {
 			/* ignored */ }
-		try {
-			if(statement != null)
-			statement.close();
-		} catch (SQLException e) {
-			/* ignored */ }
-		try {
-			if (conn != null)
-				conn.close();
-		} catch (SQLException se) {
-			//Ignored
-		}
+		disconnect(conn, statement);
 	}
 	
 	public static void disconnect(Connection conn, PreparedStatement statement) {
@@ -102,15 +92,10 @@ public class DbConnection {
 	
 	public static void disconnect(Connection conn, ResultSet rs, Statement statement) {
 		try {
-			if(statement != null)
-				statement.close();
+			if (rs != null)
+				rs.close();
 		} catch (SQLException e) {
 			/* ignored */ }
-		try {
-			if (conn != null)
-				conn.close();
-		} catch (SQLException se) {
-			//Ignored
-		}
+		disconnect(conn, statement);
 	}
 }
