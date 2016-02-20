@@ -9,10 +9,10 @@ public class UserBean {
 	private String pw;
 	private String name;
 	private String surname;
-	private String type; //TODO correct with enum ProjecManager, Senior, Junior
+	private String type;
 	private String skills;
 	private String mail;
-	
+
 	public UserBean(){
 		
 	}

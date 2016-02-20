@@ -19,7 +19,7 @@ public class StageDAO {
 		return INSTANCE;
 	}
 	
-	public boolean addPrecedences(int idStage, List<StageBean> precedences){
+	public boolean addPrecedences(StageBean stage, List<StageBean> precedences){
 		boolean added = false;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
@@ -29,13 +29,14 @@ public class StageDAO {
 			try{
 				for(StageBean p : precedences){
 					statement = currentConn.prepareStatement(addPrecedencesQuery);
-					statement.setInt(1, idStage);
+					statement.setInt(1, stage.getIdStage());
 					statement.setInt(2, p.getIdStage());
 					statement.executeUpdate();
 				}
 				added = true;
 			}catch(SQLException e){
-				
+				e.printStackTrace();
+				//TODO Handle with a Logger
 			}finally{
 				DbConnection.disconnect(currentConn, statement);
 			}

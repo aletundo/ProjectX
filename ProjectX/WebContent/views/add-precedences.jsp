@@ -10,7 +10,7 @@
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
-			Set the precedences for the stage <c:out value="${requestScope.stagesQueue[0].name}"></c:out>
+			Set the precedences for the stage <c:out value="${sessionScope.stagesQueue[0].name}"></c:out>
 			<hr>
 			<form class="form col-md-12 center-block"
 				action="${pageContext.request.contextPath}/addprecedences"
@@ -23,18 +23,16 @@
 					</div>
 					<!-- List group -->
 					<ul class="list-group list-results">
-						<c:forEach items="${requestScope.stages}" var="stage">
+						<c:forEach items="${sessionScope.stages}" var="stage">
 							<li class="checkbox"><label><input type="checkbox"
 									name="id-precedences" value="${stage.idStage}"> <c:out
 										value="${stage.name}"></c:out></label></li>
 						</c:forEach>
 					</ul>
 				</div>
-
-				<input type="hidden" name="id-project" value="${param.idProject}" />
-				<input type="hidden" name="id-stage" value="${ requestScope.stagesQueue[0].idStage}" />
-				<input type="hidden" name="stages" value="${requestScope.stages }" />
-				<input type="hidden" name="stages-queue" value="${requestScope.stagesQueue }" />
+				
+				<input type="hidden" name="id-project" value="${requestScope.idProject}" />
+				<!-- <input type="hidden" name="id-stage" value="${ sessionScope.stagesQueue[0].idStage}" /> -->
 				<br> <br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">

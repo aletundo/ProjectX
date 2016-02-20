@@ -74,9 +74,11 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath());
 		}
 		else{
-			Integer idUser = (Integer) request.getSession().getAttribute("idUser");
+			Integer idUser = (Integer) session.getAttribute("idUser");
+			String userType = (String) session.getAttribute("userType");
 			UserBean user = new UserBean();
 			user.setIdUser(idUser);
+			user.setType(userType);
 			List<ProjectBean> projects = ProjectDAO.getInstance().getUserProjects(user);
 			if (!projects.isEmpty()) {
 				request.setAttribute("projects", projects);

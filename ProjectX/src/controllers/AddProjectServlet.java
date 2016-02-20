@@ -3,7 +3,6 @@ package controllers;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +15,6 @@ import models.ClientDAO;
 import models.ProjectBean;
 import models.ProjectDAO;
 
-/**
- * Servlet implementation class AddProjectServlet
- */
 @WebServlet(name = "AddProjectServlet", urlPatterns = { "/addproject" })
 public class AddProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -75,9 +71,6 @@ public class AddProjectServlet extends HttpServlet {
 			project.setIdClient(idClient);
 			int idProject = ProjectDAO.getInstance().addProject(project);
 			if (idProject != 0) {
-				/*request.setAttribute("idProject", idProject);
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/addproject/addstages");
-				rd.forward(request, response);*/
 				response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
 			}
 		}

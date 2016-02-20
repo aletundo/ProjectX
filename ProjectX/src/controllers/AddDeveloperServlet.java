@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.UserDAO;
-import models.StageBean;
-import models.StageDAO;
 import models.TaskBean;
 import models.TaskDAO;
 import models.UserBean;
@@ -52,17 +50,18 @@ public class AddDeveloperServlet extends HttpServlet {
 			task.setIdTask(idTask);
 			boolean updated = TaskDAO.getInstance().addDeveloper(task);
 			if (!updated) {
-				// TODO RESPONSE with an alter or something like that OR FUCK!!! no errors
+				// TODO RESPONSE with an alter or something like that OR FUCK!!!
+				// no errors
 			} else if (request.getParameter("completed") == null) {
 				response.sendRedirect(request.getContextPath() + "/addtask");
 			}
-			  else if (request.getParameter("completed_developer") == null) {
-				response.sendRedirect(request.getContextPath() + "/addtask");
-			} 
-//			  else
-//			{
-//				response.sendRedirect(request.getContextPath() + "/add-developer&idTask=" + idTask);
-//			}
+			/*
+			 * else if (request.getParameter("completed_developer") == null) {
+			 * response.sendRedirect(request.getContextPath() + "/addtask"); }
+			 */
+			else {
+				response.sendRedirect(request.getContextPath() + "/add-developer&idTask=" + idTask);
+			}
 		}
 	}
 }

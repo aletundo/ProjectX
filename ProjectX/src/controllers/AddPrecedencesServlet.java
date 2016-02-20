@@ -1,7 +1,7 @@
 package controllers;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import models.StageBean;
 import models.StageDAO;
@@ -24,12 +25,14 @@ public class AddPrecedencesServlet extends HttpServlet {
 
 		int idProject = Integer.parseInt(request.getParameter("idProject"));
 		List<StageBean> stages = StageDAO.getInstance().getStages(idProject);
-		List<StageBean> stagesQueue = new LinkedList<StageBean>();
+		List<StageBean> stagesQueue = new ArrayList<StageBean>();
 		for(StageBean s : stages){
 			stagesQueue.add(s);
 		}
-		request.setAttribute("stages", stages);
-		request.setAttribute("stagesQueue", stagesQueue);
+		HttpSession session = request.getSession();
+		session.setAttribute("stages", stages);
+		session.setAttribute("stagesQueue", stagesQueue);
+		request.setAttribute("idProject", idProject);
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
 		dispatcher.forward(request, response);
@@ -37,14 +40,33 @@ public class AddPrecedencesServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int idProject = Integer.parseInt(request.getParameter("id-project"));
-		int idStage = Integer.parseInt(request.getParameter("id-stage"));
-		String[] idPrecedences = request.getParameterValues("id-precedences");
-		System.out.println(idStage);
-		for(String s : idPrecedences){
-			System.out.println(s);
-		}
-		
-	}
+		List<StageBean> precedences = new ArrayList<StageBean>();
+		StageBean stage = new StageBean();
 
+		//Get parameters
+		int idProject = Integer.parseInt(request.getParameter("id-project"));
+		String[] idPrecedences = request.getParameterValues("id-precedences");
+		@SuppressWarnings("unchecked")
+		List<StageBean> stagesQueue = (List<StageBean>)request.getSession().getAttribute("stagesQueue");
+		
+		//Build the list with the precedences to store
+		for(String p : idPrecedences){
+			StageBean sb = new StageBean();
+			sb.setIdStage(Integer.parseInt(p));
+			precedences.add(sb);
+		}
+		stage.setIdStage(stagesQueue.remove(0).getIdStage());
+		
+		StageDAO.getInstance().addPrecedences(stage, precedences);
+		
+		if(!stagesQueue.isEmpty()){
+			request.setAttribute("idProject", idProject);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
+			dispatcher.forward(request, response);
+		}else{
+			request.getSession().removeAttribute("stages");
+			request.getSession().removeAttribute("stagesQueue");
+			request.getSession().removeAttribute("idProject");
+		}
+	}
 }

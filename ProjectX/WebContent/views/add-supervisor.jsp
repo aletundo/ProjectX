@@ -15,36 +15,40 @@
 			<form class="form col-md-12 center-block"
 				action="${pageContext.request.contextPath}/addsupervisor"
 				method="POST" role="form" autocomplete="off">
-				
-					<c:choose>
-						<c:when test="${requestScope.outsourcing == true }">
-							<div class="alert alert-warning" role="alert">
-								<i class="fa fa-exclamation-triangle"></i>&nbsp;<em>Ops,
-									sorry :( There are no available supervisors. Please, fill the
-									outsourcing form below.</em>
-							</div>
-							<br>
-							<div class="input-group">
-							<span class="input-group-addon">Company name</span> <input
-						class="form-control" type="text" placeholder="Insert company name" name="company-name" />
+
+				<c:choose>
+					<c:when test="${requestScope.outsourcing == true }">
+						<div class="alert alert-warning" role="alert">
+							<i class="fa fa-exclamation-triangle"></i>&nbsp;<em>Ops,
+								sorry :( There are no available supervisors. Please, fill the
+								outsourcing form below.</em>
 						</div>
-							<br>
-							<div class="input-group">
-							<span class="input-group-addon">Mail</span>
-							<input class="form-control" type="text" placeholder="Insert mail (company@domain.example)" name="company-mail" />
-							</div>
-						</c:when>
-						<c:otherwise>
+						<br>
+						<div class="input-group">
+							<span class="input-group-addon">Company name</span> <input
+								class="form-control" type="text"
+								placeholder="Insert company name" name="company-name" />
+						</div>
+						<br>
+						<div class="input-group">
+							<span class="input-group-addon">Mail</span> <input
+								class="form-control" type="text"
+								placeholder="Insert mail (company@domain.example)"
+								name="company-mail" />
+						</div>
+					</c:when>
+					<c:otherwise>
 						<div class="input-group">
 							<jsp:include page="/views/sharable/users-list.jsp" />
-							</div>
-						</c:otherwise>
-					</c:choose>
-				
+						</div>
+					</c:otherwise>
+				</c:choose>
+
 				<div class="input-group">
 					<div class="checkbox">
 						<label><input type="checkbox" name="completed" value="">Check
-							me if it is the last stage.</label>
+							me if you have inserted all the stages and you are ready to set
+							the precedences between them.</label>
 					</div>
 				</div>
 				<input type="hidden" name="id-project" value="${param.idProject}" />
