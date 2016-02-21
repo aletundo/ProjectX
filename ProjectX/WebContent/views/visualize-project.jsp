@@ -16,7 +16,7 @@
 					<h3 class="panel-title">
 						<c:out value="${requestScope.project.name }"></c:out>
 					</h3>
-					<a class="btn btn-danger btn-sm pull-right" href=""><i class="fa fa-edit"></i>&nbsp;Edit</a>
+					<a class="btn btn-danger btn-sm pull-right" href=""><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 				</div>
 
 				<div class="panel-body">
@@ -39,9 +39,9 @@
 				<table class="table">
 					<tr>
 						<th><i class="fa fa-tag"></i>&nbsp;Stage</th>
-						<th><i class="fa fa-"></i>&nbsp;Start</th>
-						<th><i class="fa fa-"></i>&nbsp;Finish</th>
-						<th><i class="fa fa-magic"></i>&nbsp;Progress</th>
+						<th><i class="fa fa-hourglass-start"></i>&nbsp;Start</th>
+						<th><i class="fa fa-hourglass-end"></i>&nbsp;Finish</th>
+						<th><i class="fa fa-percent"></i>&nbsp;Progress</th>
 						<th><i class="fa fa-user"></i>&nbsp;Supervisor/Outsourcer</th>
 					</tr>
 
