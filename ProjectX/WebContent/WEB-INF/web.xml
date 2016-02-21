@@ -68,7 +68,7 @@
     <servlet-name>AddSupervisorServlet</servlet-name>
     <url-pattern>/addsupervisor</url-pattern>
   </servlet-mapping>
-<servlet>
+  <servlet>
     <servlet-name>AddTaskServlet</servlet-name>
     <servlet-class>controllers.AddTaskServlet</servlet-class>
   </servlet>
@@ -83,5 +83,13 @@
   <servlet-mapping>
     <servlet-name>AddDeveloperServlet</servlet-name>
     <url-pattern>/add-developer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ProjectDetailsServlet</servlet-name>
+    <servlet-class>controllers.ProjectDetailsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProjectDetailsServlet</servlet-name>
+    <url-pattern>/project/*</url-pattern>
   </servlet-mapping>
 </web-app>

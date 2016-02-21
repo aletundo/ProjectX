@@ -12,6 +12,7 @@ public class StageBean {
 	private String finishDay;
 	private int estimatedDuration;
 	private boolean outsourcing;
+	private String supervisorFullname;
 	private String companyName;
 	private String companyMail;
 	
@@ -89,6 +90,12 @@ public class StageBean {
 	}
 	public void setCompanyMail(String companyMail) {
 		this.companyMail = companyMail;
+	}
+	public String getSupervisorFullname() {
+		return supervisorFullname;
+	}
+	public void setSupervisorFullname(String supervisorFullname) {
+		this.supervisorFullname = supervisorFullname;
 	}
 	
 	

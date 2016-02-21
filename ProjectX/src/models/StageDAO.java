@@ -19,6 +19,48 @@ public class StageDAO {
 		return INSTANCE;
 	}
 	
+	public List<StageBean> getStagesDetails(int idProject){
+		List<StageBean> stages = new ArrayList<StageBean>();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, U.fullname AS Supervisor "
+					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
+					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False' "
+					+ "UNION SELECT S.idStage AS IdStage, S.name AS Name, "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.companyName AS Supervisor "
+					+ "FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
+			try{
+				statement = currentConn.prepareStatement(getStagesQuery);
+				statement.setInt(1, idProject);
+				statement.setInt(2, idProject);
+				rs = statement.executeQuery();
+				
+				while(rs.next()){
+					StageBean stage = new StageBean();
+					stage.setIdStage(rs.getInt("IdStage"));
+					stage.setName(rs.getString("Name"));
+					stage.setStartDay(rs.getString("StartDay"));
+					stage.setFinishDay(rs.getString("FinishDay"));
+					stage.setSupervisorFullname(rs.getString("Supervisor"));
+					stages.add(stage);
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a Logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return stages;
+		
+	}
+	
 	public boolean addPrecedences(StageBean stage, List<StageBean> precedences){
 		boolean added = false;
 		PreparedStatement statement = null;
@@ -73,6 +115,7 @@ public class StageDAO {
 		
 		return stages;
 	}
+	
 	public boolean addSupervisor(StageBean stage) {
 		PreparedStatement statement = null;
 		boolean updated = false;

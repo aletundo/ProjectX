@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,10 +51,10 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("userType", user.getType());
 			// Setting session to expires in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
-			Cookie userName = new Cookie("user", username);
+			/*Cookie userName = new Cookie("user", username);
 			userName.setSecure(true);
 			userName.setMaxAge(30 * 60);
-			response.addCookie(userName);
+			response.addCookie(userName);*/
 
 			dispatcher = getServletContext().getRequestDispatcher("/views/myprojects.jsp");
 			dispatcher.forward(request, response);

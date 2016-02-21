@@ -69,7 +69,7 @@
 			</div>
 		</div>
 		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sidebar-project-manager.jsp" />
+			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

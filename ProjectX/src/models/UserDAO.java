@@ -34,7 +34,7 @@ public class UserDAO {
 					+ "UNION SELECT DISTINCT U.idUser AS IdUser "
 					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor";
 			final String dropView = "DROP VIEW busyusers";
-			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.name AS Name, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'Junior' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)";
+			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'Junior' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)";
 			try {
 				statement = currentConn.createStatement();
 				statement.executeUpdate(createView);
@@ -43,7 +43,7 @@ public class UserDAO {
 				while (rs.next()) {
 					UserBean user = new UserBean();
 					user.setIdUser(rs.getInt("IdUser"));
-					user.setName(rs.getString("Name"));
+					user.setFullname(rs.getString("Fullname"));
 					user.setType(rs.getString("Type"));
 					candidates.add(user);
 				}
@@ -70,7 +70,7 @@ public class UserDAO {
 					+ "UNION SELECT DISTINCT U.idUser AS IdUser "
 					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor";
 			final String dropView = "DROP VIEW busyusers";
-			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.name AS Name, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'ProjectManager' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)";
+			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'ProjectManager' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)";
 			try {
 				statement = currentConn.createStatement();
 				statement.executeUpdate(createView);
@@ -79,7 +79,7 @@ public class UserDAO {
 				while (rs.next()) {
 					UserBean user = new UserBean();
 					user.setIdUser(rs.getInt("IdUser"));
-					user.setName(rs.getString("Name"));
+					user.setFullname(rs.getString("Fullname"));
 					user.setType(rs.getString("Type"));
 					candidates.add(user);
 				}
@@ -113,8 +113,8 @@ public class UserDAO {
 		if (currentConn != null) {
 			// String signUpQuery = "INSERT INTO User(username, salt, hashpw)
 			// VALUES(?, ?, ?)";
-			final String signUpQuery = "INSERT INTO user(username, name, surname, mail, skills, salt, hashpw, type) VALUES('"
-					+ user.getUsername() + "','" + user.getName() + "','" + user.getSurname() + "','" + user.getMail()
+			final String signUpQuery = "INSERT INTO user(username, fullname, mail, skills, salt, hashpw, type) VALUES('"
+					+ user.getUsername() + "','" + user.getFullname() + "','" + user.getMail()
 					+ "','" + user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','"
 					+ user.getType() + "')";
 			try {

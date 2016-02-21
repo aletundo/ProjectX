@@ -7,8 +7,7 @@ public class UserBean {
 	private String hashPw;
 	private String salt;
 	private String pw;
-	private String name;
-	private String surname;
+	private String fullname;
 	private String type;
 	private String skills;
 	private String mail;
@@ -57,20 +56,12 @@ public class UserBean {
 		this.salt = salt;
 	}
 
-	public String getName() {
-		return name;
+	public String getFullname() {
+		return fullname;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	public String getType() {

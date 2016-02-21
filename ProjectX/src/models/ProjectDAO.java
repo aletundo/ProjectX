@@ -20,6 +20,38 @@ public class ProjectDAO {
 
 	}
 
+	public ProjectBean getProjectInfo(int idProject) {
+		ProjectBean projectInfo = new ProjectBean();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getProjectInfoQuery = "SELECT P.idProject as IdProject, P.name AS ProjectName, P.start AS Start, P.deadline AS Deadline, C.name AS ClientName "
+					+ "FROM project AS P JOIN client AS C ON P.idClient = C.idClient  WHERE P.idProject = ?";
+			try {
+				statement = currentConn.prepareStatement(getProjectInfoQuery);
+				statement.setInt(1, idProject);
+
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					projectInfo.setIdProject(Integer.parseInt(rs.getString("IdProject")));
+					projectInfo.setName(rs.getString("ProjectName"));
+					projectInfo.setStart(rs.getString("Start"));
+					projectInfo.setDeadline(rs.getString("Deadline"));
+					projectInfo.setClientName(rs.getString("ClientName"));
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		return projectInfo;
+	}
+
 	public int addProject(ProjectBean project) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -45,7 +77,7 @@ public class ProjectDAO {
 				rs = statement.getGeneratedKeys();
 				while (rs.next())
 					project.setIdProject(rs.getInt(1));
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 				// TODO Handle with a Logger
@@ -61,28 +93,20 @@ public class ProjectDAO {
 		Connection currentConn = DbConnection.connect();
 		Statement statement = null;
 		ResultSet rs = null;
-		final String getUserProjectsQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS client "
-					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser "
-					+ "JOIN client AS C ON P.idClient = C.idClient "
-					+ "JOIN userprojects AS UP ON P.idProject = UP.idProject";
+		final String getUserProjectsQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.fullname AS ProjectManager, C.name AS client "
+				+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser "
+				+ "JOIN client AS C ON P.idClient = C.idClient "
+				+ "JOIN userprojects AS UP ON P.idProject = UP.idProject";
 		final String dropView = "DROP VIEW userprojects";
 
 		if (currentConn != null) {
-			
+
 			String createView = buildGetProjectsQueries(user.getType(), user.getIdUser());
-			
-			/*getUserProjectQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS client "
-					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser JOIN client AS C ON P.idClient = C.idClient "
-					+ "WHERE P.idProject =(SELECT P2.idProject AS IdProject2 "
-					+ "FROM user AS U2 JOIN stage AS S ON U2.idUser = S.idSupervisor JOIN project AS P2 ON S.idProject = P2.idProject "
-					+ "WHERE U2.idUser = ?) " + "UNION "
-					+ "(SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager, C.name AS client "
-					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser "
-					+ "JOIN client AS C ON P.idClient = C.idClient WHERE U.idUser = ?)";*/
+
 			try {
 				statement = currentConn.createStatement();
 				statement.executeUpdate(createView);
-				
+
 				rs = statement.executeQuery(getUserProjectsQuery);
 				while (rs.next()) {
 					ProjectBean project = new ProjectBean();
@@ -93,7 +117,7 @@ public class ProjectDAO {
 					projectList.add(project);
 				}
 				statement.executeUpdate(dropView);
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 				// TODO Handle with a Logger
@@ -103,7 +127,7 @@ public class ProjectDAO {
 		}
 		return projectList;
 	}
-	
+
 	public List<ProjectBean> searchProjects(String subjectArea) {
 		List<ProjectBean> projectList = new ArrayList<ProjectBean>();
 		PreparedStatement statement = null;
@@ -135,32 +159,29 @@ public class ProjectDAO {
 		}
 		return projectList;
 	}
-	
-	private String buildGetProjectsQueries(String userType, int idUser){
+
+	private String buildGetProjectsQueries(String userType, int idUser) {
 		String view = "";
-		if(userType.equals("ProjectManager")){
+		if (userType.equals("ProjectManager")) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor "
 					+ "JOIN project AS P ON S.idProject = P.idProject  WHERE U.idUser = " + idUser
-					+ " UNION SELECT P.idProject AS idProject "
-					+ "FROM project AS P WHERE P.idProjectManager = " + idUser;
-			
-		}else if(userType.equals("Senior")){
+					+ " UNION SELECT P.idProject AS idProject " + "FROM project AS P WHERE P.idProjectManager = "
+					+ idUser;
+
+		} else if (userType.equals("Senior")) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor "
 					+ "JOIN project AS P ON S.idProject = P.idProject  WHERE U.idUser = " + idUser
 					+ " UNION SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
-					+ "JOIN task AS T ON TD.idTask = T.idTask "
-					+ "JOIN stage AS S ON T.idStage = S.idStage "
+					+ "JOIN task AS T ON TD.idTask = T.idTask " + "JOIN stage AS S ON T.idStage = S.idStage "
 					+ "JOIN project AS P ON S.idProject = P.idProject WHERE U.idUser = " + idUser;
-				
-			
-		}else if(userType.equals("Junior")){
+
+		} else if (userType.equals("Junior")) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
-					+ "JOIN task AS T ON TD.idTask = T.idTask "
-					+ "JOIN stage AS S ON T.idStage = S.idStage "
+					+ "JOIN task AS T ON TD.idTask = T.idTask " + "JOIN stage AS S ON T.idStage = S.idStage "
 					+ "JOIN project AS P ON S.idProject = P.idProject WHERE U.idUser = " + idUser;
 		}
 		return view;

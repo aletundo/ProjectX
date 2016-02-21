@@ -14,7 +14,7 @@
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="${pageContext.request.contextPath}/myprojects"><i class="fa fa-folder"></i>&nbsp;My
+				<li><a href="${pageContext.request.contextPath}/myprojects"><i class="fa fa-folder"></i>&nbsp;My
 						Projects</a></li>
 				<li><a href="${pageContext.request.contextPath}/logout"><i
 						class="fa fa-sign-out"></i>&nbsp;Logout</a></li>

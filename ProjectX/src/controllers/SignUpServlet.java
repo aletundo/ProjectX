@@ -26,8 +26,7 @@ public class SignUpServlet extends HttpServlet {
 		String username = request.getParameter("user");
 		String pw = request.getParameter("pw");
 		String type = request.getParameter("type");
-		String name = request.getParameter("name");
-		String surname = request.getParameter("surname");
+		String fullname = request.getParameter("fullname");
 		String mail = request.getParameter("mail");
 		String skills = request.getParameter("skills");
 		
@@ -35,9 +34,8 @@ public class SignUpServlet extends HttpServlet {
 		UserBean user = new UserBean();
 		user.setUsername(username);
 		user.setPw(pw);
-		user.setName(name);
+		user.setFullname(fullname);
 		user.setType(type);
-		user.setSurname(surname);
 		user.setSkills(skills);
 		user.setMail(mail);
 		
