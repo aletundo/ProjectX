@@ -5,7 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.UserBean;
 import utils.DbConnection;
@@ -22,6 +24,75 @@ public class UserDAO {
 
 		return INSTANCE;
 	}
+	
+	public List<UserBean> newGetCandidateSupervisors() {
+		List<UserBean> candidates = new ArrayList<UserBean>();
+		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
+		ResultSet rs = null;
+		Statement statement = null;
+		Connection currentConn = DbConnection.connect();
+		if (currentConn != null) {
+			final String getUsers = "SELECT idUser AS IdUser FROM user "
+					+ "WHERE type NOT LIKE 'Junior'";
+			final String getActiveProjects = "SELECT U.idUser AS IdUser, P.idProject AS IdProject, P.start AS Start, P.deadline AS Deadline "
+					+ "FROM user AS U JOIN project AS P "
+					+ "ON U.idUser = P.idProjectManager";
+			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
+					+ "FROM user AS U JOIN stage AS S "
+					+ "ON U.idUser = S.idSupervisor";
+			
+			try{
+				statement = currentConn.createStatement();
+				rs = statement.executeQuery(getUsers);
+				while (rs.next()) {
+					List<Object> works = new ArrayList<Object>();
+					Integer user = new Integer(rs.getInt("IdUser"));
+					workMap.put(user, works);
+				}
+				rs.close();
+				
+				rs = statement.executeQuery(getActiveProjects);
+				while (rs.next()) {
+					ProjectBean project = new ProjectBean();
+					project.setIdProject(rs.getInt("IdProject"));
+					project.setStart(rs.getString("Start"));
+					project.setDeadline(rs.getString("Deadline"));
+
+					Integer user = new Integer(rs.getInt("IdUser"));
+
+					List<Object> updatedValue = workMap.get(user);
+					updatedValue.add(project);
+					workMap.put(user, updatedValue);
+				}
+				rs.close();
+				rs = statement.executeQuery(getActiveStages);
+				while (rs.next()) {
+					StageBean stage = new StageBean();
+					stage.setIdProject(rs.getInt("IdStage"));
+					stage.setStartDay(rs.getString("StartDay"));
+					stage.setFinishDay(rs.getString("FinishDay"));
+
+					Integer user = new Integer(rs.getInt("IdUser"));
+
+					List<Object> updatedValue = workMap.get(user);
+					updatedValue.add(stage);
+					workMap.put(user, updatedValue);
+				}
+				
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		//TODO CalculateAvailableUser.calculateSupervision();
+	return candidates;	
+	}
+	
+	
+
 
 	public List<UserBean> getCandidateSupervisors() {
 		List<UserBean> candidates = new ArrayList<UserBean>();
