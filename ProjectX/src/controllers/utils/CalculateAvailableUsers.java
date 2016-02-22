@@ -20,26 +20,36 @@ public class CalculateAvailableUsers{
 	private static final int PROJECTHOURPERDAY = 4;
 	private static final int STAGEHOURPERDAY = 2;
 	
-	private static DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 
 	
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
 	//TODO overload the method in case of task assignement
-	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) throws ParseException{
+	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<UserBean>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
 		while (mapIterator.hasNext()) {
-			minStart = format.parse(newStage.getStartDay());
-			maxFinish = format.parse(newStage.getFinishDay());
+			try {
+				minStart = format.parse(newStage.getStartDay());
+				maxFinish = format.parse(newStage.getFinishDay());
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			Map.Entry<Integer, List<Object>> pair = (Map.Entry<Integer, List<Object>>) mapIterator.next();
 			List<Object> criticalWorks = new ArrayList<Object>();
 			
 
 			Iterator<Object> arrayListIterator = pair.getValue().iterator();
+			if(pair.getValue() == null){
+				UserBean userFree = new UserBean();
+				userFree.setIdUser(pair.getKey());
+				availableUsers.add(userFree);
+			}
 			while (arrayListIterator.hasNext()) {	
 				try {
 					Object work = arrayListIterator.next();
@@ -51,12 +61,19 @@ public class CalculateAvailableUsers{
 					}
 				} catch (ParseException e) {
 					// TODO handle exception with a logger
+					e.printStackTrace();
 				}
 			}
 			
-			long hourAvailable = calculateAvailability(criticalWorks, newStage);
-			System.out.println(hourAvailable);
-			long hourNewStage = STAGEHOURPERDAY*(getDifferenceDays(format.parse(newStage.getStartDay()), format.parse(newStage.getFinishDay())));
+			long hourAvailable = Long.MIN_VALUE;
+			long hourNewStage = Long.MIN_VALUE;
+			try {
+				hourAvailable = calculateAvailability(criticalWorks, newStage);
+				hourNewStage = STAGEHOURPERDAY*(1 + getDifferenceDays(format.parse(newStage.getStartDay()), format.parse(newStage.getFinishDay())));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (hourAvailable >= hourNewStage){
 				UserBean availableUser = new UserBean();
 				if(pair!=null){

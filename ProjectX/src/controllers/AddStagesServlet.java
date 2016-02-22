@@ -59,7 +59,8 @@ public class AddStagesServlet extends HttpServlet {
 
 			if (idStage != 0)
 				response.sendRedirect(
-						request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage=" + idStage);
+						request.getContextPath() + "/addsupervisor?idProject=" + idProject + 
+						"&idStage=" + idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
 		}
 
 	}

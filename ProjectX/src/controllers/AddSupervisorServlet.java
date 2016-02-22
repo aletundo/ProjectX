@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controllers.utils.CalculateAvailableUsers;
 import models.UserDAO;
 import models.StageBean;
 import models.StageDAO;
@@ -28,7 +30,18 @@ public class AddSupervisorServlet extends HttpServlet {
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
 		} else {
-			List<UserBean> candidates = UserDAO.getInstance().getCandidateSupervisors();
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			String startDay = request.getParameter("startDay");
+			String finishDay = request.getParameter("finishDay");
+			
+			StageBean stage = new StageBean();
+			stage.setIdStage(idStage);
+			stage.setStartDay(startDay);
+			stage.setFinishDay(finishDay);
+			
+			Map<Integer, List<Object>> workMap = UserDAO.getInstance().newGetCandidateSupervisors();
+			List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, stage);
+			candidates = UserDAO.getInstance().getUsersInfo(candidates);
 			if(candidates.isEmpty())
 			{
 				request.setAttribute("outsourcing", true);

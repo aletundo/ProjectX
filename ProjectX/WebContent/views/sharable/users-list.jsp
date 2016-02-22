@@ -2,10 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div class="panel panel-default">
+<div class="panel panel-primary">
 	<!-- Default panel contents -->
 	<div class="panel-heading">
-		<span class="fa fa-group"></span><b>Available supervisors</b>
+		<span class="fa fa-group"></span><b>&nbsp;Available supervisors</b>
 	</div>
 	<!-- List group -->
 	<ul class="list-group list-results">
@@ -13,7 +13,7 @@
 			var="candidate">
 			<li class="radio"><label><input type="radio"
 					name="id-supervisor" value="${candidate.idUser}">
-				<c:out value="${candidate.name}"></c:out></label></li>
+				<c:out value="${candidate.fullname}"></c:out></label></li>
 		</c:forEach>
 	</ul>
 </div>

@@ -47,13 +47,13 @@
 				<div class="input-group">
 					<span class="input-group-addon">Start day</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the start day (YYYY-mm-DD)" name="start-day" />
+						placeholder="Insert the start day (yyyy-MM-dd)" name="start-day" />
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Finish day</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the finish day (YYYY-mm-DD)" name="finish-day" />
+						placeholder="Insert the finish day (yyyy-MM-dd)" name="finish-day" />
 				</div>
 				<br>
 				<div class="input-group">
