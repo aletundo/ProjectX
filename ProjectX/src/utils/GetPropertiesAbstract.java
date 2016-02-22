@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public abstract class GetPropertiesAbstract {
 	
-	abstract String[] getPropValues() throws IOException;
+	abstract Object[] getPropValues() throws IOException;
 
 }

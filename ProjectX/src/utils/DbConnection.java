@@ -21,11 +21,8 @@ public class DbConnection {
 		String user = "";
 		String pass = "";
 
-		// Get Properties
-		GetDbConnProperties properties = new GetDbConnProperties();
-
 		try {
-			String[] propertiesValues = properties.getPropValues();
+			String[] propertiesValues = GetDbConnProperties.getInstance().getPropValues();
 			dbUrl = propertiesValues[0];
 			user = propertiesValues[1];
 			pass = propertiesValues[2];

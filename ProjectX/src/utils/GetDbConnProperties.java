@@ -6,11 +6,21 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class GetDbConnProperties extends GetPropertiesAbstract {
+	private static final GetDbConnProperties INSTANCE = new GetDbConnProperties();
 	
-	String[] properties = {"", "", ""};
-	private InputStream inputStream;
+	public GetDbConnProperties(){
+		
+	}
+	
+	public static GetDbConnProperties getInstance(){
+		return INSTANCE;
+	}
+	
 	
 	public String[] getPropValues() throws IOException {
+		
+		String[] properties = {"", "", ""};
+		InputStream inputStream = null;
  
 		try {
 			Properties prop = new Properties();
