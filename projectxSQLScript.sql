@@ -153,7 +153,8 @@ CREATE TABLE `task` (
   `startDay` date DEFAULT NULL,
   `finishDay` date DEFAULT NULL,
   `idStage` int(11) NOT NULL,
-  `completed` tinyint(1) DEFAULT NULL,
+  `completed` enum('False','True') DEFAULT 'False',
+  `name` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`idTask`),
   KEY `fk_Task_Stage1_idx` (`idStage`),
   CONSTRAINT `StageTask` FOREIGN KEY (`idStage`) REFERENCES `stage` (`idStage`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -236,4 +237,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-22 16:30:30
+-- Dump completed on 2016-02-22 17:06:59
