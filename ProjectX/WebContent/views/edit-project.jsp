@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
-<title>ProjectX - Create a project</title>
+<title>ProjectX - Edit <c:out value="${requestScope.project.name }"></c:out></title>
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
@@ -14,7 +14,7 @@
 			help you.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addproject" method="POST" role="form"
+				action="${pageContext.request.contextPath}/editproject" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
@@ -63,13 +63,13 @@
 				<div class="input-group">
 					<span class="input-group-addon">Start</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the start (YYYY-mm-DD)" name="start" />
+						placeholder="Insert the start (yyyy-MM-dd)" name="start" />
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Deadline</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline" />
+						placeholder="Insert the deadline (yyyy-MM-dd)" name="deadline" />
 				</div>
 				<br>
 				<div class="input-group">

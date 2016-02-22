@@ -8,18 +8,6 @@
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
-	<%
-		//Check session exists
-		String user = (String) session.getAttribute("username");
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		}
-	%>
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
 			<strong>Perfect!</strong> Now you can divide your project into stages.

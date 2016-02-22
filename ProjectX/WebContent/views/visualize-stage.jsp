@@ -5,7 +5,7 @@
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
 <title>ProjectX - Project: <c:out
-		value="${requestScope.project.name }"></c:out></title>
+		value="${requestScope.stage.name }"></c:out></title>
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
@@ -16,7 +16,7 @@
 					<h3 class="panel-title">
 						<c:out value="${requestScope.stage.name }"></c:out>
 					</h3>
-					<a class="btn btn-danger btn-sm pull-right" href=""><i
+					<a class="btn btn-danger btn-sm pull-right" href="./editstage?idStage=${requestScope.stage.idStage }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a>
 				</div>
 
@@ -48,7 +48,7 @@
 					<c:forEach items="${requestScope.tasks}" var="task">
 						<tr>
 							<td><a
-								href="${pageContext.request.contextPath}/task?idTask=${task.idTask}"><strong><c:out
+								href="./task?idTask=${task.idTask}"><strong><c:out
 											value="${task.name}"></c:out></strong></a></td>
 							<td><c:out value="${task.startDay}"></c:out></td>
 							<td><c:out value="${task.finishDay}"></c:out></td>

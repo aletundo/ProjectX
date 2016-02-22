@@ -34,7 +34,7 @@ public class StageDAO {
 
 				rs = statement.executeQuery();
 				while (rs.next()) {
-					stageInfo.setIdProject(Integer.parseInt(rs.getString("IdStage")));
+					stageInfo.setIdStage(Integer.parseInt(rs.getString("IdStage")));
 					stageInfo.setName(rs.getString("StageName"));
 					stageInfo.setStartDay(rs.getString("StartDay"));
 					stageInfo.setFinishDay(rs.getString("FinishDay"));

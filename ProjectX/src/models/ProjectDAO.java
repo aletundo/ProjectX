@@ -19,6 +19,31 @@ public class ProjectDAO {
 		return INSTANCE;
 
 	}
+	
+	public int getProjectManagerId(int idProject){
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		int idProjectManager = 0;
+		Connection currentConn = DbConnection.connect();
+		if(currentConn != null){
+			final String getProjectManagerQuery= "SELECT P.idProjectManager AS IdProjectManager "
+					+ "FROM project AS P WHERE P.idProject = ?";
+			try{
+				statement = currentConn.prepareStatement(getProjectManagerQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while(rs.next()){
+					idProjectManager = rs.getInt("IdProjectManager");
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		return idProjectManager;
+	}
 
 	public ProjectBean getProjectInfo(int idProject) {
 		ProjectBean projectInfo = new ProjectBean();

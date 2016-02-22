@@ -16,7 +16,7 @@
 					<h3 class="panel-title">
 						<c:out value="${requestScope.project.name }"></c:out>
 					</h3>
-					<a class="btn btn-danger btn-sm pull-right" href=""><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+					<a class="btn btn-danger btn-sm pull-right" href="./editproject?idProject=${requestScope.project.idProject}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 				</div>
 
 				<div class="panel-body">
@@ -48,7 +48,7 @@
 					<c:forEach items="${requestScope.stages}" var="stage">
 						<tr>
 							<td><a
-								href="${pageContext.request.contextPath}/stage?idStage=${stage.idStage}"><strong><c:out
+								href="./stage?idStage=${stage.idStage}"><strong><c:out
 											value="${stage.name}"></c:out></strong></a></td>
 											<td><c:out
 										value="${stage.startDay}"></c:out></td>

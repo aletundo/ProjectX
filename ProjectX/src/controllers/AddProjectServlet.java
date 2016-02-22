@@ -22,71 +22,81 @@ public class AddProjectServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		//If the session is not valid redirect to login
-		HttpSession session = request.getSession(false);
+		if(!isAuthorized(request, response))
+			return;
+
+		ProjectBean project = new ProjectBean();
+		ClientBean client = new ClientBean();
+		Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
+
+		// Get parameters
+		String name = request.getParameter("name");
+		double budget = Double.parseDouble(request.getParameter("budget"));
+		String goals = request.getParameter("goals");
+		String requirements = request.getParameter("requirements");
+		String clientName = request.getParameter("client-name");
+		String clientMail = request.getParameter("client-mail");
+		String subjectAreas = request.getParameter("subject-areas");
+		int estimatedDuration = Integer.parseInt(request.getParameter("estimated-duration"));
+		double estimatedCosts = Double.parseDouble(request.getParameter("estimated-costs"));
+		String deadline = request.getParameter("deadline"); // yyyy-MM-dd
+		String start = request.getParameter("start"); // yyyy-MM-dd
+
+		// Set the bean
+		project.setName(name);
+		project.setBudget(budget);
+		project.setGoals(goals);
+		project.setRequirements(requirements);
+		project.setSubjectAreas(subjectAreas);
+		project.setEstimatedCosts(estimatedCosts);
+		project.setEstimatedDuration(estimatedDuration);
+		project.setStart(start);
+		project.setDeadline(deadline);
+		project.setIdProjectManager(idProjectManager);
+		client.setName(clientName);
+		client.setMail(clientMail);
+
+		// Add the client and retrieve his id
+		int idClient = ClientDAO.getInstance().addClient(client);
+		project.setIdClient(idClient);
+		int idProject = ProjectDAO.getInstance().addProject(project);
+		if (idProject != 0) {
+			response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
+		}
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 * @return boolean
+	 */
+	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		HttpSession session = request.getSession();
+		// If the session is not valid redirect to login
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
-		} else {
-
-			ProjectBean project = new ProjectBean();
-			ClientBean client = new ClientBean();
-			Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
-			String userType = request.getSession().getAttribute("userType").toString();
-
-			
-			if (!"ProjectManager".equals(userType)) {
-				// MUST BE DECIDED WHERE REDIRECT THE USER!!!!!!!!!!!!
-				response.sendRedirect(request.getContextPath());
-			}
-			//Get parameters
-			String name = request.getParameter("name");
-			double budget = Double.parseDouble(request.getParameter("budget"));
-			String goals = request.getParameter("goals");
-			String requirements = request.getParameter("requirements");
-			String clientName = request.getParameter("client-name");
-			String clientMail = request.getParameter("client-mail");
-			String subjectAreas = request.getParameter("subject-areas");
-			int estimatedDuration = Integer.parseInt(request.getParameter("estimated-duration"));
-			double estimatedCosts = Double.parseDouble(request.getParameter("estimated-costs"));
-			String deadline = request.getParameter("deadline"); // yyyy-MM-dd
-			String start = request.getParameter("start"); //yyyy-MM-dd
-
-			//Set the bean
-			project.setName(name);
-			project.setBudget(budget);
-			project.setGoals(goals);
-			project.setRequirements(requirements);
-			project.setSubjectAreas(subjectAreas);
-			project.setEstimatedCosts(estimatedCosts);
-			project.setEstimatedDuration(estimatedDuration);
-			project.setStart(start);
-			project.setDeadline(deadline);
-			project.setIdProjectManager(idProjectManager);
-			client.setName(clientName);
-			client.setMail(clientMail);
-			
-			//Add the client and retrieve his id
-			int idClient = ClientDAO.getInstance().addClient(client);
-			project.setIdClient(idClient);
-			int idProject = ProjectDAO.getInstance().addProject(project);
-			if (idProject != 0) {
-				response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
-			}
+			return false;
 		}
+
+		if (!"ProjectManager".equals(session.getAttribute("userType"))) {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
+			dispatcher.forward(request, response);
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-		} else {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
-			dispatcher.forward(request, response);
-		}
+		if(!isAuthorized(request, response))
+			return;
 
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
+		dispatcher.forward(request, response);
 	}
 
 }

@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,43 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import models.ClientBean;
-import models.ClientDAO;
+import models.ProjectDAO;
 
-@WebServlet(name = "SearchClientsServlet", urlPatterns = { "/searchclients" })
-public class SearchClientsServlet extends HttpServlet {
+@WebServlet("/editproject")
+public class EditProject extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(!isAuthorized(request, response))
+		if (!isAuthorized(request, response))
 			return;
-		
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/search-clients.jsp");
-			dispatcher.forward(request, response);
-	}
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		if(!isAuthorized(request, response))
-			return;
-		
-		String subjectArea = request.getParameter("subject-area");
-		List<ClientBean> clients = ClientDAO.getInstance().getRelatedClients(subjectArea);
-		RequestDispatcher dispatcher;
-		if (clients.isEmpty()) {
-			request.setAttribute("noMatchFound", "No related clients found! Sorry, try again :(");
-		} else {
-			request.setAttribute("clients", clients);
-		}
-		request.setAttribute("subjectArea", subjectArea);
-		dispatcher = getServletContext().getRequestDispatcher("/views/related-clients.jsp");
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-project.jsp");
 		dispatcher.forward(request, response);
 	}
-	
+
 	/**
 	 * @param request
 	 * @param response
@@ -64,7 +42,9 @@ public class SearchClientsServlet extends HttpServlet {
 			return false;
 		}
 
-		if (!"ProjectManager".equals(session.getAttribute("userType"))) {
+		int idProjectManager = ProjectDAO.getInstance()
+				.getProjectManagerId(Integer.parseInt(request.getParameter("idProject")));
+		if (idProjectManager != (Integer) (session.getAttribute("idUser"))) {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
 			dispatcher.forward(request, response);
 			return false;
@@ -72,5 +52,15 @@ public class SearchClientsServlet extends HttpServlet {
 		return true;
 	}
 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
 
 }

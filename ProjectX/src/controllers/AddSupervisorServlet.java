@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import controllers.utils.CalculateAvailableUsers;
 import models.UserDAO;
+import models.ProjectDAO;
 import models.StageBean;
 import models.StageDAO;
 import models.UserBean;
@@ -25,11 +26,9 @@ public class AddSupervisorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-		} else {
+		if (!isAuthorized(request, response))
+			return;
+		
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
 			String startDay = request.getParameter("startDay");
 			String finishDay = request.getParameter("finishDay");
@@ -50,16 +49,14 @@ public class AddSupervisorServlet extends HttpServlet {
 			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-supervisor.jsp");
 			dispatcher.forward(request, response);
-		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-		} else {
+		if (!isAuthorized(request, response))
+			return;
+		
 			StageBean stage = new StageBean();
 			int idStage = Integer.parseInt(request.getParameter("id-stage"));
 			int idProject = Integer.parseInt(request.getParameter("id-project"));
@@ -86,6 +83,31 @@ public class AddSupervisorServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
 			}
 		}
+	
+	/**
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 * @return boolean
+	 */
+	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		HttpSession session = request.getSession();
+		// If the session is not valid redirect to login
+		if (session == null || session.getAttribute("idUser") == null) {
+			response.sendRedirect(request.getContextPath());
+			return false;
+		}
+
+		int idProjectManager = ProjectDAO.getInstance()
+				.getProjectManagerId(Integer.parseInt(request.getParameter("idProject")));
+		if (idProjectManager != (Integer) (session.getAttribute("idUser"))) {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
+			dispatcher.forward(request, response);
+			return false;
+		}
+		return true;
 	}
 
 }
