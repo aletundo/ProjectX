@@ -24,5 +24,9 @@ public class ClientBean {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
+	@Override
+	public String toString() {
+		return "ClientBean [idClient=" + idClient + ", name=" + name + ", mail=" + mail + "]";
+	}
 
 }

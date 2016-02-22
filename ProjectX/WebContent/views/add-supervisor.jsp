@@ -17,7 +17,7 @@
 				method="POST" role="form" autocomplete="off">
 
 				<c:choose>
-					<c:when test="${requestScope.outsourcing == true }">
+					<c:when test="${requestScope.outsourcing == 'True' }">
 						<div class="alert alert-warning" role="alert">
 							<i class="fa fa-exclamation-triangle"></i>&nbsp;<em>Ops,
 								sorry :( There are no available supervisors. Please, fill the

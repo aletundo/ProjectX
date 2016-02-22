@@ -11,7 +11,7 @@ public class StageBean {
 	private String startDay;
 	private String finishDay;
 	private int estimatedDuration;
-	private boolean outsourcing;
+	private String outsourcing;
 	private String supervisorFullname;
 	private String companyName;
 	private String companyMail;
@@ -73,10 +73,10 @@ public class StageBean {
 	public void setEstimatedDuration(int duration) {
 		this.estimatedDuration = duration;
 	}
-	public boolean isOutsourcing() {
+	public String getOutsourcing() {
 		return outsourcing;
 	}
-	public void setOutsourcing(boolean outsourcing) {
+	public void setOutsourcing(String outsourcing) {
 		this.outsourcing = outsourcing;
 	}
 	public String getCompanyName() {
@@ -97,7 +97,13 @@ public class StageBean {
 	public void setSupervisorFullname(String supervisorFullname) {
 		this.supervisorFullname = supervisorFullname;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "StageBean [idStage=" + idStage + ", idProject=" + idProject + ", name=" + name + ", idSupervisor="
+				+ idSupervisor + ", goals=" + goals + ", requirements=" + requirements + ", startDay=" + startDay
+				+ ", finishDay=" + finishDay + ", estimatedDuration=" + estimatedDuration + ", outsourcing="
+				+ outsourcing + ", supervisorFullname=" + supervisorFullname + ", companyName=" + companyName
+				+ ", companyMail=" + companyMail + "]";
+	}
 
 }

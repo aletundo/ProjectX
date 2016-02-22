@@ -132,4 +132,13 @@ public ProjectBean(){
 	public void setStart(String start) {
 		this.start = start;
 	}
+
+	@Override
+	public String toString() {
+		return "ProjectBean [idProject=" + idProject + ", name=" + name + ", idProjectManager=" + idProjectManager
+				+ ", budget=" + budget + ", idClient=" + idClient + ", goals=" + goals + ", requirements="
+				+ requirements + ", subjectAreas=" + subjectAreas + ", start=" + start + ", estimatedCosts="
+				+ estimatedCosts + ", deadline=" + deadline + ", estimatedDuration=" + estimatedDuration + ", pmName="
+				+ pmName + ", clientName=" + clientName + "]";
+	}
 }

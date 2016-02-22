@@ -45,19 +45,22 @@ public class AddPrecedencesServlet extends HttpServlet {
 
 		//Get parameters
 		int idProject = Integer.parseInt(request.getParameter("id-project"));
-		String[] idPrecedences = request.getParameterValues("id-precedences");
 		@SuppressWarnings("unchecked")
 		List<StageBean> stagesQueue = (List<StageBean>)request.getSession().getAttribute("stagesQueue");
 		
-		//Build the list with the precedences to store
-		for(String p : idPrecedences){
-			StageBean sb = new StageBean();
-			sb.setIdStage(Integer.parseInt(p));
-			precedences.add(sb);
-		}
 		stage.setIdStage(stagesQueue.remove(0).getIdStage());
 		
-		StageDAO.getInstance().addPrecedences(stage, precedences);
+		if(request.getParameterValues("id-precedences") != null)
+		{
+			String[] idPrecedences = request.getParameterValues("id-precedences");
+			//Build the list with the precedences to store
+			for(String p : idPrecedences){
+				StageBean sb = new StageBean();
+				sb.setIdStage(Integer.parseInt(p));
+				precedences.add(sb);
+			}
+			StageDAO.getInstance().addPrecedences(stage, precedences);
+		}
 		
 		if(!stagesQueue.isEmpty()){
 			request.setAttribute("idProject", idProject);

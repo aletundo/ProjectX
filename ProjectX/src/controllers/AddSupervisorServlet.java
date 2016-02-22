@@ -44,7 +44,7 @@ public class AddSupervisorServlet extends HttpServlet {
 			candidates = UserDAO.getInstance().getUsersInfo(candidates);
 			if(candidates.isEmpty())
 			{
-				request.setAttribute("outsourcing", true);
+				request.setAttribute("outsourcing", "True");
 			}else{
 				request.setAttribute("candidates", candidates);
 			}
@@ -67,11 +67,12 @@ public class AddSupervisorServlet extends HttpServlet {
 			if(request.getParameter("company-name") != null){
 				String companyName = request.getParameter("company-name");
 				String companyMail = request.getParameter("company-mail");
-				stage.setOutsourcing(true);
+				stage.setOutsourcing("True");
 				stage.setCompanyName(companyName);
 				stage.setCompanyMail(companyMail);
 			}else{
 				idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
+				stage.setOutsourcing("False");
 				stage.setIdSupervisor(idSupervisor);
 			}
 			stage.setIdStage(idStage);

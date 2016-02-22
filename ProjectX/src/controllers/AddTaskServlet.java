@@ -24,6 +24,8 @@ public class AddTaskServlet extends HttpServlet {
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
 		} else {
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			request.setAttribute("idStage", idStage);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -38,7 +40,7 @@ public class AddTaskServlet extends HttpServlet {
 		} else {
 			TaskBean task = new TaskBean();
 			// Get parameters
-			int idStage = 3;
+			int idStage = Integer.parseInt(request.getParameter("id-stage"));
 			String startDay = request.getParameter("start-day");
 			String finishDay = request.getParameter("finish-day");
 

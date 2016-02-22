@@ -55,12 +55,9 @@ public class AddDeveloperServlet extends HttpServlet {
 			} else if (request.getParameter("completed") == null) {
 				response.sendRedirect(request.getContextPath() + "/addtask");
 			}
-			/*
-			 * else if (request.getParameter("completed_developer") == null) {
-			 * response.sendRedirect(request.getContextPath() + "/addtask"); }
-			 */
+
 			else {
-				response.sendRedirect(request.getContextPath() + "/add-developer&idTask=" + idTask);
+				response.sendRedirect(request.getContextPath() + "/add-developer?idTask=" + idTask);
 			}
 		}
 	}

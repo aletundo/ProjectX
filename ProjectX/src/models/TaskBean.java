@@ -5,8 +5,10 @@ public class TaskBean {
 	private int idTask;
 	private int idStage;
 	private int idDeveloper;
+	private String name;
 	private String startDay;
 	private String finishDay;
+	private String completed;
 	
 	public TaskBean(){
 		
@@ -40,5 +42,22 @@ public class TaskBean {
 	}
 	public void setFinishDay(String finishDay) {
 		this.finishDay = finishDay;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCompleted() {
+		return completed;
+	}
+	public void setCompleted(String completed) {
+		this.completed = completed;
+	}
+	@Override
+	public String toString() {
+		return "TaskBean [idTask=" + idTask + ", idStage=" + idStage + ", idDeveloper=" + idDeveloper + ", name=" + name
+				+ ", startDay=" + startDay + ", finishDay=" + finishDay + ", completed=" + completed + "]";
 	}
 }
