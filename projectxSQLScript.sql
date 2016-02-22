@@ -38,7 +38,6 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (1,'Microsoft','uuuhdhd@aol.com'),(2,'Bella','boooh@gmail.com'),(3,'YOKI','yoki@ufhf.com'),(5,'CiccioPasticcio','ciccio@pasticcio.it'),(6,'Google','google@gmail.com'),(7,'yahoooooo','fhhfhf@yahoo.com'),(8,'Bing','bingo@bing.com'),(9,'Hobs',NULL),(10,'Chdhdh',NULL),(11,'Amd',NULL),(12,'ProvaStg',NULL),(13,'Yoyoyo','yoyoyoy@hotmail.com'),(14,'yuuuuu','rureyr@uuu.com'),(15,'uuu','uuu@love.it'),(16,'wert','er@fhjfhf.com'),(17,'wertyu','erty@tityu.com'),(18,'wertyui','werty@gomail.com'),(19,'qwerty','qwerty@qwert.com'),(20,'wertyu','erty@tityu.com'),(21,'zxc','zxc@gomail.com'),(22,'zxc','zxc@gomail.com'),(23,'dsfhj','asdfg@hjjdd.coim'),(24,'dsfhj','asdfg@hjjdd.coim'),(25,'dsfhj','asdfg@hjjdd.coim'),(26,'asdfg','asdfg@hotutt.com'),(27,'asdfg','asdfg@hotutt.com'),(28,'asdfg','asdfg@kdgfghd.com'),(29,'asd','asd@ghjf.com'),(30,'asd','asd@ghjf.com'),(31,'adhjdh','df@ohg.com'),(32,'asdfgh','asdfg'),(33,'asdfgh','asdfg'),(34,'asdfgh','asdfg'),(35,'asdfgh','asdfg'),(36,'a','a'),(37,'b','b'),(38,'aaaaaa','aaaa@gmail.com'),(39,'hshshs','hsaahajja@gmail.com'),(40,'cccc','cccc'),(41,'Clienteee','afdgf@gohg.com'),(42,'kjdhuvf','dgfgfkig@gdehyhyuf.com'),(43,'shjjfd','ddfdifdijfd@gmail.com'),(44,'porova','offju@gmail.com'),(45,'dfkhu','ddhufd@gohshgd.com'),(46,'asdfghj','asdfghj@rytryry.com'),(47,'ksjfh','jdjdjdjd@gjghg.com'),(48,'jdfhghj','jsdfgjf@hhfhfhf.com'),(49,'qjwhesdfh','hdhffh@fhfhf.com'),(50,'fsÃ²oidhÃ²o','kdagho@doohf.com'),(51,'Ã Ã¨Ã Ã¨Ã ','dfrfgfdjli@hotu.com'),(52,'dhdhhdhd','dhhdhd@gmail.com'),(53,'askjdfhjf','jdshdhhd@gmnaik.com'),(54,'sdf','dfdgffd@gmail.com'),(55,'sdf','dfdgffd@gmail.com'),(56,'ffgfgff','fdfdfd'),(57,'ejrhfh','hdhdhdhd'),(58,'fddd','dd'),(59,'wedfgh','sdfg'),(60,'aqwert','asdfg'),(61,'ttt','ttt'),(62,'boh','oohh'),(63,'hudhudhu','dhuuduhd'),(64,'qwert','werty'),(65,'j','j');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +64,6 @@ CREATE TABLE `precedences` (
 
 LOCK TABLES `precedences` WRITE;
 /*!40000 ALTER TABLE `precedences` DISABLE KEYS */;
-INSERT INTO `precedences` VALUES (54,23),(23,30),(23,31),(30,31),(52,50),(50,51),(51,52),(30,53),(31,53),(53,54);
 /*!40000 ALTER TABLE `precedences` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,7 +101,6 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (36,'ccc',123445,1,40,'ccc','cccc','boooh',123,'2015-08-09',12,NULL),(37,'aaaa',123456,1,43,'aaaa','aaaaaaaaaaaa','tech',123,'2012-03-26',12,'2012-03-25'),(38,'provasuper',123456,1,44,'dfs','fvfjf','tech',12,'2016-02-03',23,'2016-02-03'),(39,'diooooo',12345678,1,45,'hfdhdhjdj','djdf','tech',12345,'2016-02-03',12,'2016-02-03'),(40,'ProvaStage333',12345,1,46,'asdfgth','adsfgh','tech',12,'2016-02-03',21,'2016-02-03'),(41,'sahyudhysfd',1234567,1,47,'jds','jfdjfkjfd','tech',12345,'2016-07-06',12,'2016-07-06'),(42,'Provvvv',123456,1,48,'dhhdhdh','fdhhdjdhdh','tech',12345,'2016-07-09',12,'2016-07-09'),(43,'sjjsjsjsjs',123456,1,49,'jszjsjsjsj','sjsjjsjs','tech',1234,'2015-06-08',12,'2015-06-08'),(44,'provacorrezioneila',1324,1,50,'afoiio','Ã²fkdslhÃ li','nature',123,'2016-02-02',20,'2016-02-02'),(45,'ciaoÃ¨Ã¨Ã¨Ã¨',1234,1,51,'wqerrtr','edffddg','tech',1234,'2016-08-20',12,'2016-08-20'),(46,'provaaaasdfghytr',1234567,1,52,'sadfghj','asdfgh','nature',12345,'2016-08-20',29,'2016-08-20'),(47,'asfgrere',13456,1,53,'sdfgddd','dfgff','biology',123,'2015-06-09',12,'2015-06-09'),(48,'tegporego',1234567,1,54,'hdshdshs','hdshdh','tech',23,'2016-08-08',12,'2016-08-08'),(49,'tegporego',1234567,1,55,'hdshdshs','hdshdh','tech',23,'2016-08-08',12,'2016-08-08'),(50,'aaaa',1234,1,56,'aaaa','aaaa','ttt',1234,'2016-08-08',23,'2016-08-08'),(51,'dudhdhdhhd',12345,1,57,'hdhdhdh','hdhdhdhd','tttt',1234,'2016-09-09',12,'2016-09-09'),(52,'tyyyyy',1234,1,58,'yyy','yyy','tech',12,'2016-09-09',12,'2016-09-09'),(53,'yyy',1234,1,59,'yyy','yyy','boh',123,'2015-06-06',12,'2015-06-06'),(54,'uu',12345,1,60,'uu','uuu','tttt',1234,'2000-08-09',12,'2000-08-09'),(55,'uuu',1234,1,61,'uuu','uuu','tech',12,'2000-09-09',12,'2000-09-09'),(56,'Pororkr',2323,1,62,'ksksk','kdjdj','nature',1234,'2000-09-09',12,'2000-09-09'),(57,'bnbnbn',12345,1,63,'bnbn','bnnbbn','tech',123,'2000-09-09',1,'2000-09-09'),(58,'hhh',1234,1,64,'hhh','hhh','hdhd',1234,'2000-09-09',1,'2000-09-09'),(59,'boh',1234,1,65,'j','j','ttt',12,'2000-09-09',12,'2000-09-09');
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,7 +138,6 @@ CREATE TABLE `stage` (
 
 LOCK TABLES `stage` WRITE;
 /*!40000 ALTER TABLE `stage` DISABLE KEYS */;
-INSERT INTO `stage` VALUES (3,'Stage1',12,'2016-02-03','2016-02-03',2,38,'speriamo dio cane','dioooo','False',NULL,NULL),(4,'Stage2222',4,'2016-02-03','2016-02-03',1,39,'dhdhdhdh','dhhdhdhd','False',NULL,NULL),(5,'stage2',12,'2016-02-03','2016-02-03',6,40,'asdfrg','asdfg','False',NULL,NULL),(6,'Stageeeee',12,'2016-07-06','2016-07-06',6,41,'asdfghjk','asdfghj','False',NULL,NULL),(7,'stage5555',12,'2016-07-06','2016-07-06',NULL,41,'dhj','hdhj','False',NULL,NULL),(8,'Stograncazzo',12,'2016-07-09','2016-07-09',2,42,'jshshshs','hdhdhhdh','False',NULL,NULL),(9,'stage44444',2,'2016-07-09','2016-07-09',4,42,'dhjyufds','dcdhfdjdd','False',NULL,NULL),(10,'sjss',123,'2016-07-09','2016-07-09',4,42,'hdhdhdhdh','hjzhshhs','False',NULL,NULL),(11,'hshdhdh',12,'2015-06-08','2015-06-08',NULL,43,'dshdhhdhd','dshdshdhhd','True','Microsoft','cmccj'),(12,'fhhfhf',12,'2015-06-08','2015-06-08',NULL,43,'hdhdhdhd','dhdhhdhd','True','Picoo','ccncnc'),(13,'cnbfchdhd',12,'2015-06-08','2015-06-08',NULL,43,'hdshdhd','shhshs','True','Njoj','iii'),(14,'dhdhdh',12,'2015-06-08','2015-06-08',6,43,'dshdhhd','dhdhhd','False',NULL,NULL),(15,'dhdhhd',1,'2015-06-08','2015-06-08',7,43,'dhhdhdhd','qdhjdd','False',NULL,NULL),(16,'staandandobene',12,'2016-02-02','2016-02-02',NULL,44,'Ã²ofid','haÃ²oidgho','False',NULL,NULL),(17,'dhhdhd',21,'2016-08-20','2016-08-20',NULL,45,'fhfhfh','dhdhdh','False',NULL,NULL),(20,'sdfgh',12,'2015-06-09','2015-06-09',NULL,47,'sdfgh','swdefrg','True','dyuduudud','hdhdhdhd@gmail.com'),(21,'uuuu',12,'2015-06-09','2015-06-09',NULL,47,'uuuuu','hjsddjdj','True','dhhdhd','dhhdhdhd'),(22,'aaa',1,'2016-09-09','2016-09-09',NULL,51,'aaaa','aaa','True','Buuu','uvfudhdhd'),(23,'ahhahaah',12,'2016-09-09','2016-09-09',NULL,52,'hahaha','hahaha','True','llolo','ololo'),(24,'ttt',12,'2015-06-06','2015-06-06',NULL,53,'ttt','ttt','False',NULL,NULL),(25,'uuu',12,'2000-08-09','2000-08-09',NULL,54,'uuu','uuu','True','hh','hhhh'),(26,'uuu',12,'2000-09-09','2000-09-09',NULL,55,'uuu','uuu','True','hh','hhh'),(27,'iii',12,'2000-09-09','2000-09-09',NULL,55,'iiii','iii','True','hhhuiu','hhhhh'),(28,'kkk',1234,'2000-09-09','2000-09-09',NULL,55,'kkk','kkkkkk','True','bbb','bbb'),(29,'jjj',12,'2000-09-09','2000-09-09',NULL,55,'jjj','jjjj','True','',''),(30,'nnn',12,'2000-01-09','2000-01-09',NULL,52,'nnn','nnn','True','nn','nnn'),(31,'mmm',12,'2000-01-09','2000-01-09',NULL,52,'mm','mmm','True','',''),(32,'uuuu',12,'2000-01-09','2000-01-09',NULL,55,'uuu','uuu','True','uu','uu'),(33,'hunjcjhujc',12,'2000-09-09','2000-09-09',NULL,55,'jjnds','dh','True','mmm','mmm'),(34,'jdhfd',12,'2000-09-09','2000-09-09',NULL,53,'dhdhd','jdjdd','True','cvvbvnvqjfchfhf','jfdhd'),(35,'fh',12,'2000-09-09','2000-09-09',NULL,53,'dhdhdh','hdshdhd','True','nmm','vv'),(36,'dfhjdh',12,'2000-09-09','2000-09-09',NULL,56,'hddh','dhhdh','True','boh','hf'),(37,'fjhfh',1,'2000-09-09','2000-09-09',NULL,56,'dhdh','dhdhhd','True','nn','nnn'),(38,'mm',12,'2000-09-09','2000-09-09',NULL,56,'mm','mmm','True','mm','uuuu'),(39,'boooh',2,'2000-09-09','2000-09-09',NULL,56,'booohh','bvh','True','mmmmnbfcvh','mdfhjfd'),(40,'bmbmbm',12,'2000-09-09','2000-09-09',NULL,57,' MBMBMB','MBMBM','True','n','n'),(41,'ushuhus',1,'2000-09-09','2000-09-09',NULL,57,'huhuhu','huhu','True','m','m'),(42,'ghu',12,'2000-09-09','2000-09-09',NULL,57,'hufhufhu','huhudhufdhu','True','m','m'),(43,'mm',12,'2000-09-09','2000-09-09',NULL,57,'mmm','mmm','True','g','g'),(44,'mmfdjhfhfjfjf',12,'2000-09-09','2000-09-09',NULL,57,'mmmm','mmmmmmm','True','m','m'),(45,'fhuf',1,'2000-09-09','2000-09-09',NULL,58,'hfdhuhuf','hudfhudhu','True','hj','j'),(46,'ghhghlllll',2222,'2000-09-09','2000-09-09',NULL,58,'hfhfhfhfhf','huhuu','True','mm','mm'),(47,'hjjj',1,'2000-09-09','2000-09-09',NULL,58,'jjjjj','j','True','f','f'),(48,'hudhud',2,'2000-09-09','2000-09-09',NULL,50,'huhudhudqhudhd','hudhud','True','jf','fifijf'),(49,'jijij',123,'2000-09-09','2000-09-09',NULL,50,'ijiji','ijiji','True','j','j'),(50,'qwerty',1,'2000-09-09','2000-09-09',NULL,59,'qwerty','qwerty','True','uio','uio'),(51,'asdfgh',1,'2000-09-09','2000-09-09',NULL,59,'asdfgh','asdfgh','True','as','as'),(52,'zxcvbn',1,'2000-09-09','2000-09-09',NULL,59,'zxcvbn','zxcvbn','True','zx','zx'),(53,'pippo',1,'2000-09-09','2000-09-09',NULL,52,'pippo','pippo','True','b','b'),(54,'pluto',1,'2000-09-09','2000-09-09',NULL,52,'pluto','pluto','True','m','m');
 /*!40000 ALTER TABLE `stage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +166,6 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
-INSERT INTO `task` VALUES (1,NULL,NULL,3,NULL),(2,NULL,NULL,3,NULL);
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,7 +179,8 @@ DROP TABLE IF EXISTS `taskdevelopment`;
 CREATE TABLE `taskdevelopment` (
   `idDeveloper` int(11) NOT NULL,
   `idTask` int(11) NOT NULL,
-  `workCompleted` tinyint(1) DEFAULT NULL,
+  `workCompleted` enum('False','True') DEFAULT 'False',
+  `hoursRequired` int(11) NOT NULL,
   PRIMARY KEY (`idDeveloper`,`idTask`),
   KEY `TaskDeveloped_idx` (`idTask`),
   CONSTRAINT `DeveloperTask` FOREIGN KEY (`idDeveloper`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -198,7 +194,6 @@ CREATE TABLE `taskdevelopment` (
 
 LOCK TABLES `taskdevelopment` WRITE;
 /*!40000 ALTER TABLE `taskdevelopment` DISABLE KEYS */;
-INSERT INTO `taskdevelopment` VALUES (3,1,NULL),(3,2,NULL);
 /*!40000 ALTER TABLE `taskdevelopment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +214,7 @@ CREATE TABLE `user` (
   `skills` varchar(300) DEFAULT NULL,
   `mail` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +223,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'user1','38e7f59446743beac67b699738ceabf74f3ec9169d2e31566f77abe56ee876ef','Alessandro Tundo','ProjectManager','-3408564752822225002',NULL,NULL),(2,'user2','1e57bd7a43baa78a4f0df0c76608284d77a626aba83def6f3353f325ec891a80','Ale Vazzola','Senior','4403057260337259784',NULL,NULL),(3,'user3','464f5cc5f855863571574aeb03d2906eeb22ee288d29a0cc3c0b1443cfd4c2f9','Ilaria Pigazzini','Junior','-6296899952466904893',NULL,NULL),(4,'user4','5d5e6eebf03795c3f42a6de67a743484bc89376709790bd3c72413057b18fa10','Victor Popescu','Senior','-589528451402326433',NULL,NULL),(5,'albertonava','8624ae2c1997705f5b5e685c18519738a46fee470edfbbb0fc6be34310ff3b0e','Alberto Nava','Junior','1812160898009983697',NULL,NULL),(6,'user5','8624ae2c1997705f5b5e685c18519738a46fee470edfbbb0fc6be34310ff3b0e','Prova','Senior','1812160898009983697',NULL,NULL),(7,'user6','8624ae2c1997705f5b5e685c18519738a46fee470edfbbb0fc6be34310ff3b0e','Prosss','ProjectManager','1812160898009983697',NULL,NULL);
+INSERT INTO `user` VALUES (9,'projectmanager1','79c67b1b4fad991e5b4f57b07e128031bf9f591cd0b7cef7f6d6dee8289dfeef','Kim Ross','ProjectManager','-4280404586469243456','Team Leader, Smart','kim.ross@gmail.com'),(10,'projectmanager2','fdcdbfee673016538615af3a2f68e64033b701a38110d977e2d3ec4f8f2369d0','Tim Cook','ProjectManager','2924996706303256609','J2EE Expert','tim.cook@gmail.com'),(11,'projectmanager3','c251f86c30cb815837c0a9f3ede7f614933c7ae6e50848eb8714d1406437ccdb','Sean Connery','ProjectManager','-1590948107888747297','Smart','sean.connery@gmail.com'),(12,'senior1','5c14b74d13225170e43ef58a85aed61b836f7651fa2f33637824697a304d6f28','Josh Rich','Senior','-5445241604329117679','Java, CSS3, HTML5','josh.rich@gmail.com'),(13,'senior2','08117f1ea7ada68998e5c951c0a6ac76fdbf67c98d83f221940f3db4384022e8','Marin Gheru','Senior','-6792706903863958269','Scala, Lisp','marin.gheru@gmail.com'),(14,'senior3','8c7f47796b6ca2de3b32a439db21d46f3d9aba45f6ebabf9e4e5593e3be8c46e','Robert De Niro','Senior','8023570297433157785','J2EE, EJB, Spring MVC','robert.de.niro@gmail.com'),(15,'senior4','4360400621b9f231d197a54e52fc85647cf4aed33bf45b2ecff7ffb0a72db1ac','Alex Pilju','Senior','3184291115291345812','SysAdmin, RedHat, FreeBSD','alex.pilju@gmail.com'),(16,'senior5','f40ab2933bee14efe697c119903b9fa5f28737ff05cbe59f09e8a086162932e7','Francesco Motti','Senior','-6577162478222502387','Web Technologies','francesco.motti@gmail.com'),(17,'junior1','fb626181d15c2f00af94e3aa2a202c75eb9f1db55e435f9f8f5bcb41b3c4a0c6','Roberta Valca','Junior','-5936166344488320325','J2EE, HTML5, CSS3, Javascript','roberta.valcai@gmail.com'),(18,'junior2','eef141cfa1b51edcf1f4fa409644942739d3e113012346bd1b1577d340010786','Julian Assange','Junior','-3787449028304039064','Security, PenTest','julian.assange@gmail.com'),(19,'junior3','cf07332b26c3ccc987976ecb102f3a3ba13fb3ad8b981ca8eb6f3d9826a78aeb','Edward Snowden','Junior','6393413954160680395','Security, PenTest','edward.snowden@gmail.com'),(20,'junior4','bda73696628842911a6c454aab2fd622ca43e88b836903d6501275ceefc2ad3c','Bill Gates','Junior','1283962606534700090','C++, C#, Visual Basic','bill.gates@gmail.com'),(21,'junior5','46c6d90de0380114211529742d6caf9b949cedc722491bcd3672f970e23a9f96','Tim Ryno','Junior','1093728519541714561','Prolog, Scala, Lisp','tim.ryno@gmail.com'),(22,'junior6','772fceda9c63c407673c5222341d6b12bea0c47ec57dd504f4d0011d628c373f','Federico Faggin','Junior','-4586985503350676543','Web Technologies, Sematic Web','federico.faggin@gmail.com'),(23,'junior7','7729d5f7b32eae7588d89553c43b17c0f28411d7b415fd005b7a09109c4fb420','Roberto Perico','Junior','-1267541783839583051','J2EE','roberto.perico@gmail.com'),(24,'junior8','52ac1884aa67de4f217a0d3c68345567cab6312162911e278e4a0794c3c4e541','John Belushi','Junior','-6832542702568549685','RedHat, DevOps','john.belushi@gmail.com'),(25,'junior9','b6542618a566ab8bc12fa4180187fdeb2fc17248819747a16276b969fdb98940','Martin Scorsese','Junior','-774033783096115650','Relational Database','martin.scorsese@gmail.com'),(26,'junior10','91fa608647c8e3ff773151c3f140fa8fa258b61aaa70f183d73490686b82c55b','Matt Grow','Junior','-1146180347890854893','MEAN Stack','matt.grow@gmail.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -241,4 +236,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-21 20:12:12
+-- Dump completed on 2016-02-22 16:30:30
