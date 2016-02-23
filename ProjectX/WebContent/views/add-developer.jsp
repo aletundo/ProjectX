@@ -9,15 +9,15 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			Select a developer for the task.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/add-developer"
+				action="./add-developer"
 				method="POST" role="form" autocomplete="off">
 						
 						<div class="input-group">
-							<jsp:include page="/views/sharable/developers.list.jsp" />
+							<jsp:include page="/views/sharable/developers-list.jsp" />
 						</div>
 				
 				<div class="input-group">
@@ -40,9 +40,6 @@
 					</button>
 				</div>
 			</form>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

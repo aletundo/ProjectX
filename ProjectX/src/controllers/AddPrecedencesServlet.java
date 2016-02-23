@@ -48,8 +48,6 @@ public class AddPrecedencesServlet extends HttpServlet {
 		List<StageBean> precedences = new ArrayList<StageBean>();
 		StageBean stage = new StageBean();
 
-		//Get parameters
-		int idProject = Integer.parseInt(request.getParameter("id-project"));
 		@SuppressWarnings("unchecked")
 		List<StageBean> stagesQueue = (List<StageBean>)request.getSession().getAttribute("stagesQueue");
 		
@@ -68,7 +66,6 @@ public class AddPrecedencesServlet extends HttpServlet {
 		}
 		
 		if(!stagesQueue.isEmpty()){
-			request.setAttribute("idProject", idProject);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
 			dispatcher.forward(request, response);
 		}else{

@@ -9,15 +9,12 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			<form class="from col-md-12 center-block" role="search"
 				autocomplete="off" method="POST"
-				action="${pageContext.request.contextPath}/searchprojects">
+				action="./searchprojects">
 				<jsp:include page="/views/sharable/search-form-input.jsp" />
 			</form>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			DECIDERE COSA METTERCI
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

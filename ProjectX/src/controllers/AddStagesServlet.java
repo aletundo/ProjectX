@@ -36,7 +36,7 @@ public class AddStagesServlet extends HttpServlet {
 
 		StageBean stage = new StageBean();
 		// Get parameters
-		int idProject = Integer.parseInt(request.getParameter("id-project"));
+		int idProject = Integer.parseInt(request.getParameter("idProject")); //From URL
 		String name = request.getParameter("name");
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");

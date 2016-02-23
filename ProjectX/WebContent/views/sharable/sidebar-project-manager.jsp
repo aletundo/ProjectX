@@ -8,18 +8,6 @@
 	</div>
 	<!-- List group -->
 	<div class="list-group">
-		<a class="list-group-item" href="${pageContext.request.contextPath}/addproject"><i class="fa fa-plus"></i>&nbsp;Create
-			a project</a> 
-		<a class="list-group-item" href="${pageContext.request.contextPath}/organizemeeting"><i class="fa fa-users"></i>&nbsp;Organize a meeting</a>
-		<div class="dropdown">
-			<div class="list-group-item dropdown-toggle" data-toggle="dropdown"
-				aria-haspopup="true" aria-expanded="true">
-				<i class="fa fa-search"></i>&nbsp;Search <span class="caret"></span>
-			</div>
-			<ul class="dropdown-menu">
-				<li><a href="${pageContext.request.contextPath}/searchprojects">Related projects</a></li>
-				<li><a href="${pageContext.request.contextPath}/searchclients">Related clients</a></li>
-			</ul>
-		</div>
+		<a class="list-group-item" href="./organizemeeting"><i class="fa fa-users"></i>&nbsp;Organize a meeting</a>
 	</div>
 </div>
