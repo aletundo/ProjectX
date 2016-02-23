@@ -6,7 +6,6 @@
 	</div>
 	<!-- List group -->
 	<div class="list-group">
-		<a class="list-group-item" href="${pageContext.request.contextPath}/organizemeeting"><i class="fa fa-users"></i>&nbsp;Organize a stage meeting</a>
-		<a class="list-group-item" href="${pageContext.request.contextPath}/searchprojects"><i class="fa fa-search"></i>&nbsp;Search related projects</a>
+		<a class="list-group-item" href="./organizemeeting"><i class="fa fa-users"></i>&nbsp;Organize a stage meeting</a>
 	</div>
 </div>

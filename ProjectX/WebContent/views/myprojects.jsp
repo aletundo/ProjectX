@@ -9,17 +9,17 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			<div id="projects-panel" class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Your projects</h3>
+					<h2 class="panel-title"><strong>Your projects</strong></h2>
 				</div>
-
+				
 				<div class="panel-body">
-					<p>
-						Hi <strong><c:out value="${sessionScope.username }"></c:out></strong>, there are projects which you are
-						involved in
-					</p>
+				<h5>
+				Hi <strong><c:out value="${sessionScope.username }"></c:out></strong>,
+				welcome back! There are projects you are involved in.</h5>
+				
 				</div>
 
 				<table class="table">
@@ -31,7 +31,7 @@
 
 					<c:forEach items="${requestScope.projects}" var="project">
 						<tr>
-							<td><a href="${pageContext.request.contextPath}/project?idProject=${project.idProject}"><strong><c:out
+							<td><a href="./project?idProject=${project.idProject}"><strong><c:out
 											value="${project.name}"></c:out></strong></a></td>
 							<td><span class="label label-success"><c:out
 										value="${project.clientName}"></c:out></span></td>
@@ -41,18 +41,6 @@
 					</c:forEach>
 				</table>
 			</div>
-		</div>
-		<div class="col-md-3 col-xs-12">
-		<c:if test="${sessionScope.userType == 'ProjectManager'}">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
-		</c:if>
-		<c:if test="${sessionScope.userType == 'Senior' }">
-			<jsp:include page="/views/sharable/sidebar-senior.jsp" />
-		</c:if>
-		<c:if test="${sessionScope.userType == 'Junior' }">
-		</c:if>
-			<p>
-				Your Session ID=<c:out value="${cookie['JSESSIONID'].value}"></c:out></p>
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

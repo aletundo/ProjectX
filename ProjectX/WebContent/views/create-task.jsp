@@ -9,7 +9,7 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			<strong>Perfect!</strong> Now you can divide your stages into tasks.
 			<hr>
 			<form class="form col-md-12 center-block"
@@ -45,9 +45,6 @@
 					</button>
 				</div>
 			</form>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

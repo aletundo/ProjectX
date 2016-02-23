@@ -58,8 +58,8 @@ public class AddSupervisorServlet extends HttpServlet {
 			return;
 		
 			StageBean stage = new StageBean();
-			int idStage = Integer.parseInt(request.getParameter("id-stage"));
-			int idProject = Integer.parseInt(request.getParameter("id-project"));
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			int idProject = Integer.parseInt(request.getParameter("idProject"));
 			int idSupervisor;
 			if(request.getParameter("company-name") != null){
 				String companyName = request.getParameter("company-name");

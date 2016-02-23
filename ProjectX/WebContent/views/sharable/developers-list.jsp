@@ -5,7 +5,7 @@
 <div class="panel panel-default">
 	<!-- Default panel contents -->
 	<div class="panel-heading">
-		<span class="fa fa-group"></span><b>Available developers</b>
+		<span class="fa fa-group"></span><b>&nbsp;Available developers</b>
 	</div>
 	<!-- List group -->
 	<ul class="list-group list-results">

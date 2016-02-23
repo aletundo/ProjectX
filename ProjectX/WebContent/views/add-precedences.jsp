@@ -9,11 +9,11 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			Set the precedences for the stage <c:out value="${sessionScope.stagesQueue[0].name}"></c:out>
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addprecedences"
+				action="./addprecedences?idProject=${param.idProject }"
 				method="POST" role="form" autocomplete="off">
 
 				<div class="panel panel-default">
@@ -44,9 +44,6 @@
 					</button>
 				</div>
 			</form>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

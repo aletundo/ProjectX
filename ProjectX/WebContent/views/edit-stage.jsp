@@ -4,25 +4,22 @@
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
-<title>ProjectX - Create a project</title>
+<title>ProjectX - Edit <c:out value="${requestScope.stage.name }"></c:out></title>
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-12 col-xs-12">
-			Create a project is very <i><b>easy</b></i>! A step-by-step procedure is going to
-			help you.
+		<div class="col-md-9 col-xs-12">
+			Enter your changes and update the stage.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addproject" method="POST" role="form"
+				action="./editstage?idStage=${param.idStage }" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
 						class="form-control" placeholder="Insert the name" name="name" />
 				</div>
-
 				<br>
-
 				<div class="input-group">
 					<span class="input-group-addon">Goals</span>
 					<textarea class="form-control" placeholder="Insert the goals"
@@ -36,40 +33,15 @@
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Budget</span> <input type="text"
-						class="form-control" name="budget" placeholder="Insert the budget" />
-					<span class="input-group-addon">&euro;</span>
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Estimated costs</span> <input
-						type="text" class="form-control" name="estimated-costs"
-						placeholder="Insert the estimated costs" /> <span
-						class="input-group-addon">&euro;</span>
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Client</span> <input
+					<span class="input-group-addon">Start day</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the name of the client" name="client-name" />
+						placeholder="Insert the start day (yyyy-MM-dd)" name="start-day" />
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Client mail</span> <input
+					<span class="input-group-addon">Finish day</span> <input
 						class="form-control" type="text"
-						placeholder="client@domain.example" name="client-mail" />
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Start</span> <input
-						class="form-control" type="text"
-						placeholder="Insert the start (YYYY-mm-DD)" name="start" />
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Deadline</span> <input
-						class="form-control" type="text"
-						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline" />
+						placeholder="Insert the finish day (yyyy-MM-dd)" name="finish-day" />
 				</div>
 				<br>
 				<div class="input-group">
@@ -77,13 +49,6 @@
 						type="text" class="form-control"
 						placeholder="Insert the estimated duration (weeks)"
 						name="estimated-duration" />
-				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Subject areas</span> <input
-						type="text" class="form-control"
-						placeholder="Insert the subjet areas (preferably splitted by a comma)"
-						name="subject-areas" />
 				</div>
 				<br> <br>
 				<div class="input-group pull-right">
@@ -96,6 +61,9 @@
 					</button>
 				</div>
 			</form>
+		</div>
+		<div class="col-md-3 col-xs-12">
+			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

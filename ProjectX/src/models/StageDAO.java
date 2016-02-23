@@ -19,6 +19,35 @@ public class StageDAO {
 		return INSTANCE;
 	}
 	
+	public int[] getAuthorizedUsers(int idStage){
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		int[] idAuthorizedUsers = new int[2];
+		
+		if(currentConn != null){
+			final String getIdSupervisorQuery = "SELECT S.idSupervisor AS IdSupervisor, P.idProjectManager AS IdProjectManager "
+					+ "FROM stage AS S JOIN project AS P ON S.idProject = P.idProject WHERE S.idStage = ?";
+			try{
+				statement = currentConn.prepareStatement(getIdSupervisorQuery);
+				statement.setInt(1, idStage);
+				rs = statement.executeQuery();
+				while(rs.next()){
+					idAuthorizedUsers[0] = rs.getInt("IdSupervisor");
+					idAuthorizedUsers[1] = rs.getInt("IdProjectManager");
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return idAuthorizedUsers;
+	}
+	
 	public StageBean getStageInfo(int idStage){
 		StageBean stageInfo = new StageBean();
 		PreparedStatement statement = null;

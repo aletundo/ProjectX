@@ -9,11 +9,11 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			Select a supervisor for the stage.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addsupervisor"
+				action="./addsupervisor?idProject=${param.idProject }&idStage=${param.idStage}"
 				method="POST" role="form" autocomplete="off">
 
 				<c:choose>
@@ -39,7 +39,7 @@
 					</c:when>
 					<c:otherwise>
 						<div class="input-group">
-							<jsp:include page="/views/sharable/users-list.jsp" />
+							<jsp:include page="/views/sharable/supervisors-list.jsp" />
 						</div>
 					</c:otherwise>
 				</c:choose>
@@ -51,8 +51,6 @@
 							the precedences between them.</label>
 					</div>
 				</div>
-				<input type="hidden" name="id-project" value="${param.idProject}" />
-				<input type="hidden" name="id-stage" value="${param.idStage}" /> <br>
 				<br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">
@@ -64,9 +62,6 @@
 					</button>
 				</div>
 			</form>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

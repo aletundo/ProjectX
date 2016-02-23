@@ -10,11 +10,10 @@
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
-			Create a project is very <i><b>easy</b></i>! A step-by-step procedure is going to
-			help you.
+			Enter your changes and update the project.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/editproject" method="POST" role="form"
+				action="./editproject?=idProject=${param.idProject }" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"

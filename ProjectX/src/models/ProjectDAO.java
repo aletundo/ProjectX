@@ -160,7 +160,7 @@ public class ProjectDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getRelatedProjectsQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.name AS ProjectManager "
+			final String getRelatedProjectsQuery = "SELECT P.idProject AS IdProject, P.name AS Name, U.fullname AS ProjectManager "
 					+ "FROM project AS P JOIN user AS U ON P.idProjectManager = U.idUser "
 					+ "WHERE P.subjectAreas LIKE ?";
 			try {

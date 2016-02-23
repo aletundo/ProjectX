@@ -8,20 +8,8 @@
 </head>
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
-	<%
-		//Check session exists
-		String user = (String) session.getAttribute("username");
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		}
-	%>
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 		Here's your client research by key
 			<hr>
 			<div id="projects-panel" class="panel panel-primary">
@@ -67,9 +55,6 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

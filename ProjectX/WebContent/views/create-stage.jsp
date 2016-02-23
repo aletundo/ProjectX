@@ -9,11 +9,11 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			<strong>Perfect!</strong> Now you can divide your project into stages.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addstages" method="POST" role="form"
+				action="./addstages?idProject=${param.idProject }" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
@@ -50,8 +50,6 @@
 						placeholder="Insert the estimated duration (weeks)"
 						name="estimated-duration" />
 				</div>
-				
-				<input type="hidden" value="${param.idProject}" name="id-project"/>
 				<br> <br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">
@@ -63,9 +61,6 @@
 					</button>
 				</div>
 			</form>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />
