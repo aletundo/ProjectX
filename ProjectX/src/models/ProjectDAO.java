@@ -20,6 +20,56 @@ public class ProjectDAO {
 
 	}
 	
+	public float getRateWorkCompleted(int idProject) {
+		float rateWorkCompleted = 0;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getRateworkCompletedQuery = "SELECT P.rateWorkCompleted AS RateWorkCompleted FROM project AS P "
+					+ "WHERE P.idProject = ? ";
+			try {
+				statement = currentConn.prepareStatement(getRateworkCompletedQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					rateWorkCompleted = rs.getFloat("RateWorkCompleted");
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a logger
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+
+		return rateWorkCompleted;
+	}
+
+	public void setRateWorkCompleted(int idProject, float rate) {
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String setRateWorkCompletedQuery = "UPDATE project AS P SET P.rateWorkCompleted = P.rateWorkCompleted + ? "
+					+ "WHERE P.idProject = ? ";
+			try {
+				statement = currentConn.prepareStatement(setRateWorkCompletedQuery);
+				statement.setFloat(1, rate);
+				statement.setInt(2, idProject);
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a logger
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+	
 	public int getProjectManagerId(int idProject){
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -52,7 +102,8 @@ public class ProjectDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getProjectInfoQuery = "SELECT P.idProject as IdProject, P.name AS ProjectName, P.start AS Start, P.deadline AS Deadline, C.name AS ClientName "
+			final String getProjectInfoQuery = "SELECT P.idProject as IdProject, P.name AS ProjectName,"
+					+ " P.rateWorkCompleted AS RateWorkCompleted, P.start AS Start, P.deadline AS Deadline, C.name AS ClientName "
 					+ "FROM project AS P JOIN client AS C ON P.idClient = C.idClient  WHERE P.idProject = ?";
 			try {
 				statement = currentConn.prepareStatement(getProjectInfoQuery);
@@ -63,6 +114,7 @@ public class ProjectDAO {
 					projectInfo.setIdProject(Integer.parseInt(rs.getString("IdProject")));
 					projectInfo.setName(rs.getString("ProjectName"));
 					projectInfo.setStart(rs.getString("Start"));
+					projectInfo.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					projectInfo.setDeadline(rs.getString("Deadline"));
 					projectInfo.setClientName(rs.getString("ClientName"));
 				}

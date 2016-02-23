@@ -16,6 +16,7 @@ public class ProjectBean {
 	private int estimatedDuration;
 	private String pmName;
 	private String clientName;
+	private float rateWorkCompleted;
 	
 public ProjectBean(){
 		
@@ -140,5 +141,13 @@ public ProjectBean(){
 				+ requirements + ", subjectAreas=" + subjectAreas + ", start=" + start + ", estimatedCosts="
 				+ estimatedCosts + ", deadline=" + deadline + ", estimatedDuration=" + estimatedDuration + ", pmName="
 				+ pmName + ", clientName=" + clientName + "]";
+	}
+
+	public float getRateWorkCompleted() {
+		return rateWorkCompleted;
+	}
+
+	public void setRateWorkCompleted(float rateWorkCompleted) {
+		this.rateWorkCompleted = rateWorkCompleted;
 	}
 }

@@ -15,6 +15,8 @@ public class StageBean {
 	private String supervisorFullname;
 	private String companyName;
 	private String companyMail;
+	private float relativeWeight;
+	private float rateWorkCompleted;
 	
 	public StageBean(){
 		
@@ -104,6 +106,18 @@ public class StageBean {
 				+ ", finishDay=" + finishDay + ", estimatedDuration=" + estimatedDuration + ", outsourcing="
 				+ outsourcing + ", supervisorFullname=" + supervisorFullname + ", companyName=" + companyName
 				+ ", companyMail=" + companyMail + "]";
+	}
+	public float getRelativeWeight() {
+		return relativeWeight;
+	}
+	public void setRelativeWeight(float relativeWeight) {
+		this.relativeWeight = relativeWeight;
+	}
+	public float getRateWorkCompleted() {
+		return rateWorkCompleted;
+	}
+	public void setRateWorkCompleted(float rateWorkCompleted) {
+		this.rateWorkCompleted = rateWorkCompleted;
 	}
 
 }

@@ -18,44 +18,148 @@ public class StageDAO {
 
 		return INSTANCE;
 	}
-	
-	public int[] getAuthorizedUsers(int idStage){
+
+	public StageBean getRelativeWeight(int idStage) {
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		StageBean stage = new StageBean();
+
+		if (currentConn != null) {
+			final String getRelativeWeightQuery = "SELECT S.relativeWeight AS RelativeWeight, S.idProject AS IdProject "
+					+ "FROM stage AS S WHERE S.idStage = ?";
+			try {
+				statement = currentConn.prepareStatement(getRelativeWeightQuery);
+				statement.setInt(1, idStage);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					stage.setIdProject(rs.getInt("IdProject"));
+					stage.setRelativeWeight(rs.getFloat("RelativeWeight"));
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+
+		return stage;
+	}
+
+	public void setStagesWeight(List<StageBean> stages) {
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String setStagesWeight = "UPDATE stage AS S SET S.relativeWeight = ? WHERE S.idStage = ?";
+			try {
+				for (StageBean stage : stages) {
+					statement = currentConn.prepareStatement(setStagesWeight);
+					statement.setFloat(1, stage.getRelativeWeight());
+					statement.setInt(2, stage.getIdStage());
+					statement.executeUpdate();
+					statement.close();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a logger
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+
+	public float getRateWorkCompleted(int idStage) {
+		float rateWorkCompleted = 0;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getRateworkCompletedQuery = "SELECT S.rateWorkCompleted AS RateWorkCompleted FROM stage AS S "
+					+ "WHERE S.idStage = ? ";
+			try {
+				statement = currentConn.prepareStatement(getRateworkCompletedQuery);
+				statement.setInt(1, idStage);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					rateWorkCompleted = rs.getFloat("RateWorkCompleted");
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a logger
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+
+		return rateWorkCompleted;
+	}
+
+	public void setRateWorkCompleted(int idStage, float rate) {
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String setRateWorkCompletedQuery = "UPDATE stage AS S SET S.rateWorkCompleted = S.rateWorkCompleted + ? "
+					+ "WHERE S.idStage = ? ";
+			try {
+				statement = currentConn.prepareStatement(setRateWorkCompletedQuery);
+				statement.setFloat(1, rate);
+				statement.setInt(2, idStage);
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a logger
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+
+	public int[] getAuthorizedUsers(int idStage) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
 		int[] idAuthorizedUsers = new int[2];
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String getIdSupervisorQuery = "SELECT S.idSupervisor AS IdSupervisor, P.idProjectManager AS IdProjectManager "
 					+ "FROM stage AS S JOIN project AS P ON S.idProject = P.idProject WHERE S.idStage = ?";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getIdSupervisorQuery);
 				statement.setInt(1, idStage);
 				rs = statement.executeQuery();
-				while(rs.next()){
+				while (rs.next()) {
 					idAuthorizedUsers[0] = rs.getInt("IdSupervisor");
 					idAuthorizedUsers[1] = rs.getInt("IdProjectManager");
 				}
-				
-			}catch(SQLException e){
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a logger
-			}finally{
+				// TODO Handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return idAuthorizedUsers;
 	}
-	
-	public StageBean getStageInfo(int idStage){
+
+	public StageBean getStageInfo(int idStage) {
 		StageBean stageInfo = new StageBean();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getProjectInfoQuery = "SELECT S.idStage as IdStage, S.name AS StageName, S.startDay AS StartDay, S.finishDay AS FinishDay, U.fullname AS SupervisorFullname "
+			final String getProjectInfoQuery = "SELECT S.idStage as IdStage, S.name AS StageName, S.startDay AS StartDay, "
+					+ "S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS SupervisorFullname "
 					+ "FROM stage AS S JOIN user AS U ON S.idSupervisor = U.idUser  WHERE S.idStage = ?";
 			try {
 				statement = currentConn.prepareStatement(getProjectInfoQuery);
@@ -67,6 +171,7 @@ public class StageDAO {
 					stageInfo.setName(rs.getString("StageName"));
 					stageInfo.setStartDay(rs.getString("StartDay"));
 					stageInfo.setFinishDay(rs.getString("FinishDay"));
+					stageInfo.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stageInfo.setSupervisorFullname(rs.getString("SupervisorFullname"));
 				}
 
@@ -79,103 +184,105 @@ public class StageDAO {
 		}
 		return stageInfo;
 	}
-	public List<StageBean> getStagesDetails(int idProject){
+
+	public List<StageBean> getStagesDetails(int idProject) {
 		List<StageBean> stages = new ArrayList<StageBean>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
-					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, U.fullname AS Supervisor "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS Supervisor "
 					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
 					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False' "
-					+ "UNION SELECT S.idStage AS IdStage, S.name AS Name, "
+					+ "UNION SELECT S.idStage AS IdStage, S.name AS Name, S.rateWorkCompleted AS RateWorkCompleted, "
 					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.companyName AS Supervisor "
 					+ "FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getStagesQuery);
 				statement.setInt(1, idProject);
 				statement.setInt(2, idProject);
 				rs = statement.executeQuery();
-				
-				while(rs.next()){
+
+				while (rs.next()) {
 					StageBean stage = new StageBean();
 					stage.setIdStage(rs.getInt("IdStage"));
 					stage.setName(rs.getString("Name"));
 					stage.setStartDay(rs.getString("StartDay"));
 					stage.setFinishDay(rs.getString("FinishDay"));
+					stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stage.setSupervisorFullname(rs.getString("Supervisor"));
 					stages.add(stage);
 				}
-				
-			}catch(SQLException e){
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a Logger
-			}finally{
+				// TODO Handle with a Logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return stages;
-		
+
 	}
-	
-	public boolean addPrecedences(StageBean stage, List<StageBean> precedences){
+
+	public boolean addPrecedences(StageBean stage, List<StageBean> precedences) {
 		boolean added = false;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String addPrecedencesQuery = "INSERT INTO precedences (idStage, idPrecedence) VALUES (?, ?)";
-			try{
-				for(StageBean p : precedences){
+			try {
+				for (StageBean p : precedences) {
 					statement = currentConn.prepareStatement(addPrecedencesQuery);
 					statement.setInt(1, stage.getIdStage());
 					statement.setInt(2, p.getIdStage());
 					statement.executeUpdate();
 				}
 				added = true;
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a Logger
-			}finally{
+				// TODO Handle with a Logger
+			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
 		}
 		return added;
 	}
 
-	public List<StageBean> getStages(int idProject){
+	public List<StageBean> getStages(int idProject) {
 		List<StageBean> stages = new ArrayList<StageBean>();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name"
 					+ " FROM stage AS S WHERE S.idProject = ?";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getStagesQuery);
 				statement.setInt(1, idProject);
 				rs = statement.executeQuery();
-				while(rs.next()){
+				while (rs.next()) {
 					StageBean stage = new StageBean();
 					stage.setIdStage(rs.getInt("IdStage"));
 					stage.setName(rs.getString("Name"));
 					stages.add(stage);
 				}
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a Logger
-			}finally{
+				// TODO Handle with a Logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return stages;
 	}
-	
+
 	public boolean addSupervisor(StageBean stage) {
 		PreparedStatement statement = null;
 		boolean updated = false;

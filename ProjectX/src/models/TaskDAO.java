@@ -19,6 +19,102 @@ public class TaskDAO {
 		return INSTANCE;
 	}
 	
+	public TaskBean getRelativeWeight(int idTask){
+		TaskBean task = new TaskBean();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		if(currentConn != null){
+			final String getRelativeWeightQuery= "SELECT T.idStage AS IdStage, T.relativeWeight AS RelativeWeight WHERE T.idTask = ?";
+			try{
+				statement = currentConn.prepareStatement(getRelativeWeightQuery);
+				statement.setInt(1, idTask);
+				rs = statement.executeQuery();
+				while(rs.next()){
+					task.setIdStage(rs.getInt("IdStage"));
+					task.setRelativeWeight(rs.getFloat("RelativeWeight"));
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO ilaria handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+			
+		}
+		return task;
+	}
+	
+	public void setTaskCompleted(int idTask){
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String setTasksWeight = "UPDATE tasks AS T SET T.completed = 'True' WHERE T.idTask = ?";
+			try{
+					statement = currentConn.prepareStatement(setTasksWeight);
+					statement.setInt(1, idTask);
+					statement.executeUpdate();
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+	
+	public List<String> checkDevelopersWork(int idTask) {
+		List<String> workCompletedState = new ArrayList<String>();
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		if(currentConn != null){
+			final String checkWorkQuery= "SELECT TD.workCompleted AS WorkCompleted FROM taskdevelopment AS TD WHERE TD.idTask = ?";
+			try{
+				statement = currentConn.prepareStatement(checkWorkQuery);
+				statement.setInt(1, idTask);
+				rs = statement.executeQuery();
+				while(rs.next()){
+					workCompletedState.add(rs.getString("WorkCompleted"));
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO ilaria handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+			
+		}
+		
+		return workCompletedState;
+	}
+	
+	public void setTasksWeight(List<TaskBean> tasks){
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String setTasksWeight = "UPDATE task AS T SET T.relativeWeight = ? WHERE T.idTask = ?";
+			try{
+				for(TaskBean task : tasks){
+					statement = currentConn.prepareStatement(setTasksWeight);
+					statement.setFloat(1, task.getRelativeWeight());
+					statement.setInt(2, task.getIdTask());
+					statement.executeUpdate();
+					statement.close();
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+	
 	public List<TaskBean> getTasksDetails(int idStage){
 		List<TaskBean> tasks = new ArrayList<TaskBean>();
 		ResultSet rs = null;

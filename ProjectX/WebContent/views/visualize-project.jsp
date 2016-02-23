@@ -31,8 +31,8 @@
 					<div class="progress">
 						<div
 							class="progress-bar progress-bar-success progress-bar-striped"
-							role="progressbar" aria-valuenow="40" aria-valuemin="0"
-							aria-valuemax="100" style="width: 40%">40% Complete</div>
+							role="progressbar" aria-valuenow="${requestScope.project.rateWorkCompleted }" aria-valuemin="0"
+							aria-valuemax="100" style="width: ${requestScope.project.rateWorkCompleted }%">${requestScope.project.rateWorkCompleted }% Complete</div>
 					</div>
 				</div>
 
@@ -58,8 +58,8 @@
 								<div class="progress">
 									<div
 										class="progress-bar progress-bar-info progress-bar-striped"
-										role="progressbar" aria-valuenow="30" aria-valuemin="0"
-										aria-valuemax="100" style="width: 30%">30%</div>
+										role="progressbar" aria-valuenow="${stage.rateWorkCompleted }" aria-valuemin="0"
+										aria-valuemax="100" style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%</div>
 								</div>
 							</td>
 							<td><span class="label label-warning"><c:out

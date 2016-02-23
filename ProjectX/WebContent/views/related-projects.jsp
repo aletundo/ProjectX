@@ -55,6 +55,7 @@
 				</c:choose>
 			</div>
 		</div>
+	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />
 </body>
 </html>

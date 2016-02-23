@@ -9,6 +9,7 @@ public class TaskBean {
 	private String startDay;
 	private String finishDay;
 	private String completed;
+	private float relativeWeight;
 	
 	public TaskBean(){
 		
@@ -59,5 +60,11 @@ public class TaskBean {
 	public String toString() {
 		return "TaskBean [idTask=" + idTask + ", idStage=" + idStage + ", idDeveloper=" + idDeveloper + ", name=" + name
 				+ ", startDay=" + startDay + ", finishDay=" + finishDay + ", completed=" + completed + "]";
+	}
+	public float getRelativeWeight() {
+		return relativeWeight;
+	}
+	public void setRelativeWeight(float relativeWeight) {
+		this.relativeWeight = relativeWeight;
 	}
 }
