@@ -9,6 +9,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import controllers.utils.CalculateAvailableUsers;
+import models.ProjectBean;
 import models.StageBean;
 import models.UserBean;
 
@@ -20,20 +21,26 @@ public class CalculateAvailableUsersTest {
 		user.setIdUser(1);
 		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
 		StageBean newStage = new StageBean();
-		newStage.setStartDay("2016-02-15");
-		newStage.setFinishDay("2016-02-17");
+		newStage.setStartDay("2016-01-01");
+		newStage.setFinishDay("2016-01-07");
 		List<Object> works = new ArrayList<Object>();
-		StageBean stage = new StageBean();
-
-		stage.setStartDay("2016-02-16");
-		stage.setFinishDay("2016-02-18");
 		
+		ProjectBean project = new ProjectBean();
+		project.setStart("2016-01-01");
+		project.setDeadline("2016-07-01");
+		
+		StageBean stage = new StageBean();
+		stage.setStartDay("2016-01-05");
+		stage.setFinishDay("2016-01-06");
+		
+		works.add(project);
 		works.add(stage);
 
 		workMap.put(user.getIdUser(), works);
 		
 		List<UserBean> available= new ArrayList<UserBean>();
 		available = CalculateAvailableUsers.calculate(workMap, newStage);
+		System.out.println(available);
 		System.out.println(available.get(0).getIdUser());
 		
 		assertEquals(1, available.size());
