@@ -2,12 +2,14 @@ package controllers.utils;
 
 import models.ProjectBean;
 import java.sql.*;
+import java.io.IOException;
 import java.lang.Math;
 
 import models.StageBean;
 import models.TaskBean;
 import models.UserBean;
 import utils.DbConnection;
+import utils.GetWorkhoursProperties;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,15 +23,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CalculateAvailableUsers {
-	private static final int HOURPERDAY = 8;
-	private static final int PROJECTHOURPERDAY = 4;
-	private static final int STAGEHOURPERDAY = 2;
+	private static int HOURPERDAY;
+	private static int PROJECTHOURPERDAY;
+	private static int STAGEHOURPERDAY;
 
 	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
-	
+
 	private static final CalculateAvailableUsers INSTANCE = new CalculateAvailableUsers();
 
 	private CalculateAvailableUsers() {
@@ -43,6 +45,9 @@ public class CalculateAvailableUsers {
 
 	// calculate the available users for a new TASK
 	public List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
+
+		getProperties();
+
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<UserBean>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
@@ -87,6 +92,9 @@ public class CalculateAvailableUsers {
 
 	// calculate the available users for a new STAGE
 	public List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
+
+		getProperties();
+
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<UserBean>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
@@ -155,8 +163,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the availability of a user for a new TASK
-	private UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair,
-			List<Object> criticalWorks) {
+	private UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair, List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
 
 		try {
@@ -339,8 +346,7 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// STAGE
-	private boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
-			throws ParseException {
+	private boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format) throws ParseException {
 		if (work instanceof models.ProjectBean) {
 			ProjectBean workProject = (ProjectBean) work;
 			// check if the referenced project does not collide through time
@@ -373,8 +379,7 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// TASK
-	private boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format)
-			throws ParseException {
+	private boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format) throws ParseException {
 		if (work instanceof models.StageBean) {
 			StageBean workStage = (StageBean) work;
 			if (!(format.parse(workStage.getFinishDay()).before(format.parse(newTask.getStartDay()))
@@ -430,5 +435,17 @@ public class CalculateAvailableUsers {
 			return diff;
 		}
 		return 1 + diff;
+	}
+
+	private void getProperties() {
+		try {
+			Integer[] propertiesValues = GetWorkhoursProperties.getInstance().getPropValues();
+			HOURPERDAY = propertiesValues[0];
+			PROJECTHOURPERDAY = propertiesValues[1];
+			STAGEHOURPERDAY = propertiesValues[2];
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			// TODO Handle with a Logger
+		}
 	}
 }

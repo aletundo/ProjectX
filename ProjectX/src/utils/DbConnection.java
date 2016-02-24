@@ -28,6 +28,7 @@ public class DbConnection {
 			pass = propertiesValues[2];
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			//TODO Handle with a Logger
 		}
 
 		Connection conn = null;
