@@ -76,8 +76,8 @@ public class OrganizeMeetingPMServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		/*if (!isAuthorized(request, response))
-			return;*/
+		if (!isAuthorized(request, response))
+			return;
 
 		RequestDispatcher dispatcher = getServletContext()
 				.getRequestDispatcher("/views/organize-meeting-PM.jsp");
