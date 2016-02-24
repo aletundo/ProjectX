@@ -70,8 +70,6 @@
 			<c:if test="${sessionScope.userType == 'Senior' }">
 				<jsp:include page="/views/sharable/sidebar-senior.jsp" />
 			</c:if>
-			<c:if test="${sessionScope.userType == 'Junior' }">
-			</c:if>
 			<p>
 				Your Session ID=
 				<c:out value="${cookie['JSESSIONID'].value}"></c:out>

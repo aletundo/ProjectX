@@ -24,6 +24,118 @@ public class UserDAO {
 
 		return INSTANCE;
 	}
+	
+	public String getProjectManagerMailByIdStage(int idStage){
+		String mail = "";
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if (currentConn != null) {
+			final String getUserMailQuery = "SELECT U.mail AS Mail FROM user AS U JOIN project AS P ON U.idUser = P.idProjectManager JOIN stage AS S ON S.idProject = P.idProject WHERE S.idStage = ?";
+			try {
+				statement = currentConn.prepareStatement(getUserMailQuery);
+				statement.setInt(1, idStage);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					mail = rs.getString("Mail");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return mail;
+	}
+
+	public List<String> getAllDevelopersMail(int idStage) {
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<String> developersMail = new ArrayList<String>();
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getUserMailQuery = "SELECT U.mail AS Mail "
+					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
+					+ "JOIN task AS T ON TD.idTask = T.idTask WHERE T.idStage = ?";
+			try {
+				statement = currentConn.prepareStatement(getUserMailQuery);
+				statement.setInt(1, idStage);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					developersMail.add(rs.getString("Mail"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+
+		return developersMail;
+
+	}
+
+	public List<String> getAllSupervisorsMail(int idProject) {
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<String> supervisorsMail = new ArrayList<String>();
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getUserMailQuery = "SELECT U.mail AS Mail "
+					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor "
+					+ "JOIN project AS P ON S.idProject = P.idProject WHERE P.idProject = ?";
+			try {
+				statement = currentConn.prepareStatement(getUserMailQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					supervisorsMail.add(rs.getString("Mail"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+
+		return supervisorsMail;
+
+	}
+
+	public String getGenericUserMailById(int idUser) {
+
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		String mail = "";
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getUserMailQuery = "SELECT U.mail AS Mail " + "FROM user AS U WHERE U.idUser = ?";
+			try {
+				statement = currentConn.prepareStatement(getUserMailQuery);
+				statement.setInt(1, idUser);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					mail = rs.getString("Mail");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+
+		return mail;
+
+	}
 
 	public List<UserBean> getUsersInfo(List<UserBean> candidates) {
 		PreparedStatement statement = null;
@@ -31,8 +143,7 @@ public class UserDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getUsersInfoQuery = "SELECT U.fullname AS Fullname "
-					+ "FROM user AS U WHERE U.idUser = ?";
+			final String getUsersInfoQuery = "SELECT U.fullname AS Fullname " + "FROM user AS U WHERE U.idUser = ?";
 			try {
 				for (UserBean u : candidates) {
 					statement = currentConn.prepareStatement(getUsersInfoQuery);
@@ -94,7 +205,7 @@ public class UserDAO {
 				rs = statement.executeQuery(getActiveStages);
 				while (rs.next()) {
 					StageBean stage = new StageBean();
-					stage.setIdProject(rs.getInt("IdStage"));
+					stage.setIdStage(rs.getInt("IdStage"));
 					stage.setStartDay(rs.getString("StartDay"));
 					stage.setFinishDay(rs.getString("FinishDay"));
 

@@ -8,6 +8,6 @@
 	</div>
 	<!-- List group -->
 	<div class="list-group">
-		<a class="list-group-item" href="./organizemeeting"><i class="fa fa-users"></i>&nbsp;Organize a meeting</a>
+		<a class="list-group-item" href="./organizemeeting?idProject=${requestScope.project.idProject}"><i class="fa fa-users"></i>&nbsp;Organize a meeting</a>
 	</div>
 </div>

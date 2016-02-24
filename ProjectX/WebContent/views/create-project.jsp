@@ -88,11 +88,11 @@
 				<br> <br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">
-						<i class="fa fa-arrow-right"></i> Continue
+						<i class="fa fa-arrow-right"></i>&nbsp;Continue
 					</button>
 					&nbsp;&nbsp;
 					<button class="btn btn-danger" type="reset">
-						<i class="fa fa-undo"></i> Reset
+						<i class="fa fa-undo"></i>&nbsp;Reset
 					</button>
 				</div>
 			</form>

@@ -23,6 +23,34 @@ public class ClientDAO {
 		return INSTANCE;
 
 	}
+	
+	public String getClientMail(int idProject){
+		
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		String mail = "";
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getUserMailQuery = "SELECT C.mail AS Mail "
+					+ "FROM client AS C JOIN project AS P ON C.idClient = P.idClient WHERE P.idProject = ?";
+			try {
+				statement = currentConn.prepareStatement(getUserMailQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					mail = rs.getString("Mail");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+
+		return mail;
+	}
 
 	public List<ClientBean> getRelatedClients(String subjectArea) {
 		List<ClientBean> clients = new ArrayList<ClientBean>();

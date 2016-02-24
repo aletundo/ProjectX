@@ -9,7 +9,7 @@ import models.TaskBean;
 import models.TaskDAO;
 
 public class UpdateRateCompleted {
-	
+
 	private static final UpdateRateCompleted INSTANCE = new UpdateRateCompleted();
 
 	private UpdateRateCompleted() {
@@ -20,33 +20,33 @@ public class UpdateRateCompleted {
 
 		return INSTANCE;
 	}
-	
-	public void checkTaskCompleted(int idTask){
+
+	public void checkTaskCompleted(int idTask) {
 		List<String> workCompletedState = TaskDAO.getInstance().checkDevelopersWork(idTask);
 		boolean isTaskCompleted = true;
-		for(String isCompleted : workCompletedState ){
-			if(isCompleted.equals("False"))
+		for (String isCompleted : workCompletedState) {
+			if (isCompleted.equals("False"))
 				isTaskCompleted = false;
 		}
-		
-		if(isTaskCompleted){
+
+		if (isTaskCompleted) {
 			TaskDAO.getInstance().setTaskCompleted(idTask);
 			updateStageRateCompleted(idTask);
 		}
 	}
-	
-	private void updateStageRateCompleted(int idTask){
+
+	private void updateStageRateCompleted(int idTask) {
 		TaskBean task = TaskDAO.getInstance().getRelativeWeight(idTask);
 		StageDAO.getInstance().setRateWorkCompleted(task.getIdStage(), task.getRelativeWeight());
 		updateProjectRatecompleted(task.getIdStage());
 	}
-	
-	private void updateProjectRatecompleted(int idStage){
+
+	private void updateProjectRatecompleted(int idStage) {
 		StageBean stage = StageDAO.getInstance().getRelativeWeight(idStage);
 		float rateWorkCompleted = StageDAO.getInstance().getRateWorkCompleted(idStage);
 		float rateProjectCompleted = (rateWorkCompleted * stage.getRelativeWeight()) / 100;
 		ProjectDAO.getInstance().setRateWorkCompleted(stage.getIdProject(), rateProjectCompleted);
-		
+
 	}
 
 }

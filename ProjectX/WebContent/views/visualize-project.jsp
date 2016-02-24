@@ -16,7 +16,9 @@
 					<h3 class="panel-title">
 						<c:out value="${requestScope.project.name }"></c:out>
 					</h3>
-					<a class="btn btn-danger btn-sm pull-right" href="./editproject?idProject=${requestScope.project.idProject}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+					<a class="btn btn-danger btn-sm pull-right"
+						href="./editproject?idProject=${requestScope.project.idProject}"><i
+						class="fa fa-pencil"></i>&nbsp;Edit</a>
 				</div>
 
 				<div class="panel-body">
@@ -29,10 +31,23 @@
 						<c:out value="${requestScope.project.clientName }"></c:out>
 					</p>
 					<div class="progress">
-						<div
-							class="progress-bar progress-bar-success progress-bar-striped"
-							role="progressbar" aria-valuenow="${requestScope.project.rateWorkCompleted }" aria-valuemin="0"
-							aria-valuemax="100" style="width: ${requestScope.project.rateWorkCompleted }%">${requestScope.project.rateWorkCompleted }% Complete</div>
+						<c:choose>
+							<c:when test="${requestScope.project.rateWorkCompleted } >= 99">
+								<div
+									class="progress-bar progress-bar-success progress-bar-striped"
+									role="progressbar" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100" style="width: 100%">100% Complete</div>
+							</c:when>
+							<c:otherwise>
+								<div
+									class="progress-bar progress-bar-success progress-bar-striped"
+									role="progressbar"
+									aria-valuenow="${requestScope.project.rateWorkCompleted }"
+									aria-valuemin="0" aria-valuemax="100"
+									style="width: ${requestScope.project.rateWorkCompleted }%">${requestScope.project.rateWorkCompleted }%
+									Complete</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 
@@ -47,19 +62,17 @@
 
 					<c:forEach items="${requestScope.stages}" var="stage">
 						<tr>
-							<td><a
-								href="./stage?idStage=${stage.idStage}"><strong><c:out
+							<td><a href="./stage?idStage=${stage.idStage}"><strong><c:out
 											value="${stage.name}"></c:out></strong></a></td>
-											<td><c:out
-										value="${stage.startDay}"></c:out></td>
-										<td><c:out
-										value="${stage.finishDay}"></c:out></td>
-																	<td>
+							<td><c:out value="${stage.startDay}"></c:out></td>
+							<td><c:out value="${stage.finishDay}"></c:out></td>
+							<td>
 								<div class="progress">
 									<div
 										class="progress-bar progress-bar-info progress-bar-striped"
-										role="progressbar" aria-valuenow="${stage.rateWorkCompleted }" aria-valuemin="0"
-										aria-valuemax="100" style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%</div>
+										role="progressbar" aria-valuenow="${stage.rateWorkCompleted }"
+										aria-valuemin="0" aria-valuemax="100"
+										style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%</div>
 								</div>
 							</td>
 							<td><span class="label label-warning"><c:out
@@ -72,11 +85,6 @@
 		<div class="col-md-3 col-xs-12">
 			<c:if test="${sessionScope.userType == 'ProjectManager'}">
 				<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
-			</c:if>
-			<c:if test="${sessionScope.userType == 'Senior' }">
-				<jsp:include page="/views/sharable/sidebar-senior.jsp" />
-			</c:if>
-			<c:if test="${sessionScope.userType == 'Junior' }">
 			</c:if>
 			<p>
 				Your Session ID=
