@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controllers.utils.CalculateAvailableUsers;
 import models.UserDAO;
 import models.TaskBean;
 import models.TaskDAO;
@@ -29,7 +30,15 @@ public class AddDeveloperServlet extends HttpServlet {
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
 		} else {
-			Map<Integer, List<Object>> candidates = UserDAO.getInstance().getCandidateDevelopers();
+			TaskBean task = new TaskBean();
+			task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
+			task.setStartDay(request.getParameter("startDay"));
+			task.setFinishDay(request.getParameter("finishDay"));
+			
+			Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateDevelopers();
+			List<UserBean> candidates = CalculateAvailableUsers.getInstance().calculate(workMap, task);
+			candidates = UserDAO.getInstance().getUsersInfo(candidates);
+			
 			request.setAttribute("candidates", candidates);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
 			dispatcher.forward(request, response);

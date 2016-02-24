@@ -38,7 +38,7 @@ public class AddTaskServlet extends HttpServlet {
 			return;
 		TaskBean task = new TaskBean();
 		// Get parameters
-		int idStage = Integer.parseInt(request.getParameter("id-stage"));
+		int idStage = Integer.parseInt(request.getParameter("idStage"));
 		String startDay = request.getParameter("start-day");
 		String finishDay = request.getParameter("finish-day");
 
@@ -50,7 +50,7 @@ public class AddTaskServlet extends HttpServlet {
 		int idTask = TaskDAO.getInstance().createTask(task);
 
 		if (idTask != 0)
-			response.sendRedirect(request.getContextPath() + "/add-developer?idTask=" + idTask);
+			response.sendRedirect(request.getContextPath() + "/add-developer?idTask=" + idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
 
 	}
 
