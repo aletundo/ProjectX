@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,7 +29,7 @@ public class AddDeveloperServlet extends HttpServlet {
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
 		} else {
-			List<UserBean> candidates = UserDAO.getInstance().getCandidateDevelopers();
+			Map<Integer, List<Object>> candidates = UserDAO.getInstance().getCandidateDevelopers();
 			request.setAttribute("candidates", candidates);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
 			dispatcher.forward(request, response);
