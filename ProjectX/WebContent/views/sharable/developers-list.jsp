@@ -13,7 +13,7 @@
 			var="candidate">
 			<li class="radio"><label><input type="radio"
 					name="id-developer" value="${candidate.idUser}">
-				<c:out value="${candidate.name}"></c:out></label></li>
+				<c:out value="${candidate.fullname}"></c:out></label></li>
 		</c:forEach>
 	</ul>
 </div>

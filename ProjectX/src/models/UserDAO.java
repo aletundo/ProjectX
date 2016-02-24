@@ -278,7 +278,7 @@ public class UserDAO {
 			final String getUsers = "SELECT idUser AS IdUser FROM user " + "WHERE type NOT LIKE 'ProjectManager'";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN stage AS S "
-					+ "ON U.idUser = S.idSupervisor";
+					+ "ON U.idUser = S.idSupervisor WHERE U.type NOT LIKE 'ProjectManager";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper"
 					+ "JOIN task AS T ON TD.idTask = T.idTask";

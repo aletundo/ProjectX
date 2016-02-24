@@ -39,13 +39,15 @@ public class AddTaskServlet extends HttpServlet {
 		TaskBean task = new TaskBean();
 		// Get parameters
 		int idStage = Integer.parseInt(request.getParameter("idStage"));
+		String name = request.getParameter("name");
 		String startDay = request.getParameter("start-day");
 		String finishDay = request.getParameter("finish-day");
 
 		// Set the bean
+		task.setIdStage(idStage);
+		task.setName(name);
 		task.setStartDay(startDay);
 		task.setFinishDay(finishDay);
-		task.setIdStage(idStage);
 
 		int idTask = TaskDAO.getInstance().createTask(task);
 

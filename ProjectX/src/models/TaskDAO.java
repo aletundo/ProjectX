@@ -250,14 +250,15 @@ public class TaskDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String addTaskQuery = "INSERT INTO task (idStage, startDay, "
-					+ "finishDay) VALUES(?, ?, ?)";
+			final String addTaskQuery = "INSERT INTO task (idStage, name, startDay, "
+					+ "finishDay) VALUES(?, ?, ?, ?)";
 			try {
 				statement = currentConn.prepareStatement(addTaskQuery, Statement.RETURN_GENERATED_KEYS);
 
 				statement.setInt(1, task.getIdStage());
-				statement.setString(2, task.getStartDay());
-				statement.setString(3, task.getFinishDay());
+				statement.setString(2, task.getName());
+				statement.setString(3, task.getStartDay());
+				statement.setString(4, task.getFinishDay());
 
 				statement.executeUpdate();
 				rs = statement.getGeneratedKeys();
