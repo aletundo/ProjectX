@@ -177,6 +177,9 @@ public class UserDAO {
 					+ "FROM user AS U JOIN project AS P " + "ON U.idUser = P.idProjectManager";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor";
+			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
+					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper"
+					+ "JOIN task AS T ON TD.idTask = T.idTask";
 
 			try {
 				statement = currentConn.createStatement();
@@ -215,6 +218,20 @@ public class UserDAO {
 					updatedValue.add(stage);
 					workMap.put(user, updatedValue);
 				}
+				rs.close();
+				rs = statement.executeQuery(getActiveTasks);
+				while (rs.next()) {
+					TaskBean task = new TaskBean();
+					task.setIdTask(rs.getInt("IdTask"));
+					task.setStartDay(rs.getString("StartDay"));
+					task.setFinishDay(rs.getString("FinishDay"));
+
+					Integer user = new Integer(rs.getInt("IdUser"));
+
+					List<Object> updatedValue = workMap.get(user);
+					updatedValue.add(task);
+					workMap.put(user, updatedValue);
+				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -251,31 +268,58 @@ public class UserDAO {
 	 * return candidates; }
 	 */
 
-	public List<UserBean> getCandidateDevelopers() {
-		List<UserBean> candidates = new ArrayList<UserBean>();
+	public Map<Integer, List<Object>> getCandidateDevelopers() {
+
+		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
 		ResultSet rs = null;
 		Statement statement = null;
 		Connection currentConn = DbConnection.connect();
 		if (currentConn != null) {
-			final String createView = "CREATE VIEW busyusers AS SELECT DISTINCT U.idUser AS IdUser FROM "
-					+ "user AS U JOIN project AS P ON U.idUser = P.idProjectManager "
-					+ "UNION SELECT DISTINCT U.idUser AS IdUser "
-					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor";
-			final String dropView = "DROP VIEW busyusers";
-			final String cadidatesQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'ProjectManager' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)";
+			final String getUsers = "SELECT idUser AS IdUser FROM user " + "WHERE type NOT LIKE 'ProjectManager'";
+			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
+					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor";
+			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
+					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper"
+					+ "JOIN task AS T ON TD.idTask = T.idTask";
+
 			try {
 				statement = currentConn.createStatement();
-				statement.executeUpdate(createView);
-				// statement = currentConn.prepareStatement(cadidatesQuery);
-				rs = statement.executeQuery(cadidatesQuery);
+				rs = statement.executeQuery(getUsers);
 				while (rs.next()) {
-					UserBean user = new UserBean();
-					user.setIdUser(rs.getInt("IdUser"));
-					user.setFullname(rs.getString("Fullname"));
-					user.setType(rs.getString("Type"));
-					candidates.add(user);
+					List<Object> works = new ArrayList<Object>();
+					Integer user = new Integer(rs.getInt("IdUser"));
+					workMap.put(user, works);
 				}
-				statement.executeUpdate(dropView);
+				rs.close();
+				
+				rs = statement.executeQuery(getActiveStages);
+				while (rs.next()) {
+					StageBean stage = new StageBean();
+					stage.setIdStage(rs.getInt("IdStage"));
+					stage.setStartDay(rs.getString("StartDay"));
+					stage.setFinishDay(rs.getString("FinishDay"));
+
+					Integer user = new Integer(rs.getInt("IdUser"));
+
+					List<Object> updatedValue = workMap.get(user);
+					updatedValue.add(stage);
+					workMap.put(user, updatedValue);
+				}
+				rs.close();
+				rs = statement.executeQuery(getActiveTasks);
+				while (rs.next()) {
+					TaskBean task = new TaskBean();
+					task.setIdTask(rs.getInt("IdTask"));
+					task.setStartDay(rs.getString("StartDay"));
+					task.setFinishDay(rs.getString("FinishDay"));
+
+					Integer user = new Integer(rs.getInt("IdUser"));
+
+					List<Object> updatedValue = workMap.get(user);
+					updatedValue.add(task);
+					workMap.put(user, updatedValue);
+				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 				// TODO handle with a Logger
@@ -283,8 +327,8 @@ public class UserDAO {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-
-		return candidates;
+		return workMap;
+	
 	}
 
 	public boolean signUpUser(UserBean user) {
