@@ -25,13 +25,13 @@ public class EditProject extends HttpServlet {
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-project.jsp");
 		dispatcher.forward(request, response);
 	}
-
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub

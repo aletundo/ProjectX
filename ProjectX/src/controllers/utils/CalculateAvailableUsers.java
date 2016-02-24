@@ -57,10 +57,8 @@ public class CalculateAvailableUsers {
 				try {
 					Object work = arrayListIterator.next();
 					boolean isCritical = calculateCriticalWork(work, newTask, format);
-					if (isCritical) {
-						if (work != null) {
-							criticalWorks.add(work);
-						}
+					if (isCritical && work != null) {
+						criticalWorks.add(work);
 					}
 				} catch (ParseException e) {
 					// TODO handle exception with a logger
@@ -103,10 +101,8 @@ public class CalculateAvailableUsers {
 				try {
 					Object work = arrayListIterator.next();
 					boolean isCritical = calculateCriticalWork(work, newStage, format);
-					if (isCritical) {
-						if (work != null) {
-							criticalWorks.add(work);
-						}
+					if (isCritical && work != null) {
+						criticalWorks.add(work);
 					}
 				} catch (ParseException e) {
 					// TODO handle exception with a logger
@@ -181,7 +177,7 @@ public class CalculateAvailableUsers {
 
 			long hourWork = 0;
 
-			if (work.getClass().getName().equals("models.ProjectBean")) {
+			if (work instanceof models.ProjectBean) {
 
 				System.out.println("working hours tot" + workingHoursTOT);
 				ProjectBean workProject = (ProjectBean) work;
@@ -199,7 +195,7 @@ public class CalculateAvailableUsers {
 				System.out.println("ore lavori critici1 " + hoursCriticalWorks);
 			}
 
-			if (work.getClass().getName().equals("models.StageBean")) {
+			if (work instanceof models.StageBean) {
 				StageBean workStage = (StageBean) work;
 				long dateDiff = getDifferenceDays(
 						calculateMin(format.parse(workStage.getStartDay()), format.parse(newStage.getStartDay())),
@@ -220,7 +216,7 @@ public class CalculateAvailableUsers {
 				System.out.println("ore lavori critici2 " + hoursCriticalWorks);
 
 			}
-			if (work.getClass().getName().equals("models.TaskBean")) {
+			if (work instanceof models.TaskBean) {
 				TaskBean workTask = (TaskBean) work;
 				Connection currentConn = DbConnection.connect();
 				ResultSet rs = null;
@@ -270,7 +266,7 @@ public class CalculateAvailableUsers {
 
 			long hourWork = 0;
 
-			if (work.getClass().getName().equals("models.StageBean")) {
+			if (work instanceof models.StageBean) {
 				StageBean workStage = (StageBean) work;
 				long dateDiff = getDifferenceDays(
 						calculateMin(format.parse(workStage.getStartDay()), format.parse(newTask.getStartDay())),
@@ -291,7 +287,7 @@ public class CalculateAvailableUsers {
 				System.out.println("ore lavori critici2 " + hoursCriticalWorks);
 
 			}
-			if (work.getClass().getName().equals("models.TaskBean")) {
+			if (work instanceof models.TaskBean) {
 				TaskBean workTask = (TaskBean) work;
 				Connection currentConn = DbConnection.connect();
 				ResultSet rs = null;
@@ -334,7 +330,7 @@ public class CalculateAvailableUsers {
 	// STAGE
 	public static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
 			throws ParseException {
-		if (work.getClass().getName().equals("models.ProjectBean")) {
+		if (work instanceof models.ProjectBean) {
 			ProjectBean workProject = (ProjectBean) work;
 			// check if the referenced project does not collide through time
 			// with the newStage to assign
@@ -345,7 +341,7 @@ public class CalculateAvailableUsers {
 			}
 		}
 
-		if (work.getClass().getName().equals("models.StageBean")) {
+		if (work instanceof models.StageBean) {
 			StageBean workStage = (StageBean) work;
 			if (!(format.parse(workStage.getFinishDay()).before(format.parse(newStage.getStartDay()))
 					|| format.parse(workStage.getStartDay()).after(format.parse(newStage.getFinishDay())))) {
@@ -353,7 +349,7 @@ public class CalculateAvailableUsers {
 				return true;
 			}
 		}
-		if (work.getClass().getName().equals("models.TaskBean")) {
+		if (work instanceof models.TaskBean) {
 			TaskBean workTask = (TaskBean) work;
 			if (!(format.parse(workTask.getFinishDay()).before(format.parse(newStage.getStartDay()))
 					|| format.parse(workTask.getStartDay()).after(format.parse(newStage.getFinishDay())))) {
@@ -368,7 +364,7 @@ public class CalculateAvailableUsers {
 	// TASK
 	public static boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format)
 			throws ParseException {
-		if (work.getClass().getName().equals("models.StageBean")) {
+		if (work instanceof models.StageBean) {
 			StageBean workStage = (StageBean) work;
 			if (!(format.parse(workStage.getFinishDay()).before(format.parse(newTask.getStartDay()))
 					|| format.parse(workStage.getStartDay()).after(format.parse(newTask.getFinishDay())))) {
@@ -377,7 +373,7 @@ public class CalculateAvailableUsers {
 			}
 		}
 
-		if (work.getClass().getName().equals("models.TaskBean")) {
+		if (work instanceof models.TaskBean) {
 			TaskBean workTask = (TaskBean) work;
 			if (!(format.parse(workTask.getFinishDay()).before(format.parse(newTask.getStartDay()))
 					|| format.parse(workTask.getStartDay()).after(format.parse(newTask.getFinishDay())))) {

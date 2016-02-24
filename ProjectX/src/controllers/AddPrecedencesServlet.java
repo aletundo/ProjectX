@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +33,12 @@ public class AddPrecedencesServlet extends HttpServlet {
 		for(StageBean s : stages){
 			stagesQueue.add(s);
 		}
+		Serializable stagesSer = (Serializable)stages;
+		Serializable stagesQueueSer = (Serializable)stagesQueue;
+		
 		HttpSession session = request.getSession();
-		session.setAttribute("stages", stages);
-		session.setAttribute("stagesQueue", stagesQueue);
+		session.setAttribute("stages", stagesSer);
+		session.setAttribute("stagesQueue", stagesQueueSer);
 		request.setAttribute("idProject", idProject);
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");

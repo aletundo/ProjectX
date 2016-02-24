@@ -47,7 +47,10 @@ public class GetDbConnProperties extends GetPropertiesAbstract {
 		} catch (Exception e) {
 			//TODO Handle exception
 		} finally {
-			inputStream.close();
+			if(inputStream != null){
+				inputStream.close();
+			}
+			
 		}
 		return properties;
 	}

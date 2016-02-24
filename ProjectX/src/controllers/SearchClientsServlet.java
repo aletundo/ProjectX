@@ -21,20 +21,20 @@ public class SearchClientsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(!isAuthorized(request, response))
+		if (!isAuthorized(request, response))
 			return;
-		
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/search-clients.jsp");
-			dispatcher.forward(request, response);
+
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/search-clients.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		if(!isAuthorized(request, response))
+		if (!isAuthorized(request, response))
 			return;
-		
+
 		String subjectArea = request.getParameter("subject-area");
 		List<ClientBean> clients = ClientDAO.getInstance().getRelatedClients(subjectArea);
 		RequestDispatcher dispatcher;
@@ -47,7 +47,7 @@ public class SearchClientsServlet extends HttpServlet {
 		dispatcher = getServletContext().getRequestDispatcher("/views/related-clients.jsp");
 		dispatcher.forward(request, response);
 	}
-	
+
 	/**
 	 * @param request
 	 * @param response
@@ -71,6 +71,5 @@ public class SearchClientsServlet extends HttpServlet {
 		}
 		return true;
 	}
-
 
 }
