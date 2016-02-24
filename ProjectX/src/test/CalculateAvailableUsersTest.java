@@ -19,50 +19,50 @@ public class CalculateAvailableUsersTest {
 	@Test
 	public void calculateTest()throws ParseException{
 		UserBean user = new UserBean();
-		user.setIdUser(17);
+		user.setIdUser(27);
 		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
 		
 		StageBean newStage = new StageBean();
-		newStage.setStartDay("2016-01-01");
-		newStage.setFinishDay("2016-01-07");
+		newStage.setStartDay("2016-03-27");
+		newStage.setFinishDay("2016-03-30");
 		
-		TaskBean newTask = new TaskBean();
+		/*TaskBean newTask = new TaskBean();
 		newTask.setStartDay("2016-01-01");
-		newTask.setFinishDay("2016-01-07");
+		newTask.setFinishDay("2016-01-07");*/
 		
 		List<Object> works = new ArrayList<Object>();
 		
 		ProjectBean project = new ProjectBean();
-		project.setStart("2016-01-01");
-		project.setDeadline("2016-07-01");
+		project.setStart("2016-03-25");
+		project.setDeadline("2016-12-09");
 		
-		StageBean stage = new StageBean();
+	/*	StageBean stage = new StageBean();
 		stage.setStartDay("2016-01-05");
 		stage.setFinishDay("2016-01-06");
 		
 		TaskBean task = new TaskBean();
 		task.setIdTask(1);
 		task.setStartDay("2016-01-03");
-		task.setFinishDay("2016-01-05");
+		task.setFinishDay("2016-01-05");*/
 		
 		works.add(project);
-		works.add(stage);
-		works.add(task);
+		//works.add(stage);
+		//works.add(task);
 
 		workMap.put(user.getIdUser(), works);
 		
 		List<UserBean> available1= new ArrayList<UserBean>();
-		List<UserBean> available2= new ArrayList<UserBean>();
+		//List<UserBean> available2= new ArrayList<UserBean>();
 		
 		available1 = CalculateAvailableUsers.calculate(workMap, newStage);
-		available2 = CalculateAvailableUsers.calculate(workMap, newTask);
+		//available2 = CalculateAvailableUsers.calculate(workMap, newTask);
 		
 		System.out.println("available1: " + available1);
-		System.out.println("available2: " + available2);
+		//System.out.println("available2: " + available2);
 	
 		
-		assertEquals(17, available1.get(0).getIdUser());
-		assertEquals(17, available2.get(0).getIdUser());
+		assertEquals(27, available1.get(0).getIdUser());
+		//assertEquals(17, available2.get(0).getIdUser());
 		//System.out.println(x);
 	}
 	
