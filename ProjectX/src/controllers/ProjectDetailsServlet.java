@@ -30,7 +30,7 @@ public class ProjectDetailsServlet extends HttpServlet {
 			int idProject = Integer.parseInt(request.getParameter("idProject"));
 			RequestDispatcher dispatcher;
 
-			List<StageBean> stagesInfo = StageDAO.getInstance().getStagesDetails(idProject);
+			List<StageBean> stagesInfo = StageDAO.getInstance().getStagesByIdProject(idProject);
 			ProjectBean projectInfo = ProjectDAO.getInstance().getProjectInfo(idProject);
 
 			request.setAttribute("project", projectInfo);

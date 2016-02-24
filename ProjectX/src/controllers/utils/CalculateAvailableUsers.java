@@ -29,9 +29,20 @@ public class CalculateAvailableUsers {
 
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
+	
+	private static final CalculateAvailableUsers INSTANCE = new CalculateAvailableUsers();
+
+	private CalculateAvailableUsers() {
+
+	}
+
+	public static CalculateAvailableUsers getInstance() {
+
+		return INSTANCE;
+	}
 
 	// calculate the available users for a new TASK
-	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
+	public List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<UserBean>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
@@ -75,7 +86,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the available users for a new STAGE
-	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
+	public List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<UserBean>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
@@ -119,7 +130,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the availability of a user for a new STAGE
-	private static UserBean isAvailable(StageBean newStage, Map.Entry<Integer, List<Object>> pair,
+	private UserBean isAvailable(StageBean newStage, Map.Entry<Integer, List<Object>> pair,
 			List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
 		long hourNewStage = Long.MIN_VALUE;
@@ -144,7 +155,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the availability of a user for a new TASK
-	private static UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair,
+	private UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair,
 			List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
 
@@ -166,7 +177,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the available hours of a user for a new STAGE
-	public static long calculateAvailability(List<Object> criticalWorks, StageBean newStage,
+	private long calculateAvailability(List<Object> criticalWorks, StageBean newStage,
 			Map.Entry<Integer, List<Object>> pair) throws ParseException {
 		long dateDiffTOT = getDifferenceDays(minStart, maxFinish);
 		System.out.println("dateDiffTOT: " + dateDiffTOT);
@@ -255,7 +266,7 @@ public class CalculateAvailableUsers {
 
 	}
 
-	public static long calculateAvailability(List<Object> criticalWorks, TaskBean newTask,
+	private long calculateAvailability(List<Object> criticalWorks, TaskBean newTask,
 			Map.Entry<Integer, List<Object>> pair) throws ParseException {
 		long dateDiffTOT = getDifferenceDays(minStart, maxFinish);
 		System.out.println("dateDiffTOT: " + dateDiffTOT);
@@ -328,7 +339,7 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// STAGE
-	public static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
+	private boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
 			throws ParseException {
 		if (work instanceof models.ProjectBean) {
 			ProjectBean workProject = (ProjectBean) work;
@@ -362,7 +373,7 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// TASK
-	public static boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format)
+	private boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format)
 			throws ParseException {
 		if (work instanceof models.StageBean) {
 			StageBean workStage = (StageBean) work;

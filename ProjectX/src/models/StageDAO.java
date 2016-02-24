@@ -185,7 +185,7 @@ public class StageDAO {
 		return stageInfo;
 	}
 
-	public List<StageBean> getStagesDetails(int idProject) {
+	public List<StageBean> getStagesByIdProject(int idProject) {
 		List<StageBean> stages = new ArrayList<StageBean>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
@@ -260,7 +260,7 @@ public class StageDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name"
+			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, S.startDay AS StartDay, S.finishDay AS FinishDay"
 					+ " FROM stage AS S WHERE S.idProject = ?";
 			try {
 				statement = currentConn.prepareStatement(getStagesQuery);
@@ -270,6 +270,8 @@ public class StageDAO {
 					StageBean stage = new StageBean();
 					stage.setIdStage(rs.getInt("IdStage"));
 					stage.setName(rs.getString("Name"));
+					stage.setStartDay(rs.getString("StartDay"));
+					stage.setFinishDay(rs.getString("FinishDay"));
 					stages.add(stage);
 				}
 			} catch (SQLException e) {

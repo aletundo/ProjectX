@@ -15,28 +15,31 @@ import models.StageDAO;
 @WebServlet("/editstage")
 public class EditStage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(!isAuthorized(request, response)){
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (!isAuthorized(request, response)) {
 			return;
 		}
-		
+
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-stage.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
-	
+
 	/**
 	 * @param request
 	 * @param response
@@ -53,9 +56,10 @@ public class EditStage extends HttpServlet {
 			return false;
 		}
 
-		int[] idAuthorizedUsers = StageDAO.getInstance().getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
+		int[] idAuthorizedUsers = StageDAO.getInstance()
+				.getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
 		int idLoggedUser = (Integer) (session.getAttribute("idUser"));
-		if (idAuthorizedUsers[0] != idLoggedUser  && idAuthorizedUsers[1] != idLoggedUser) {
+		if (idAuthorizedUsers[0] != idLoggedUser && idAuthorizedUsers[1] != idLoggedUser) {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
 			dispatcher.forward(request, response);
 			return false;

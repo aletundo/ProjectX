@@ -17,9 +17,19 @@ import java.lang.Math;
 
 public class CalculateWeights {
 	
+	private static final CalculateWeights INSTANCE = new CalculateWeights();
+
+	private CalculateWeights() {
+
+	}
+
+	public static CalculateWeights getInstance() {
+
+		return INSTANCE;
+	}
 
 	//Called when a supervisor add the last task
-	public static void computeTasksWeight(List<TaskBean> tasks) {
+	public void computeTasksWeight(List<TaskBean> tasks) {
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		float durationSum = 0;
 		Map<Integer, Float> durationMap = new HashMap<Integer, Float>();
@@ -45,7 +55,7 @@ public class CalculateWeights {
 	}
 	
 	//Called when a project manager set the last stage
-	public static void computeStagesWeight(List<StageBean> stages) {
+	public void computeStagesWeight(List<StageBean> stages) {
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		float durationSum = 0;
 		Map<Integer, Float> durationMap = new HashMap<Integer, Float>();

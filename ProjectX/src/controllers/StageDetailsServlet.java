@@ -29,7 +29,7 @@ public class StageDetailsServlet extends HttpServlet {
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
 			RequestDispatcher dispatcher;
 
-			List<TaskBean> tasks = TaskDAO.getInstance().getTasksDetails(idStage);
+			List<TaskBean> tasks = TaskDAO.getInstance().getTasksByStageId(idStage);
 			StageBean stageInfo = StageDAO.getInstance().getStageInfo(idStage);
 
 			request.setAttribute("stage", stageInfo);

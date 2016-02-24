@@ -13,7 +13,7 @@
 			<strong>Perfect!</strong> Now you can divide your stages into tasks.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addtask" method="POST" role="form"
+				action="./addtask?idStage=${requestScope.idStage }" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"

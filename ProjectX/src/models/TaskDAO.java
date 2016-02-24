@@ -19,6 +19,73 @@ public class TaskDAO {
 		return INSTANCE;
 	}
 	
+	public List<UserBean> getAllDevelopersByIdTask(int idTask){
+		List<UserBean> developers = new ArrayList<UserBean>();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String getAllDevelopersQuery = "SELECT U.fullname AS Fullname, U.type AS Type "
+					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper WHERE TD.idTask = ?";
+			try{
+				statement = currentConn.prepareStatement(getAllDevelopersQuery);
+				statement.setInt(1, idTask);
+				rs = statement.executeQuery();
+				
+				while(rs.next()){
+					UserBean developer = new UserBean();
+					developer.setFullname(rs.getString("Fullname"));
+					developer.setType(rs.getString("Type"));
+					developers.add(developer);
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a Logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return developers;
+	}
+	
+	public TaskBean getTaskInfo(int idTask){
+		TaskBean task = new TaskBean();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String getTaskInfoQuery = "SELECT T.name AS Name, "
+					+ "T.startDay AS StartDay, T.finishDay AS FinishDay, T.completed AS Completed "
+					+ "FROM task AS T WHERE T.idTask = ?";
+			try{
+				statement = currentConn.prepareStatement(getTaskInfoQuery);
+				statement.setInt(1, idTask);
+				rs = statement.executeQuery();
+				
+				while(rs.next()){
+					task.setName(rs.getString("Name"));
+					task.setStartDay(rs.getString("StartDay"));
+					task.setFinishDay(rs.getString("FinishDay"));
+					task.setCompleted(rs.getString("Completed"));
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a Logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return task;
+		
+		
+	}
+	
 	public TaskBean getRelativeWeight(int idTask){
 		TaskBean task = new TaskBean();
 		PreparedStatement statement = null;
@@ -115,7 +182,7 @@ public class TaskDAO {
 		}
 	}
 	
-	public List<TaskBean> getTasksDetails(int idStage){
+	public List<TaskBean> getTasksByStageId(int idStage){
 		List<TaskBean> tasks = new ArrayList<TaskBean>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;

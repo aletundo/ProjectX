@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controllers.utils.CalculateWeights;
 import models.ProjectDAO;
 import models.StageBean;
 import models.StageDAO;
@@ -45,6 +46,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!isAuthorized(request, response))
@@ -52,7 +54,6 @@ public class AddPrecedencesServlet extends HttpServlet {
 		List<StageBean> precedences = new ArrayList<StageBean>();
 		StageBean stage = new StageBean();
 
-		@SuppressWarnings("unchecked")
 		List<StageBean> stagesQueue = (List<StageBean>)request.getSession().getAttribute("stagesQueue");
 		
 		stage.setIdStage(stagesQueue.remove(0).getIdStage());
@@ -73,9 +74,11 @@ public class AddPrecedencesServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
 			dispatcher.forward(request, response);
 		}else{
+			CalculateWeights.getInstance().computeStagesWeight((List<StageBean>)request.getSession().getAttribute("stages"));
 			request.getSession().removeAttribute("stages");
 			request.getSession().removeAttribute("stagesQueue");
 			request.getSession().removeAttribute("idProject");
+			response.sendRedirect(request.getContextPath() + "/project?idProject=" + Integer.parseInt(request.getParameter("idProject")));
 		}
 	}
 	

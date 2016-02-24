@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
-<title>ProjectX - Project: <c:out
+<title>ProjectX - Stage: <c:out
 		value="${requestScope.stage.name }"></c:out></title>
 </head>
 <body>

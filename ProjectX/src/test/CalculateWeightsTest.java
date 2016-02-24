@@ -68,8 +68,8 @@ public class CalculateWeightsTest {
 		tasks.add(task3);
 		tasks.add(task4);
 		
-		CalculateWeights.computeStagesWeight(stages);
-		CalculateWeights.computeTasksWeight(tasks);
+		CalculateWeights.getInstance().computeStagesWeight(stages);
+		CalculateWeights.getInstance().computeTasksWeight(tasks);
 		
 		assertEquals(34.831463, stages.get(0).getRelativeWeight(), 0.001);
 		assertEquals(11.235955, stages.get(1).getRelativeWeight(), 0.001);

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.StageDAO;
 import models.TaskBean;
 import models.TaskDAO;
 
@@ -20,41 +21,63 @@ public class AddTaskServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-		} else {
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			request.setAttribute("idStage", idStage);
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
-			dispatcher.forward(request, response);
-		}
+		if (!isAuthorized(request, response))
+			return;
+
+		int idStage = Integer.parseInt(request.getParameter("idStage"));
+		request.setAttribute("idStage", idStage);
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
+		dispatcher.forward(request, response);
+
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
+		if (!isAuthorized(request, response))
+			return;
+		TaskBean task = new TaskBean();
+		// Get parameters
+		int idStage = Integer.parseInt(request.getParameter("id-stage"));
+		String startDay = request.getParameter("start-day");
+		String finishDay = request.getParameter("finish-day");
+
+		// Set the bean
+		task.setStartDay(startDay);
+		task.setFinishDay(finishDay);
+		task.setIdStage(idStage);
+
+		int idTask = TaskDAO.getInstance().createTask(task);
+
+		if (idTask != 0)
+			response.sendRedirect(request.getContextPath() + "/add-developer?idTask=" + idTask);
+
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 * @return boolean
+	 */
+	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		HttpSession session = request.getSession();
+		// If the session is not valid redirect to login
 		if (session == null || session.getAttribute("idUser") == null) {
 			response.sendRedirect(request.getContextPath());
-		} else {
-			TaskBean task = new TaskBean();
-			// Get parameters
-			int idStage = Integer.parseInt(request.getParameter("id-stage"));
-			String startDay = request.getParameter("start-day");
-			String finishDay = request.getParameter("finish-day");
-
-			// Set the bean
-			task.setStartDay(startDay);
-			task.setFinishDay(finishDay);
-			task.setIdStage(idStage);
-
-			int idTask = TaskDAO.getInstance().createTask(task);
-
-			if (idTask != 0)
-				response.sendRedirect(
-						request.getContextPath() + "/add-developer?idTask=" + idTask);
+			return false;
 		}
 
+		int[] idAuthorizedUsers = StageDAO.getInstance()
+				.getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
+		int idLoggedUser = (Integer) (session.getAttribute("idUser"));
+		if (idAuthorizedUsers[0] != idLoggedUser && idAuthorizedUsers[1] != idLoggedUser) {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
+			dispatcher.forward(request, response);
+			return false;
+		}
+		return true;
 	}
 }
