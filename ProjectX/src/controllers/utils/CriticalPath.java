@@ -1,34 +1,25 @@
 package controllers.utils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import models.StageBean;
-import utils.DbConnection;
+
 
 public class CriticalPath {
-
-	private static final CriticalPath INSTANCE = new CriticalPath();
 
 	private CriticalPath() {
 
 	}
 
-	public static CriticalPath getInstance() {
-
-		return INSTANCE;
-	}
 
 	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 

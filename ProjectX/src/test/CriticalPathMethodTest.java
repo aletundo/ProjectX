@@ -53,7 +53,7 @@ public class CriticalPathMethodTest {
 		
 		
 		
-	CriticalPath.getInstance();
+
 		//	mapIterator.forEachRemaining(action);
 	//	System.out.println(pair.getKey());
 	//	pair.setValue(stages);

@@ -36,7 +36,7 @@ public class AddDeveloperServlet extends HttpServlet {
 			task.setFinishDay(request.getParameter("finishDay"));
 			
 			Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateDevelopers();
-			List<UserBean> candidates = CalculateAvailableUsers.getInstance().calculate(workMap, task);
+			List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, task);
 			candidates = UserDAO.getInstance().getUsersInfo(candidates);
 			
 			request.setAttribute("candidates", candidates);

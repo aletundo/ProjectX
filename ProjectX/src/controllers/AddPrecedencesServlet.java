@@ -74,7 +74,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
 			dispatcher.forward(request, response);
 		}else{
-			CalculateWeights.getInstance().computeStagesWeight((List<StageBean>)request.getSession().getAttribute("stages"));
+			CalculateWeights.computeStagesWeight((List<StageBean>)request.getSession().getAttribute("stages"));
 			request.getSession().removeAttribute("stages");
 			request.getSession().removeAttribute("stagesQueue");
 			request.getSession().removeAttribute("idProject");

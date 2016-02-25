@@ -54,7 +54,7 @@ public class CalculateAvailableUsersTest {
 		List<UserBean> available1= new ArrayList<UserBean>();
 		//List<UserBean> available2= new ArrayList<UserBean>();
 		
-		available1 = CalculateAvailableUsers.getInstance().calculate(workMap, newStage);
+		available1 = CalculateAvailableUsers.calculate(workMap, newStage);
 		//available2 = CalculateAvailableUsers.calculate(workMap, newTask);
 		
 		System.out.println("available1: " + available1);

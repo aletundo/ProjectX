@@ -32,19 +32,14 @@ public class CalculateAvailableUsers {
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
 
-	private static final CalculateAvailableUsers INSTANCE = new CalculateAvailableUsers();
 
 	private CalculateAvailableUsers() {
 
 	}
 
-	public static CalculateAvailableUsers getInstance() {
-
-		return INSTANCE;
-	}
 
 	// calculate the available users for a new TASK
-	public List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
+	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
 
 		getProperties();
 
@@ -91,7 +86,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the available users for a new STAGE
-	public List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
+	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
 
 		getProperties();
 
@@ -138,7 +133,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the availability of a user for a new STAGE
-	private UserBean isAvailable(StageBean newStage, Map.Entry<Integer, List<Object>> pair,
+	private static UserBean isAvailable(StageBean newStage, Map.Entry<Integer, List<Object>> pair,
 			List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
 		long hourNewStage = Long.MIN_VALUE;
@@ -163,7 +158,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the availability of a user for a new TASK
-	private UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair, List<Object> criticalWorks) {
+	private static UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair, List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
 
 		try {
@@ -184,7 +179,7 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the available hours of a user for a new STAGE
-	private long calculateAvailability(List<Object> criticalWorks, StageBean newStage,
+	private static long calculateAvailability(List<Object> criticalWorks, StageBean newStage,
 			Map.Entry<Integer, List<Object>> pair) throws ParseException {
 		long dateDiffTOT = getDifferenceDays(minStart, maxFinish);
 		System.out.println("dateDiffTOT: " + dateDiffTOT);
@@ -273,7 +268,7 @@ public class CalculateAvailableUsers {
 
 	}
 
-	private long calculateAvailability(List<Object> criticalWorks, TaskBean newTask,
+	private static long calculateAvailability(List<Object> criticalWorks, TaskBean newTask,
 			Map.Entry<Integer, List<Object>> pair) throws ParseException {
 		long dateDiffTOT = getDifferenceDays(minStart, maxFinish);
 		System.out.println("dateDiffTOT: " + dateDiffTOT);
@@ -346,7 +341,7 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// STAGE
-	private boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format) throws ParseException {
+	private static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format) throws ParseException {
 		if (work instanceof models.ProjectBean) {
 			ProjectBean workProject = (ProjectBean) work;
 			// check if the referenced project does not collide through time
@@ -379,7 +374,7 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// TASK
-	private boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format) throws ParseException {
+	private static boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format) throws ParseException {
 		if (work instanceof models.StageBean) {
 			StageBean workStage = (StageBean) work;
 			if (!(format.parse(workStage.getFinishDay()).before(format.parse(newTask.getStartDay()))
@@ -437,7 +432,7 @@ public class CalculateAvailableUsers {
 		return 1 + diff;
 	}
 
-	private void getProperties() {
+	private static void getProperties() {
 		try {
 			Integer[] propertiesValues = GetWorkhoursProperties.getInstance().getPropValues();
 			HOURPERDAY = propertiesValues[0];
