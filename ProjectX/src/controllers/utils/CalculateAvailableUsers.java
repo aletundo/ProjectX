@@ -457,4 +457,19 @@ public class CalculateAvailableUsers {
 			// TODO Handle with a Logger
 		}
 	}
+	
+	public static long getHoursRequestedTask(String startDay, String finishDay){
+		long hourRequested = 0;
+		try{
+			
+		Date start = format.parse(startDay);
+		Date finish = format.parse(finishDay);
+		hourRequested = HOURPERDAY * getDifferenceDays(start,finish);
+		
+		
+		}catch(ParseException e){
+			//TODO handle with a logger
+		}
+		return hourRequested;
+	}
 }
