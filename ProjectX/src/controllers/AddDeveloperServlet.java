@@ -3,7 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.io.Serializable;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

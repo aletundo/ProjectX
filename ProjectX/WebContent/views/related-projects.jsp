@@ -42,8 +42,8 @@
 
 							<c:forEach items="${requestScope.projects}" var="project">
 								<tr>
-									<td><a href="#"><strong><c:out
-													value="${project.idProject}"></c:out></strong></a></td>
+									<td><span class="badge"><strong><c:out
+													value="${project.idProject}"></c:out></strong></span></td>
 									<td><span class="label label-success"><c:out
 												value="${project.name}"></c:out></span></td>
 									<td><span class="label label-warning"><c:out

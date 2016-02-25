@@ -10,7 +10,7 @@
 <body>
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
-		<div class="col-md-9 col-xs-12">
+		<div class="col-md-12 col-xs-12">
 			<div id="projects-panel" class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">
@@ -18,7 +18,10 @@
 					</h3>
 					<a class="btn btn-danger btn-sm pull-right"
 						href="./editstage?idStage=${requestScope.stage.idStage }"><i
-						class="fa fa-pencil"></i>&nbsp;Edit</a>
+						class="fa fa-pencil"></i>&nbsp;Edit</a> <a
+						class="btn btn-success btn-sm pull-right"
+						href="./organizemeeting?idStage=${requestScope.stage.idStage }"><i
+						class="fa fa-users"></i>&nbsp;Organize meeting</a>
 				</div>
 
 				<div class="panel-body">
@@ -77,18 +80,6 @@
 					</c:forEach>
 				</table>
 			</div>
-		</div>
-		<div class="col-md-3 col-xs-12">
-			<c:if test="${sessionScope.userType == 'ProjectManager'}">
-				<jsp:include page="/views/sharable/sidebar-project-manager.jsp" />
-			</c:if>
-			<c:if test="${sessionScope.userType == 'Senior' }">
-				<jsp:include page="/views/sharable/sidebar-senior.jsp" />
-			</c:if>
-			<p>
-				Your Session ID=
-				<c:out value="${cookie['JSESSIONID'].value}"></c:out>
-			</p>
 		</div>
 	</div>
 	<jsp:include page="/views/sharable/footer.jsp" />

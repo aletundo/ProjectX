@@ -95,8 +95,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
 
 			int[] idAuthorizedUsers = StageDAO.getInstance()
 					.getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
+			int idSupervisor = idAuthorizedUsers[0];
 			int idLoggedUser = (Integer) (session.getAttribute("idUser"));
-			if (idAuthorizedUsers[0] != idLoggedUser && idAuthorizedUsers[1] != idLoggedUser) {
+			if (idSupervisor != idLoggedUser) {
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
 				dispatcher.forward(request, response);
 				return false;
