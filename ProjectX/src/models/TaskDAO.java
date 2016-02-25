@@ -219,17 +219,17 @@ public class TaskDAO {
 		
 	}
 
-	public boolean addDeveloper(TaskBean task) {
+	public boolean addDeveloper(TaskBean task, long hoursRequired) {
 		PreparedStatement statement = null;
 		boolean updated = false;
 		Connection currentConn = DbConnection.connect();
-		String addDeveloperQuery = "UPDATE task SET idDeveloper = ? WHERE idTask = ?";
-
+		final String addDeveloperQuery = "INSERT INTO taskdevelopment (idDeveloper, idTask, hoursRequired) VALUES (?, ?, ?)";
 		if (currentConn != null) {
 			try {
 					statement = currentConn.prepareStatement(addDeveloperQuery);
 					statement.setInt(1, task.getIdDeveloper());
 					statement.setInt(2, task.getIdTask());
+					statement.setInt(3, (int) hoursRequired);
 				
 				statement.executeUpdate();
 				updated = true;

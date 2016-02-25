@@ -143,14 +143,16 @@ public class UserDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getUsersInfoQuery = "SELECT U.fullname AS Fullname " + "FROM user AS U WHERE U.idUser = ?";
+			final String getUsersInfoQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type " + "FROM user AS U WHERE U.idUser = ?";
 			try {
 				for (UserBean u : candidates) {
 					statement = currentConn.prepareStatement(getUsersInfoQuery);
 					statement.setInt(1, u.getIdUser());
 					rs = statement.executeQuery();
 					while (rs.next()) {
+						u.setIdUser(rs.getInt("IdUser"));
 						u.setFullname(rs.getString("Fullname"));
+						u.setType(rs.getString("Type"));
 					}
 					rs.close();
 					statement.close();
@@ -278,9 +280,9 @@ public class UserDAO {
 			final String getUsers = "SELECT idUser AS IdUser FROM user " + "WHERE type NOT LIKE 'ProjectManager'";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN stage AS S "
-					+ "ON U.idUser = S.idSupervisor WHERE U.type NOT LIKE 'ProjectManager";
+					+ "ON U.idUser = S.idSupervisor WHERE U.type NOT LIKE 'ProjectManager'";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
-					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper"
+					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask";
 
 			try {

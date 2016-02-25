@@ -84,7 +84,7 @@ public class CalculateAvailableUsers {
 			}
 
 			UserBean availableUser = isAvailable(newTask, pair, criticalWorks);
-			if (availableUsers != null) {
+			if (availableUser != null) {
 				availableUsers.add(availableUser);
 			}
 		}
@@ -120,7 +120,7 @@ public class CalculateAvailableUsers {
 				userFree.setTemporaryHoursAvailable(hoursAvailable);
 				availableUsers.add(userFree);
 				}catch(ParseException e){
-					//TODO handle witha  logger
+					//TODO handle with  logger
 				}
 			}
 			while (arrayListIterator.hasNext()) {

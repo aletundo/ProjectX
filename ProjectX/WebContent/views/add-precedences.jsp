@@ -32,7 +32,6 @@
 				</div>
 				
 				<input type="hidden" name="id-project" value="${requestScope.idProject}" />
-				<!-- <input type="hidden" name="id-stage" value="${ sessionScope.stagesQueue[0].idStage}" /> -->
 				<br> <br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">

@@ -16,7 +16,8 @@
 					<h3 class="panel-title">
 						<c:out value="${requestScope.stage.name }"></c:out>
 					</h3>
-					<a class="btn btn-danger btn-sm pull-right" href="./editstage?idStage=${requestScope.stage.idStage }"><i
+					<a class="btn btn-danger btn-sm pull-right"
+						href="./editstage?idStage=${requestScope.stage.idStage }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a>
 				</div>
 
@@ -30,10 +31,23 @@
 						<c:out value="${requestScope.stage.supervisorFullname }"></c:out>
 					</p>
 					<div class="progress">
-						<div
-							class="progress-bar progress-bar-success progress-bar-striped"
-							role="progressbar" aria-valuenow="${requestScope.stage.rateWorkCompleted }" aria-valuemin="0"
-							aria-valuemax="100" style="width: ${requestScope.stage.rateWorkCompleted }%">${requestScope.stage.rateWorkCompleted }% Complete</div>
+						<c:choose>
+							<c:when test="${requestScope.stage.rateWorkCompleted } >= 99">
+								<div
+									class="progress-bar progress-bar-success progress-bar-striped"
+									role="progressbar" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100" style="width: 100%">100% Complete</div>
+							</c:when>
+							<c:otherwise>
+								<div
+									class="progress-bar progress-bar-success progress-bar-striped"
+									role="progressbar"
+									aria-valuenow="${requestScope.stage.rateWorkCompleted }"
+									aria-valuemin="0" aria-valuemax="100"
+									style="width: ${requestScope.stage.rateWorkCompleted }%">${requestScope.stage.rateWorkCompleted }%
+									Complete</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 
@@ -47,17 +61,18 @@
 
 					<c:forEach items="${requestScope.tasks}" var="task">
 						<tr>
-							<td><a
-								href="./task?idTask=${task.idTask}"><strong><c:out
+							<td><a href="./task?idTask=${task.idTask}"><strong><c:out
 											value="${task.name}"></c:out></strong></a></td>
 							<td><c:out value="${task.startDay}"></c:out></td>
 							<td><c:out value="${task.finishDay}"></c:out></td>
 							<td><c:choose>
-							<c:when test="${task.completed == 'True' }">
-							<i class="fa fa-check"></i>
-							</c:when>
-							<c:otherwise><i class="fa fa-times"></i></c:otherwise>
-							</c:choose></td>
+									<c:when test="${task.completed == 'True' }">
+										<i class="fa fa-check"></i>
+									</c:when>
+									<c:otherwise>
+										<i class="fa fa-times"></i>
+									</c:otherwise>
+								</c:choose></td>
 						</tr>
 					</c:forEach>
 				</table>

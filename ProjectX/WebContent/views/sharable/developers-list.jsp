@@ -9,11 +9,12 @@
 	</div>
 	<!-- List group -->
 	<ul class="list-group list-results">
-		<c:forEach items="${requestScope.candidates}"
-			var="candidate">
+		<c:forEach items="${sessionScope.candidates}" var="candidate" varStatus="k">
 			<li class="radio"><label><input type="radio"
-					name="id-developer" value="${candidate.idUser}">
-				<c:out value="${candidate.fullname}"></c:out></label></li>
+					name="index" value="${k.count }"> <c:out
+						value="${candidate.fullname}"></c:out>&nbsp;|&nbsp;<c:out
+						value="${candidate.type}"></c:out>&nbsp;|&nbsp;<c:out
+						value="${candidate.temporaryHoursAvailable}"></c:out></label></li>
 		</c:forEach>
 	</ul>
 </div>

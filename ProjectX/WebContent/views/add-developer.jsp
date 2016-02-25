@@ -10,25 +10,23 @@
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
 		<div class="col-md-12 col-xs-12">
-			Select a developer for the task.
+			Select a developer for the task.<br>
+			<br> Hours to be assigned:&nbsp;&nbsp;<span class="badge">${requestScope.taskHoursRequired }</span>
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="./add-developer"
+				action="./add-developer?idStage=${param.idStage}&idTask=${param.idTask}&startDay=${param.startDay}&finishDay=${param.finishDay}"
 				method="POST" role="form" autocomplete="off">
-						
-						<div class="input-group">
-							<jsp:include page="/views/sharable/developers-list.jsp" />
-						</div>
-				
+				<div class="input-group">
+					<jsp:include page="/views/sharable/developers-list.jsp" />
+				</div>
+				<input type="hidden" name="task-hours-required"
+					value="${requestScope.taskHoursRequired }">
 				<div class="input-group">
 					<div class="checkbox">
-						<label><input type="checkbox" name="completed" value="">Check
+						<label><input type="checkbox" name="completed">Check
 							me if it is the last task.</label>
-<!-- 						<label><input type="checkbox" name="completed_developer" value="">Check -->
-<!-- 							me if it is the last developer.</label> -->
 					</div>
 				</div>
-				<input type="hidden" name="id-task" value="${param.idTask}" /> <br>
 				<br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">

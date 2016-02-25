@@ -68,11 +68,23 @@
 							<td><c:out value="${stage.finishDay}"></c:out></td>
 							<td>
 								<div class="progress">
-									<div
-										class="progress-bar progress-bar-info progress-bar-striped"
-										role="progressbar" aria-valuenow="${stage.rateWorkCompleted }"
-										aria-valuemin="0" aria-valuemax="100"
-										style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%</div>
+									<c:choose>
+										<c:when test="${stage.rateWorkCompleted } >= 99">
+											<div
+												class="progress-bar progress-bar-success progress-bar-striped"
+												role="progressbar" aria-valuenow="100" aria-valuemin="0"
+												aria-valuemax="100" style="width: 100%">100% Complete</div>
+										</c:when>
+										<c:otherwise>
+											<div
+												class="progress-bar progress-bar-success progress-bar-striped"
+												role="progressbar"
+												aria-valuenow="${stage.rateWorkCompleted }"
+												aria-valuemin="0" aria-valuemax="100"
+												style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%
+												Complete</div>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</td>
 							<td><span class="label label-warning"><c:out

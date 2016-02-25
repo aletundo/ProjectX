@@ -52,7 +52,8 @@ public class AddTaskServlet extends HttpServlet {
 		int idTask = TaskDAO.getInstance().createTask(task);
 
 		if (idTask != 0)
-			response.sendRedirect(request.getContextPath() + "/add-developer?idTask=" + idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
+			response.sendRedirect(request.getContextPath() + "/add-developer?idStage=" + idStage + "&idTask=" + idTask
+					+ "&startDay=" + startDay + "&finishDay=" + finishDay);
 
 	}
 
