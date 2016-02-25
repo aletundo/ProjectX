@@ -63,7 +63,7 @@ public class CalculateAvailableUsers {
 				try{
 				UserBean userFree = new UserBean();
 				userFree.setIdUser(pair.getKey());
-				long hoursAvailable = 8*getDifferenceDays(format.parse(newTask.getStartDay()),format.parse(newTask.getFinishDay())); 
+				long hoursAvailable = HOURPERDAY*getDifferenceDays(format.parse(newTask.getStartDay()),format.parse(newTask.getFinishDay())); 
 				userFree.setTemporaryHoursAvailable(hoursAvailable);
 				availableUsers.add(userFree);
 				}catch(ParseException e){
@@ -113,9 +113,15 @@ public class CalculateAvailableUsers {
 
 			Iterator<Object> arrayListIterator = pair.getValue().iterator();
 			if (pair.getValue() == null) {
+				try{
 				UserBean userFree = new UserBean();
 				userFree.setIdUser(pair.getKey());
+				long hoursAvailable = HOURPERDAY*getDifferenceDays(format.parse(newStage.getStartDay()),format.parse(newStage.getFinishDay())); 
+				userFree.setTemporaryHoursAvailable(hoursAvailable);
 				availableUsers.add(userFree);
+				}catch(ParseException e){
+					//TODO handle witha  logger
+				}
 			}
 			while (arrayListIterator.hasNext()) {
 				try {

@@ -58,9 +58,12 @@ public class CriticalPathMethodTest {
 	//	System.out.println(pair.getKey());
 	//	pair.setValue(stages);
 	//	assert(pair.getValue() == null);
-	controllers.utils.CriticalPath.computeCriticalTasks(mapProva);
+	List<StageBean> criticalStages = controllers.utils.CriticalPath.computeCriticalStages(mapProva);
 	//	CriticalPath.getInstance().precedencesHasES(pair);
-		System.out.println(mapProva.get(1));
-		System.out.println("ciao");
+	/*	System.out.println(mapProva.get(1));
+		System.out.println("ciao");*/
+	for(StageBean critical : criticalStages){
+		System.out.println(critical);
+	}
 	}
 }

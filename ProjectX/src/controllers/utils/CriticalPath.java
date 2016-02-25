@@ -27,7 +27,7 @@ public class CriticalPath {
 
 	private static List<StageBean> criticalTasks = new ArrayList<StageBean>();
 
-	public static void computeCriticalTasks(Map<Integer, List<StageBean>> mapPrecedences) {
+	public static List<StageBean> computeCriticalStages(Map<Integer, List<StageBean>> mapPrecedences) {
 		while (!mapPrecedences.isEmpty()) {
 			Iterator<Map.Entry<Integer, List<StageBean>>> mapIterator = mapPrecedences.entrySet().iterator();
 			while (mapIterator.hasNext()) {
@@ -50,6 +50,7 @@ public class CriticalPath {
 				}
 			}
 		}
+		return criticalTasks;
 	}
 
 	public static boolean precedencesHasES(Map.Entry<Integer, List<StageBean>> pair) {
