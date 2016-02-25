@@ -11,6 +11,8 @@ public class UserBean {
 	private String type;
 	private String skills;
 	private String mail;
+	private long temporaryHoursAvailable;
+
 
 	public UserBean(){
 		
@@ -86,6 +88,14 @@ public class UserBean {
 
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+	
+	public long getTemporaryHoursAvailable() {
+		return temporaryHoursAvailable;
+	}
+
+	public void setTemporaryHoursAvailable(long temporaryHoursAvailable) {
+		this.temporaryHoursAvailable = temporaryHoursAvailable;
 	}
 
 	@Override
