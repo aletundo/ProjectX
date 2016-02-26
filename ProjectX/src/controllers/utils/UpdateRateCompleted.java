@@ -36,7 +36,7 @@ public class UpdateRateCompleted {
 	}
 
 	private void updateStageRateCompleted(int idTask) {
-		TaskBean task = TaskDAO.getInstance().getRelativeWeight(idTask);
+		TaskBean task = TaskDAO.getInstance().getRelativeWeight(idTask); 
 		float rateWorkCompletedToUpdate = StageDAO.getInstance().getRateWorkCompleted(task.getIdStage()) + task.getRelativeWeight();
 		if(rateWorkCompletedToUpdate > 99){
 			rateWorkCompletedToUpdate = 100;

@@ -29,7 +29,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 			return;
 		
 		int idProject = Integer.parseInt(request.getParameter("idProject"));
-		List<StageBean> stages = StageDAO.getInstance().getStages(idProject);
+		List<StageBean> stages = StageDAO.getInstance().getStagesByIdProject(idProject);
 		List<StageBean> stagesQueue = new ArrayList<StageBean>();
 		for(StageBean s : stages){
 			stagesQueue.add(s);

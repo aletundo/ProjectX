@@ -193,12 +193,9 @@ public class StageDAO {
 
 		if (currentConn != null) {
 			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
-					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS Supervisor "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS Supervisor, S.outsourcing AS Outsourcing "
 					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
-					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False' "
-					+ "UNION SELECT S.idStage AS IdStage, S.name AS Name, S.rateWorkCompleted AS RateWorkCompleted, "
-					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.companyName AS Supervisor "
-					+ "FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
+					+ "WHERE S.idProject = ?";
 			try {
 				statement = currentConn.prepareStatement(getStagesQuery);
 				statement.setInt(1, idProject);
@@ -213,6 +210,7 @@ public class StageDAO {
 					stage.setFinishDay(rs.getString("FinishDay"));
 					stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stage.setSupervisorFullname(rs.getString("Supervisor"));
+					stage.setOutsourcing(rs.getString("Outsourcing"));
 					stages.add(stage);
 				}
 
@@ -251,38 +249,6 @@ public class StageDAO {
 			}
 		}
 		return added;
-	}
-
-	public List<StageBean> getStages(int idProject) {
-		List<StageBean> stages = new ArrayList<StageBean>();
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		Connection currentConn = DbConnection.connect();
-
-		if (currentConn != null) {
-			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, S.startDay AS StartDay, S.finishDay AS FinishDay"
-					+ " FROM stage AS S WHERE S.idProject = ?";
-			try {
-				statement = currentConn.prepareStatement(getStagesQuery);
-				statement.setInt(1, idProject);
-				rs = statement.executeQuery();
-				while (rs.next()) {
-					StageBean stage = new StageBean();
-					stage.setIdStage(rs.getInt("IdStage"));
-					stage.setName(rs.getString("Name"));
-					stage.setStartDay(rs.getString("StartDay"));
-					stage.setFinishDay(rs.getString("FinishDay"));
-					stages.add(stage);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
-			} finally {
-				DbConnection.disconnect(currentConn, rs, statement);
-			}
-		}
-
-		return stages;
 	}
 
 	public void addSupervisor(StageBean stage) {
