@@ -42,7 +42,7 @@ public class SchedulerEvents {
 		}, 0, 24, TimeUnit.HOURS);
 	}
 
-	public List<StageBean> getStagesDates() {
+	/*public List<StageBean> getStagesDates() {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
@@ -68,7 +68,9 @@ public class SchedulerEvents {
 		}
 
 		return stage;
-	}
+	}*/
+	
+	
 
 	public static Date GetCurrentDateTime() {
 

@@ -37,15 +37,23 @@ public class UpdateRateCompleted {
 
 	private void updateStageRateCompleted(int idTask) {
 		TaskBean task = TaskDAO.getInstance().getRelativeWeight(idTask);
-		StageDAO.getInstance().setRateWorkCompleted(task.getIdStage(), task.getRelativeWeight());
+		float rateWorkCompletedToUpdate = StageDAO.getInstance().getRateWorkCompleted(task.getIdStage()) + task.getRelativeWeight();
+		if(rateWorkCompletedToUpdate > 99){
+			rateWorkCompletedToUpdate = 100;
+		}
+		StageDAO.getInstance().setRateWorkCompleted(task.getIdStage(), rateWorkCompletedToUpdate);
 		updateProjectRatecompleted(task.getIdStage());
 	}
 
 	private void updateProjectRatecompleted(int idStage) {
 		StageBean stage = StageDAO.getInstance().getRelativeWeight(idStage);
-		float rateWorkCompleted = StageDAO.getInstance().getRateWorkCompleted(idStage);
-		float rateProjectCompleted = (rateWorkCompleted * stage.getRelativeWeight()) / 100;
-		ProjectDAO.getInstance().setRateWorkCompleted(stage.getIdProject(), rateProjectCompleted);
+		float stageRateWorkCompleted = StageDAO.getInstance().getRateWorkCompleted(idStage);
+		float rateStageToProjectCompleted = (stageRateWorkCompleted * stage.getRelativeWeight()) / 100;
+		float rateProjectCompletedToUpdate = ProjectDAO.getInstance().getRateWorkCompleted(stage.getIdProject()) + rateStageToProjectCompleted;
+		if(rateProjectCompletedToUpdate > 99){
+			rateProjectCompletedToUpdate = 100;
+		}
+		ProjectDAO.getInstance().setRateWorkCompleted(stage.getIdProject(), rateProjectCompletedToUpdate);
 
 	}
 

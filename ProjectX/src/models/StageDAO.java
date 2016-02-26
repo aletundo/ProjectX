@@ -105,7 +105,7 @@ public class StageDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String setRateWorkCompletedQuery = "UPDATE stage AS S SET S.rateWorkCompleted = S.rateWorkCompleted + ? "
+			final String setRateWorkCompletedQuery = "UPDATE stage AS S SET S.rateWorkCompleted = ? "
 					+ "WHERE S.idStage = ? ";
 			try {
 				statement = currentConn.prepareStatement(setRateWorkCompletedQuery);

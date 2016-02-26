@@ -53,7 +53,7 @@ public class ProjectDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String setRateWorkCompletedQuery = "UPDATE project AS P SET P.rateWorkCompleted = P.rateWorkCompleted + ? "
+			final String setRateWorkCompletedQuery = "UPDATE project AS P SET P.rateWorkCompleted = ? "
 					+ "WHERE P.idProject = ? ";
 			try {
 				statement = currentConn.prepareStatement(setRateWorkCompletedQuery);
