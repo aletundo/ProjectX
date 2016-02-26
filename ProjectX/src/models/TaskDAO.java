@@ -27,7 +27,7 @@ public class TaskDAO {
 		Connection currentConn = DbConnection.connect();
 		
 		if(currentConn != null){
-			final String getAllDevelopersQuery = "SELECT U.fullname AS Fullname, U.type AS Type "
+			final String getAllDevelopersQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper WHERE TD.idTask = ?";
 			try{
 				statement = currentConn.prepareStatement(getAllDevelopersQuery);
@@ -36,6 +36,7 @@ public class TaskDAO {
 				
 				while(rs.next()){
 					UserBean developer = new UserBean();
+					developer.setIdUser(rs.getInt("IdUser"));
 					developer.setFullname(rs.getString("Fullname"));
 					developer.setType(rs.getString("Type"));
 					developers.add(developer);

@@ -18,7 +18,10 @@
 						<c:out value="${requestScope.task.name }"></c:out>
 					</h3>
 					<a class="btn btn-danger btn-sm pull-right"
-						href="./edittask?idTak=${requestScope.task.idTask }"><i
+						href="./setworkcompleted?idTask=${requestScope.task.idTask }"><i
+						class="fa fa-pencil"></i>&nbsp;Set my work completed</a>
+					<a class="btn btn-danger btn-sm pull-right"
+						href="./edittask?idTask=${requestScope.task.idTask }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a>
 				</div>
 
