@@ -8,9 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import models.StageDAO;
+import controllers.utils.security.SecureStageStrategy;
 import models.TaskBean;
 import models.TaskDAO;
 
@@ -21,7 +20,7 @@ public class AddTaskServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 
 		int idStage = Integer.parseInt(request.getParameter("idStage"));
@@ -34,7 +33,7 @@ public class AddTaskServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 		TaskBean task = new TaskBean();
 		// Get parameters
@@ -52,35 +51,8 @@ public class AddTaskServlet extends HttpServlet {
 		int idTask = TaskDAO.getInstance().createTask(task);
 
 		if (idTask != 0)
-			response.sendRedirect(request.getContextPath() + "/add-developer?idStage=" + idStage + "&idTask=" + idTask
+			response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask=" + idTask
 					+ "&startDay=" + startDay + "&finishDay=" + finishDay);
 
-	}
-
-	/**
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 * @return boolean
-	 */
-	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		HttpSession session = request.getSession();
-		// If the session is not valid redirect to login
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-			return false;
-		}
-
-		int[] idAuthorizedUsers = StageDAO.getInstance()
-				.getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
-		int idLoggedUser = (Integer) (session.getAttribute("idUser"));
-		if (idAuthorizedUsers[0] != idLoggedUser && idAuthorizedUsers[1] != idLoggedUser) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
-			dispatcher.forward(request, response);
-			return false;
-		}
-		return true;
 	}
 }

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controllers.utils.CalculateWeights;
-import models.ProjectDAO;
+import controllers.utils.security.SecureProjectStrategy;
 import models.StageBean;
 import models.StageDAO;
 
@@ -25,7 +25,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 		
 		int idProject = Integer.parseInt(request.getParameter("idProject"));
@@ -49,8 +49,9 @@ public class AddPrecedencesServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
+		
 		List<StageBean> precedences = new ArrayList<StageBean>();
 		StageBean stage = new StageBean();
 
@@ -80,31 +81,5 @@ public class AddPrecedencesServlet extends HttpServlet {
 			request.getSession().removeAttribute("idProject");
 			response.sendRedirect(request.getContextPath() + "/project?idProject=" + Integer.parseInt(request.getParameter("idProject")));
 		}
-	}
-	
-	/**
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 * @return boolean
-	 */
-	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		HttpSession session = request.getSession();
-		// If the session is not valid redirect to login
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-			return false;
-		}
-
-		int idProjectManager = ProjectDAO.getInstance()
-				.getProjectManagerId(Integer.parseInt(request.getParameter("idProject")));
-		if (idProjectManager != (Integer) (session.getAttribute("idUser"))) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
-			dispatcher.forward(request, response);
-			return false;
-		}
-		return true;
 	}
 }

@@ -10,26 +10,26 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import controllers.utils.CalculateAvailableUsers;
 import controllers.utils.CalculateWeights;
+import controllers.utils.security.SecureStageStrategy;
 import models.UserDAO;
-import models.StageDAO;
 import models.TaskBean;
 import models.TaskDAO;
 import models.UserBean;
 
-@WebServlet(name = "AddDeveloperServlet", urlPatterns = { "/add-developer" })
+@WebServlet(name = "AddDeveloperServlet", urlPatterns = { "/adddeveloper" })
 public class AddDeveloperServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response)) {
+		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
-		}
+		
+		RequestDispatcher dispatcher;
 		long taskHoursRequired;
 		TaskBean task = new TaskBean();
 		task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
@@ -37,6 +37,13 @@ public class AddDeveloperServlet extends HttpServlet {
 		task.setFinishDay(request.getParameter("finishDay"));
 		Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateDevelopers();
 		List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, task);
+		
+		if(candidates.isEmpty()){
+			request.setAttribute("outsourcing", "True");
+			dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
+			dispatcher.forward(request, response);
+		}
+			
 		List<UserBean> candidatesWithInfos = UserDAO.getInstance().getUsersInfo(candidates);
 
 		if (request.getAttribute("taskHoursRequired") == null) {
@@ -49,16 +56,16 @@ public class AddDeveloperServlet extends HttpServlet {
 		request.setAttribute("taskHoursRequired", taskHoursRequired);
 		request.getSession().setAttribute("candidates", candidatesWithInfos);
 
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
+		dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response)) {
+		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
-		}
+		
 		TaskBean task = new TaskBean();
 		int idTask = Integer.parseInt(request.getParameter("idTask"));
 		int indexDeveloper = Integer.parseInt(request.getParameter("index")) - 1;
@@ -91,32 +98,5 @@ public class AddDeveloperServlet extends HttpServlet {
 					request.getContextPath() + "/addtask?idStage=" + Integer.parseInt(request.getParameter("idStage")));
 
 		}
-	}
-
-	/**
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 * @return boolean
-	 */
-	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		HttpSession session = request.getSession();
-		// If the session is not valid redirect to login
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-			return false;
-		}
-
-		int[] idAuthorizedUsers = StageDAO.getInstance()
-				.getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
-		int idLoggedUser = (Integer) (session.getAttribute("idUser"));
-		if (idAuthorizedUsers[0] != idLoggedUser && idAuthorizedUsers[1] != idLoggedUser) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
-			dispatcher.forward(request, response);
-			return false;
-		}
-		return true;
 	}
 }

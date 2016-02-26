@@ -19,9 +19,9 @@
 					<a class="btn btn-danger btn-sm pull-right clearfix"
 						href="./editproject?idProject=${requestScope.project.idProject}"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a> <a
-						class="btn btn-success btn-sm pull-right"
+						class="btn btn-info btn-sm pull-right"
 						href="./organizemeeting?idProject=${requestScope.project.idProject}"><i
-						class="fa fa-users"></i>&nbsp;Organize meeting</a>
+						class="fa fa-users"></i>&nbsp;Organize client meeting</a>
 				</div>
 
 				<div class="panel-body">

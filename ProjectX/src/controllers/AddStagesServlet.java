@@ -8,9 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import models.ProjectDAO;
+import controllers.utils.security.SecureProjectStrategy;
 import models.StageBean;
 import models.StageDAO;
 
@@ -21,7 +20,7 @@ public class AddStagesServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
@@ -31,7 +30,7 @@ public class AddStagesServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 
 		StageBean stage = new StageBean();
@@ -58,25 +57,5 @@ public class AddStagesServlet extends HttpServlet {
 		if (idStage != 0)
 			response.sendRedirect(request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage="
 					+ idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
-	}
-
-	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession();
-		// If the session is not valid redirect to login
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-			return false;
-		}
-
-		int idProjectManager = ProjectDAO.getInstance()
-				.getProjectManagerId(Integer.parseInt(request.getParameter("idProject")));
-		if (idProjectManager != (Integer) (session.getAttribute("idUser"))) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
-			dispatcher.forward(request, response);
-			return false;
-		}
-		return true;
 	}
 }

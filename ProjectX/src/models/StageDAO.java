@@ -122,7 +122,7 @@ public class StageDAO {
 		}
 	}
 
-	public int[] getAuthorizedUsers(int idStage) {
+	public int[] checkIdProjectManagerOrSupervisor(int idStage) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
@@ -285,9 +285,8 @@ public class StageDAO {
 		return stages;
 	}
 
-	public boolean addSupervisor(StageBean stage) {
+	public void addSupervisor(StageBean stage) {
 		PreparedStatement statement = null;
-		boolean updated = false;
 		Connection currentConn = DbConnection.connect();
 		String addSupervisorQuery = "UPDATE stage SET idSupervisor = ? WHERE idStage = ?";
 
@@ -307,7 +306,6 @@ public class StageDAO {
 					statement.setInt(2, stage.getIdStage());
 				}
 				statement.executeUpdate();
-				updated = true;
 			} catch (SQLException e) {
 				e.printStackTrace();
 				// TODO Handle with a logger
@@ -315,8 +313,6 @@ public class StageDAO {
 				DbConnection.disconnect(currentConn, statement);
 			}
 		}
-
-		return updated;
 	}
 
 	public int createStage(StageBean stage) {

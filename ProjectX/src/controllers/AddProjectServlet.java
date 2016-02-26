@@ -8,8 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import controllers.utils.security.SecureProjectStrategy;
 import models.ClientBean;
 import models.ClientDAO;
 import models.ProjectBean;
@@ -22,7 +22,7 @@ public class AddProjectServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(!isAuthorized(request, response))
+		if(!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
 			return;
 
 		ProjectBean project = new ProjectBean();
@@ -65,34 +65,10 @@ public class AddProjectServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 * @return boolean
-	 */
-	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		HttpSession session = request.getSession();
-		// If the session is not valid redirect to login
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-			return false;
-		}
-
-		if (!"ProjectManager".equals(session.getAttribute("userType"))) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
-			dispatcher.forward(request, response);
-			return false;
-		}
-		return true;
-	}
-
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(!isAuthorized(request, response))
+		if(!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
 			return;
 
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");

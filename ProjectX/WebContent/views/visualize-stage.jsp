@@ -16,12 +16,15 @@
 					<h3 class="panel-title">
 						<c:out value="${requestScope.stage.name }"></c:out>
 					</h3>
+					<a class="btn btn-success btn-sm pull-right"
+						href="./addtask?idStage=${requestScope.stage.idStage }"><i
+						class="fa fa-plus"></i>&nbsp;Add tasks</a>
 					<a class="btn btn-danger btn-sm pull-right"
 						href="./editstage?idStage=${requestScope.stage.idStage }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a> <a
-						class="btn btn-success btn-sm pull-right"
+						class="btn btn-info btn-sm pull-right"
 						href="./organizemeeting?idStage=${requestScope.stage.idStage }"><i
-						class="fa fa-users"></i>&nbsp;Organize meeting</a>
+						class="fa fa-users"></i>&nbsp;Organize stage meeting</a>
 				</div>
 
 				<div class="panel-body">

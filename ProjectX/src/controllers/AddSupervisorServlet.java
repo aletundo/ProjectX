@@ -10,11 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import controllers.utils.CalculateAvailableUsers;
+import controllers.utils.security.SecureProjectStrategy;
 import models.UserDAO;
-import models.ProjectDAO;
 import models.StageBean;
 import models.StageDAO;
 import models.UserBean;
@@ -26,7 +25,7 @@ public class AddSupervisorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 		
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
@@ -54,7 +53,7 @@ public class AddSupervisorServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
+		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 			return;
 		
 			StageBean stage = new StageBean();
@@ -74,40 +73,12 @@ public class AddSupervisorServlet extends HttpServlet {
 			}
 			stage.setIdStage(idStage);
 			stage.setIdProject(idProject);
-			boolean updated = StageDAO.getInstance().addSupervisor(stage);
-			if (!updated) {
-				// TODO RESPONSE with an alter or something like that OR FUCK!!! no errors
-			} else if (request.getParameter("completed") == null) {
+			StageDAO.getInstance().addSupervisor(stage);
+			
+			if (request.getParameter("completed") == null) {
 				response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
 			} else {
 				response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
 			}
 		}
-	
-	/**
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 * @return boolean
-	 */
-	private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		HttpSession session = request.getSession();
-		// If the session is not valid redirect to login
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-			return false;
-		}
-
-		int idProjectManager = ProjectDAO.getInstance()
-				.getProjectManagerId(Integer.parseInt(request.getParameter("idProject")));
-		if (idProjectManager != (Integer) (session.getAttribute("idUser"))) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/access-denied.jsp");
-			dispatcher.forward(request, response);
-			return false;
-		}
-		return true;
-	}
-
 }

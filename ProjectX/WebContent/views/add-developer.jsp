@@ -16,11 +16,33 @@
 			<form class="form col-md-12 center-block"
 				action="./add-developer?idStage=${param.idStage}&idTask=${param.idTask}&startDay=${param.startDay}&finishDay=${param.finishDay}"
 				method="POST" role="form" autocomplete="off">
-				<div class="input-group">
-					<jsp:include page="/views/sharable/developers-list.jsp" />
-				</div>
-				<input type="hidden" name="task-hours-required"
-					value="${requestScope.taskHoursRequired }">
+				<c:choose>
+					<c:when test="${requestScope.outsourcing == 'True' }">
+						<div class="alert alert-warning" role="alert">
+							<i class="fa fa-exclamation-triangle"></i>&nbsp;<em>Ops,
+								sorry :( There are no available developers during this period. Please, fill the
+								outsourcing form below or talk with your superior.</em>
+						</div>
+						<br>
+						<div class="input-group">
+							<span class="input-group-addon">Company name</span> <input
+								class="form-control" type="text"
+								placeholder="Insert company name" name="company-name" />
+						</div>
+						<br>
+						<div class="input-group">
+							<span class="input-group-addon">Mail</span> <input
+								class="form-control" type="text"
+								placeholder="Insert mail (company@domain.example)"
+								name="company-mail" />
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="input-group">
+							<jsp:include page="/views/sharable/developers-list.jsp" />
+						</div>
+					</c:otherwise>
+				</c:choose>
 				<div class="input-group">
 					<div class="checkbox">
 						<label><input type="checkbox" name="completed">Check

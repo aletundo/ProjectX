@@ -94,7 +94,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 		if (request.getParameter("idStage") != null) {
 
 			int[] idAuthorizedUsers = StageDAO.getInstance()
-					.getAuthorizedUsers(Integer.parseInt(request.getParameter("idStage")));
+					.checkIdProjectManagerOrSupervisor(Integer.parseInt(request.getParameter("idStage")));
 			int idSupervisor = idAuthorizedUsers[0];
 			int idLoggedUser = (Integer) (session.getAttribute("idUser"));
 			if (idSupervisor != idLoggedUser) {
