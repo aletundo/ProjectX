@@ -21,11 +21,11 @@ public class CalculateWeights {
 
 	}
 
-	//Called when a supervisor add the last task
+	// Called when a supervisor add the last task
 	public static void computeTasksWeight(List<TaskBean> tasks) {
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		float durationSum = 0;
-		Map<Integer, Float> durationMap = new HashMap<Integer, Float>();
+		Map<Integer, Float> durationMap = new HashMap<>();
 		for (TaskBean task : tasks) {
 			try {
 				Date start = sdf.parse(task.getStartDay());
@@ -38,20 +38,20 @@ public class CalculateWeights {
 				e.printStackTrace();
 			}
 		}
-		
-		for(TaskBean task : tasks) {
-			Float weight = (durationMap.get(task.getIdTask())/ durationSum) * 100;
+
+		for (TaskBean task : tasks) {
+			Float weight = (durationMap.get(task.getIdTask()) / durationSum) * 100;
 			task.setRelativeWeight(weight);
 		}
-		
+
 		TaskDAO.getInstance().setTasksWeight(tasks);
 	}
-	
-	//Called when a project manager set the last stage
+
+	// Called when a project manager set the last stage
 	public static void computeStagesWeight(List<StageBean> stages) {
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		float durationSum = 0;
-		Map<Integer, Float> durationMap = new HashMap<Integer, Float>();
+		Map<Integer, Float> durationMap = new HashMap<>();
 		for (StageBean stage : stages) {
 			try {
 				Date start = sdf.parse(stage.getStartDay());
@@ -64,12 +64,12 @@ public class CalculateWeights {
 				e.printStackTrace();
 			}
 		}
-		
-		for(StageBean stage : stages) {
-			float weight = (durationMap.get(stage.getIdStage())/ durationSum) * 100;
+
+		for (StageBean stage : stages) {
+			float weight = (durationMap.get(stage.getIdStage()) / durationSum) * 100;
 			stage.setRelativeWeight(weight);
 		}
-		
+
 		StageDAO.getInstance().setStagesWeight(stages);
 	}
 

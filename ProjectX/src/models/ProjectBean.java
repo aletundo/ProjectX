@@ -1,7 +1,7 @@
 package models;
 
 public class ProjectBean {
-	
+
 	private int idProject;
 	private String name;
 	private int idProjectManager;
@@ -16,11 +16,11 @@ public class ProjectBean {
 	private String pmName;
 	private String clientName;
 	private float rateWorkCompleted;
-	
-public ProjectBean(){
-		
+
+	public ProjectBean() {
+		/* Say why it's empty */
 	}
-	
+
 	public String getClientName() {
 		return clientName;
 	}

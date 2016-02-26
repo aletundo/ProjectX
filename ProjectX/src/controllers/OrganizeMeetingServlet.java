@@ -74,7 +74,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				String clientMail = request.getParameter("client-mail");
 				String object = request.getParameter("object");
 				String message = request.getParameter("message");
-				if (request.getParameter("invite-supervisors").equals("Yes")) {
+				if ("Yes".equals(request.getParameter("invite-supervisors"))) {
 					List<String> supervisorsMail = UserDAO.getInstance()
 							.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
 					for (String mails : supervisorsMail) {
@@ -84,7 +84,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
 					controllers.utils.SendEmail.sendEmail(host, port, userName, password, clientMail, object, message);
 				}
 
-				/* TODO get the name of the supervisors and maybe extract method*/
+				/*
+				 * TODO get the name of the supervisors and maybe extract method
+				 */
 
 			} else if (request.getParameter("idStage") != null) {
 				String supervisorMail = request.getParameter("supervisor-mail");
@@ -92,7 +94,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				String message = request.getParameter("message");
 				List<String> developersMail = UserDAO.getInstance()
 						.getAllDevelopersMail(Integer.parseInt(request.getParameter("idStage")));
-				if (request.getParameter("invite-project-manager").equals("Yes")) {
+				if ("Yes".equals(request.getParameter("invite-project-manager"))) {
 					UserDAO.getInstance()
 							.getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
 					for (String mails : developersMail) {
@@ -101,7 +103,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
 					controllers.utils.SendEmail.sendEmail(host, port, userName, password, supervisorMail, object,
 							message);
 				}
-				/* TODO get the name of the developers and maybe extract method */
+				/*
+				 * TODO get the name of the developers and maybe extract method
+				 */
 			}
 		} catch (Exception e) {
 			/* TODO LOGGER */

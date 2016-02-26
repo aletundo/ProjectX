@@ -19,14 +19,14 @@ public class CriticalPath {
 
 	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-	private static Map<Integer, Integer> mapES = new HashMap<Integer, Integer>();
+	private static Map<Integer, Integer> mapES = new HashMap<>();
 
-	private static List<StageBean> criticalTasks = new ArrayList<StageBean>();
+	private static List<StageBean> criticalTasks = new ArrayList<>();
 
 	public static List<StageBean> computeCriticalStages(Map<StageBean, List<StageBean>> mapPrecedences) {
 		setLastCritical(mapPrecedences);
 		while (!mapPrecedences.isEmpty()) {
-			List<StageBean> toRemove = new ArrayList<StageBean>();
+			List<StageBean> toRemove = new ArrayList<>();
 			for (Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()) {
 				System.out.println(pair);
 				if (pair.getValue() == null) {
@@ -84,8 +84,8 @@ public class CriticalPath {
 	public static long computeES(List<StageBean> precedences) throws ParseException {
 		System.out.println("sono in computeES");
 		long max = 0;
-		long result = 0;
-		List<Long> results = new ArrayList<Long>();
+		long result;
+		List<Long> results = new ArrayList<>();
 		System.out.println(precedences);
 		for (StageBean precedence : precedences) {
 			System.out.println("sono nel for");

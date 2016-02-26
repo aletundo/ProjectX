@@ -1,7 +1,7 @@
 package models;
 
 public class UserBean {
-	
+
 	private int idUser;
 	private String username;
 	private String hashPw;
@@ -13,9 +13,8 @@ public class UserBean {
 	private String mail;
 	private long temporaryHoursAvailable;
 
-
-	public UserBean(){
-		
+	public UserBean() {
+		/* Say why it's empty */
 	}
 
 	public int getIdUser() {
@@ -89,7 +88,7 @@ public class UserBean {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-	
+
 	public long getTemporaryHoursAvailable() {
 		return temporaryHoursAvailable;
 	}

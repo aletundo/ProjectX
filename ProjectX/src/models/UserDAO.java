@@ -158,7 +158,7 @@ public class UserDAO {
 	public List<String> getAllDevelopersMail(int idStage) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		List<String> developersMail = new ArrayList<String>();
+		List<String> developersMail = new ArrayList<>();
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {

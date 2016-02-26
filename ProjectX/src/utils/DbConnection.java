@@ -11,11 +11,16 @@ import java.sql.Statement;
 import utils.GetDbConnProperties;
 
 public class DbConnection {
+
+	private DbConnection() {
+
+	}
+
 	public static Connection connect() {
 
 		// JDBC driver name and database URL
 		final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-		
+
 		String dbUrl = "";
 		// Database credentials
 		String user = "";
@@ -28,23 +33,23 @@ public class DbConnection {
 			pass = propertiesValues[2];
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			//TODO Handle with a Logger
+			// TODO Handle with a Logger
 		}
 
 		Connection conn = null;
 
 		try {
-			//Register JDBC driver
+			// Register JDBC driver
 			Class.forName(JDBC_DRIVER);
 
-			//Open a connection
+			// Open a connection
 			conn = DriverManager.getConnection(dbUrl, user, pass);
 
 		} catch (SQLException se) {
-			//TODO Handle errors for JDBC in a Logger
+			// TODO Handle errors for JDBC in a Logger
 			se.printStackTrace();
 		} catch (Exception e) {
-			//TODO Handle errors for Class.forName in a Logger
+			// TODO Handle errors for Class.forName in a Logger
 			e.printStackTrace();
 		}
 		return conn;
@@ -59,10 +64,10 @@ public class DbConnection {
 			/* ignored */ }
 		disconnect(conn, statement);
 	}
-	
+
 	public static void disconnect(Connection conn, PreparedStatement statement) {
 		try {
-			if(statement != null)
+			if (statement != null)
 				statement.close();
 		} catch (SQLException e) {
 			/* ignored */ }
@@ -70,13 +75,13 @@ public class DbConnection {
 			if (conn != null)
 				conn.close();
 		} catch (SQLException se) {
-			//Ignored
+			// Ignored
 		}
 	}
-	
+
 	public static void disconnect(Connection conn, Statement statement) {
 		try {
-			if(statement != null)
+			if (statement != null)
 				statement.close();
 		} catch (SQLException e) {
 			/* ignored */ }
@@ -84,10 +89,10 @@ public class DbConnection {
 			if (conn != null)
 				conn.close();
 		} catch (SQLException se) {
-			//Ignored
+			// Ignored
 		}
 	}
-	
+
 	public static void disconnect(Connection conn, ResultSet rs, Statement statement) {
 		try {
 			if (rs != null)

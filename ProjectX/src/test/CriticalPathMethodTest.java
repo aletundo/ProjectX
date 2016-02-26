@@ -14,11 +14,11 @@ import models.StageBean;
 public class CriticalPathMethodTest {
 	@Test
 	public void CriticalPath() throws ParseException {
-		Map<StageBean, List<StageBean>> map = new HashMap<StageBean, List<StageBean>>();
+		Map<StageBean, List<StageBean>> map = new HashMap<>();
 		List<StageBean> precedencesA = null;
-		List<StageBean> precedencesB = new ArrayList<StageBean>();
-		List<StageBean> precedencesC = new ArrayList<StageBean>();
-		List<StageBean> precedencesD = new ArrayList<StageBean>();
+		List<StageBean> precedencesB = new ArrayList<>();
+		List<StageBean> precedencesC = new ArrayList<>();
+		List<StageBean> precedencesD = new ArrayList<>();
 
 		StageBean a = new StageBean();
 		StageBean b = new StageBean();
