@@ -23,56 +23,89 @@ public class OrganizeMeetingServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
-			return;
+		try {
+			if (!isAuthorized(request, response))
+				return;
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 
 		RequestDispatcher dispatcher;
 		String senderMail = UserDAO.getInstance()
 				.getGenericUserMailById((Integer) request.getSession().getAttribute("idUser"));
 
-		if (request.getParameter("idProject") != null) {
-			String clientMail = ClientDAO.getInstance()
-					.getClientMail(Integer.parseInt(request.getParameter("idProject")));
-			request.setAttribute("clientMail", clientMail);
-			request.setAttribute("pmMail", senderMail);
-			dispatcher = getServletContext().getRequestDispatcher("/views/organize-client-meeting.jsp");
-			dispatcher.forward(request, response);
-		} else if (request.getParameter("idStage") != null) {
-			request.setAttribute("supervisorMail", senderMail);
-			dispatcher = getServletContext().getRequestDispatcher("/views/organize-stage-meeting.jsp");
-			dispatcher.forward(request, response);
+		try {
+			if (request.getParameter("idProject") != null) {
+				String clientMail = ClientDAO.getInstance()
+						.getClientMail(Integer.parseInt(request.getParameter("idProject")));
+				request.setAttribute("clientMail", clientMail);
+				request.setAttribute("pmMail", senderMail);
+				dispatcher = getServletContext().getRequestDispatcher("/views/organize-client-meeting.jsp");
+				dispatcher.forward(request, response);
+			} else if (request.getParameter("idStage") != null) {
+				request.setAttribute("supervisorMail", senderMail);
+				dispatcher = getServletContext().getRequestDispatcher("/views/organize-stage-meeting.jsp");
+				dispatcher.forward(request, response);
+			}
+		} catch (Exception e) {
+			/* TODO LOGGER */
 		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!isAuthorized(request, response))
-			return;
 
-		if (request.getParameter("idProject") != null) {
-			String pmMail = request.getParameter("pm-mail");
-			String clientMail = request.getParameter("client-mail");
-			String object = request.getParameter("object");
-			String message = request.getParameter("message");
-			if (request.getParameter("invite-supervisors").equals("Yes")) {
-				List<String> supervisorsMail = UserDAO.getInstance()
-						.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
-			}
-			// TODO send the mail
+		String host = "localhost";
+		String port = ""; /* TODO check port */
+		final String password = ""; /* TODO check password */
+		String userName = "";
 
-		} else if (request.getParameter("idStage") != null) {
-			String supervisorMail = request.getParameter("supervisor-mail");
-			String object = request.getParameter("object");
-			String message = request.getParameter("message");
-			List<String> developersMail = UserDAO.getInstance()
-					.getAllDevelopersMail(Integer.parseInt(request.getParameter("idStage")));
-			if (request.getParameter("invite-project-manager").equals("Yes")) {
-				UserDAO.getInstance().getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
-			}
-			// TODO send the mail
+		try {
+			if (!isAuthorized(request, response))
+				return;
+		} catch (Exception e) {
+			/* TODO LOGGER */
 		}
 
+		try {
+			if (request.getParameter("idProject") != null) {
+				String pmMail = request.getParameter("pm-mail");
+				String clientMail = request.getParameter("client-mail");
+				String object = request.getParameter("object");
+				String message = request.getParameter("message");
+				if (request.getParameter("invite-supervisors").equals("Yes")) {
+					List<String> supervisorsMail = UserDAO.getInstance()
+							.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
+					for (String mails : supervisorsMail) {
+						controllers.utils.SendEmail.sendEmail(host, port, userName, password, mails, object, message);
+					}
+					controllers.utils.SendEmail.sendEmail(host, port, userName, password, pmMail, object, message);
+					controllers.utils.SendEmail.sendEmail(host, port, userName, password, clientMail, object, message);
+				}
+
+				/* TODO get the name of the supervisors and maybe extract method*/
+
+			} else if (request.getParameter("idStage") != null) {
+				String supervisorMail = request.getParameter("supervisor-mail");
+				String object = request.getParameter("object");
+				String message = request.getParameter("message");
+				List<String> developersMail = UserDAO.getInstance()
+						.getAllDevelopersMail(Integer.parseInt(request.getParameter("idStage")));
+				if (request.getParameter("invite-project-manager").equals("Yes")) {
+					UserDAO.getInstance()
+							.getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
+					for (String mails : developersMail) {
+						controllers.utils.SendEmail.sendEmail(host, port, userName, password, mails, object, message);
+					}
+					controllers.utils.SendEmail.sendEmail(host, port, userName, password, supervisorMail, object,
+							message);
+				}
+				/* TODO get the name of the developers and maybe extract method */
+			}
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 
 	/**
