@@ -1,83 +1,96 @@
 package controllers.utils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-
 
 import models.StageBean;
-import utils.DbConnection;
 
 public class SchedulerEvents {
-	
+
 	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static void main(String[] args) throws ParseException {
 		final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+		String host = "localhost";
+		String port = "90"; /*TODO check port*/
+		//final String userName;
+		final String password = "password"; /*TODO check password*/
+		String toAddress = "someAddress"; /*TODO check toAddress*/
+		//String subject;
+		//String message;
+		
 		service.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
+
+				//int idproject;
 				List<StageBean> stage = new ArrayList<StageBean>();
 
-				int dataCritica;
-	/*			for (StageBean varDaCiclo : stage) {
-					dataCritica = CalculateAvailableUsers.getDifferenceDays(format.parse(varDaCiclo.getFinishDay()),
-							format.parse(GetCurrentDateTime()));
-					if (dataCritica < 0 && varDaCiclo.getRateWorkCompleted() < 99) {
+				/*
+				 * TODO da rendere statico ? stage =
+				 * models.StageDAO.getStagesByIdProject(idproject);
+				 */
+
+				long dataCritica;
+				for (StageBean varDaCiclo : stage) {
+					try {
+						dataCritica = CalculateAvailableUsers.getDifferenceDays(format.parse(varDaCiclo.getFinishDay()),
+								format.parse(GetCurrentDateTime()));
+						/*STAGE NON CRITICO IN RITARDO*/
+						if (dataCritica < 0 && varDaCiclo.getRateWorkCompleted() < 99 /*&& varDaCiclo.getCritical() != true*/) {
+							
+							/*TODO altra query per indirizzo email:
+							"toAddress" */
+							
+							final String userName=varDaCiclo.getSupervisorFullname();
+							final String subject="[STAGE DELAY]";
+							final String message="The stage should have ended but it has not yet done it.";
+							
+							controllers.utils.SendEmail.sendEmail(host,port,userName,password,toAddress,subject,message);
+						}/*STAGE CRITICO IN RITARDO*/
+						else if (dataCritica < 0 && varDaCiclo.getRateWorkCompleted() < 99 /*&& varDaCiclo.getCritical() == true*/){
+							
+							/*TODO altra query per indirizzo email:
+							"toAddress" */
+							
+							final String userName=varDaCiclo.getSupervisorFullname();
+							final String subject="[PROJECT DELAY]";
+							final String message="A critical stage should have ended but it has not yet done it and now the entire project in delaying.";
+							
+							controllers.utils.SendEmail.sendEmail(host,port,userName,password,toAddress,subject,message);
+							controllers.utils.SendEmail.sendEmail(host,port,userName,password,toAddress,subject,message);/*TODO change in address of the projectmanager*/
+
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (AddressException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} */
-				/* TODO CHANGING TO SEND EMAIL */
+				}
 			}
 		}, 0, 24, TimeUnit.HOURS);
 	}
 
-	/*public List<StageBean> getStagesDates() {
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		Connection currentConn = DbConnection.connect();
-		List<StageBean> stage = new ArrayList<StageBean>();
-
-		if (currentConn != null) {
-			final String getStagesDates = "SELECT S.idStage as IdStage, S.name AS StageName, S.startDay AS StartDay, "
-					+ "S.finishDay AS FinishDay, U.fullname AS SupervisorFullname "
-					+ "FROM stage AS S JOIN user AS U ON S.idSupervisor = U.idUser";
-			try {
-				statement = currentConn.prepareStatement(getStagesDates);
-				rs = statement.executeQuery();
-				while (rs.next()) {
-					// TODO QUALCOSA
-				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
-			} finally {
-				DbConnection.disconnect(currentConn, rs, statement);
-			}
-		}
-
-		return stage;
-	}*/
-	
-	
-
-	public static Date GetCurrentDateTime() {
-
-		// get current date time with Calendar()
+	public static String GetCurrentDateTime() {
+		/* get current date time with Calendar() */
 		Date date = new Date();
-//		String dateStr = (String) date;
-
-		return date;
+		String dateStr = format.format(date);
+		return dateStr;
 	}
 }
