@@ -25,52 +25,65 @@ public class AddSupervisorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
-		
+		try {
+			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
+
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
 			String startDay = request.getParameter("startDay");
 			String finishDay = request.getParameter("finishDay");
-			
+
 			StageBean stage = new StageBean();
 			stage.setIdStage(idStage);
 			stage.setStartDay(startDay);
 			stage.setFinishDay(finishDay);
-			
+
 			Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateSupervisors();
 			List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, stage);
 			candidates = UserDAO.getInstance().getUsersInfo(candidates);
-			if(candidates.isEmpty())
-			{
+			if (candidates.isEmpty()) {
 				request.setAttribute("outsourcing", "True");
-			}else{
+			} else {
 				request.setAttribute("candidates", candidates);
 			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-supervisor.jsp");
 			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
-		
+
+		String host = "localhost";
+		String port = ""; /* TODO check port */
+		final String password = ""; /* TODO check password */
+		String userName = "";
+
+		try {
+			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
+
 			StageBean stage = new StageBean();
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
 			int idProject = Integer.parseInt(request.getParameter("idProject"));
 			int idSupervisor;
-			if(request.getParameter("company-name") != null){
+			if (request.getParameter("company-name") != null) {
 				String companyName = request.getParameter("company-name");
 				String companyMail = request.getParameter("company-mail");
 				idSupervisor = (Integer) request.getSession().getAttribute("idUser");
 				stage.setIdSupervisor(idSupervisor);
 				stage.setOutsourcing("True");
-				//TODO SEND THE MAIL TO THE OUTSOURCER
-				
-				//stage.setCompanyName(companyName);
-				//stage.setCompanyMail(companyMail);
-			}else{
+				// TODO Modify message
+				String object = "[OUTSOURCING]";
+				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
+				controllers.utils.SendEmail.sendEmail(host, port, userName, password, companyMail, object, message);
+
+				// stage.setCompanyName(companyName);
+				// stage.setCompanyMail(companyMail);
+			} else {
 				idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
 				stage.setOutsourcing("False");
 				stage.setIdSupervisor(idSupervisor);
@@ -78,11 +91,14 @@ public class AddSupervisorServlet extends HttpServlet {
 			stage.setIdStage(idStage);
 			stage.setIdProject(idProject);
 			StageDAO.getInstance().addSupervisor(stage);
-			
+
 			if (request.getParameter("completed") == null) {
 				response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
 			} else {
 				response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
 			}
+		} catch (Exception e) {
+			/* TODO LOGGER */
 		}
+	}
 }
