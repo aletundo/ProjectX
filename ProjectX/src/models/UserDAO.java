@@ -180,7 +180,7 @@ public class UserDAO {
 							+ "WHERE  P.rateWorkCompleted < 100";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor "
-							+ "WHERE S.rateWorkCompleted < 100";
+							+ "WHERE S.rateWorkCompleted < 100 AND S.outsourcing LIKE 'False'";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask "
