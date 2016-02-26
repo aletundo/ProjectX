@@ -25,6 +25,110 @@ public class UserDAO {
 		return INSTANCE;
 	}
 	
+	public List<Integer> getAllUsersInvolvedByProject(int idProject){
+		List<Integer> usersInvolved = new ArrayList<Integer>();
+		
+		usersInvolved.add(ProjectDAO.getInstance().getProjectManagerId(idProject));
+		
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if (currentConn != null) {
+			final String getSupervisorsId = "SELECT DISTINCT S.idSupervisor AS IdSupervisor "
+					+ "FROM stage AS S JOIN project AS P ON S.idProject = ?";
+			
+			final String getDevelopersId = "SELECT DISTINCT TD.idDeveloper AS IdDeveloper "
+					+ "FROM taskdevelopment AS TD JOIN task AS T ON TD.idTask = T.idTask JOIN stage AS S ON T.idStage = S.idStage "
+					+ "JOIN project AS P ON S.idProject = ?";
+			
+			try {
+				statement = currentConn.prepareStatement(getSupervisorsId);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					usersInvolved.add(rs.getInt("IdSupervisor"));
+				}
+				rs.close();
+				statement.close();
+
+				statement = currentConn.prepareStatement(getDevelopersId);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					usersInvolved.add(rs.getInt("IdDeveloper"));
+				}
+				rs.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		return usersInvolved;
+	}
+	
+	public List<Integer> getAllUsersInvolvedByStage(int idStage){
+		int idProject = 0;
+		List<Integer> usersInvolved = new ArrayList<Integer>();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+	
+		if (currentConn != null) {
+			final String getIdProject = "SELECT P.idProject AS IdProject "
+					+ "FROM stage AS S JOIN project AS P ON S.idProject  = P.idProject " + "WHERE S.idStage = ?";
+
+			try {
+				statement = currentConn.prepareStatement(getIdProject);
+				statement.setInt(1, idStage);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					idProject = rs.getInt("IdProject");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		usersInvolved = getAllUsersInvolvedByProject(idProject);
+		return usersInvolved;
+	}
+	
+	public List<Integer> getAllUsersInvolvedByTask(int idTask){
+		int idProject = 0;
+		List<Integer> usersInvolved = new ArrayList<Integer>();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+	
+		if (currentConn != null) {
+			final String getIdProject = "SELECT P.idProject AS IdProject "
+					+ "FROM task AS T JOIN stage AS S ON T.idStage = S.idStage JOIN project AS P ON S.idProject  = P.idProject "
+					+ "WHERE T.idTask = ?";
+
+			try {
+				statement = currentConn.prepareStatement(getIdProject);
+				statement.setInt(1, idTask);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					idProject = rs.getInt("IdProject");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		usersInvolved = getAllUsersInvolvedByProject(idProject);
+		return usersInvolved;
+	}
+	
 	public String getProjectManagerMailByIdStage(int idStage){
 		String mail = "";
 		PreparedStatement statement = null;
