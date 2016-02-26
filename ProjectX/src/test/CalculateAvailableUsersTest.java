@@ -36,14 +36,14 @@ public class CalculateAvailableUsersTest {
 		project.setStart("2016-03-25");
 		project.setDeadline("2016-12-09");
 		
-	/*	StageBean stage = new StageBean();
+		StageBean stage = new StageBean();
 		stage.setStartDay("2016-01-05");
 		stage.setFinishDay("2016-01-06");
 		
 		TaskBean task = new TaskBean();
 		task.setIdTask(1);
 		task.setStartDay("2016-01-03");
-		task.setFinishDay("2016-01-05");*/
+		task.setFinishDay("2016-01-05");
 		
 		works.add(project);
 		//works.add(stage);

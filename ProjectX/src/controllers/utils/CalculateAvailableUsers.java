@@ -7,6 +7,7 @@ import java.lang.Math;
 
 import models.StageBean;
 import models.TaskBean;
+import models.TaskDAO;
 import models.UserBean;
 import utils.DbConnection;
 import utils.GetWorkhoursProperties;
@@ -245,30 +246,7 @@ public class CalculateAvailableUsers {
 			}
 			if (work instanceof models.TaskBean) {
 				TaskBean workTask = (TaskBean) work;
-				Connection currentConn = DbConnection.connect();
-				ResultSet rs = null;
-				PreparedStatement statement = null;
-
-				if (currentConn != null) {
-					final String getTaskHourQuery = "SELECT TD.hoursRequired AS HoursRequired "
-							+ "FROM taskdevelopment AS TD JOIN user AS U ON TD.idDeveloper = U.idUser "
-							+ "WHERE U.idUser = ? AND TD.idTask = ?";
-					try {
-						statement = currentConn.prepareStatement(getTaskHourQuery);
-						statement.setInt(1, pair.getKey());
-						statement.setInt(2, workTask.getIdTask());
-						rs = statement.executeQuery();
-						while (rs.next()) {
-							hourWork = rs.getInt("HoursRequired");
-							System.out.println("ore Task: " + hourWork);
-						}
-					} catch (SQLException e) {
-						e.printStackTrace();
-						// TODO Handle with a Logger
-					} finally {
-						DbConnection.disconnect(currentConn, rs, statement);
-					}
-				}
+				hourWork = TaskDAO.getInstance().getTaskHourRequested(pair, hourWork, workTask);
 				hoursCriticalWorks += hourWork;
 				System.out.println("ore lavori critici3 " + hoursCriticalWorks);
 			}
@@ -316,30 +294,7 @@ public class CalculateAvailableUsers {
 			}
 			if (work instanceof models.TaskBean) {
 				TaskBean workTask = (TaskBean) work;
-				Connection currentConn = DbConnection.connect();
-				ResultSet rs = null;
-				PreparedStatement statement = null;
-
-				if (currentConn != null) {
-					final String getTaskHourQuery = "SELECT TD.hoursRequired AS HoursRequired "
-							+ "FROM taskdevelopment AS TD JOIN user AS U ON TD.idDeveloper = U.idUser "
-							+ "WHERE U.idUser = ? AND TD.idTask = ?";
-					try {
-						statement = currentConn.prepareStatement(getTaskHourQuery);
-						statement.setInt(1, pair.getKey());
-						statement.setInt(2, workTask.getIdTask());
-						rs = statement.executeQuery();
-						while (rs.next()) {
-							hourWork = rs.getInt("HoursRequired");
-							System.out.println("ore Task: " + hourWork);
-						}
-					} catch (SQLException e) {
-						e.printStackTrace();
-						// TODO Handle with a Logger
-					} finally {
-						DbConnection.disconnect(currentConn, rs, statement);
-					}
-				}
+				hourWork = TaskDAO.getInstance().getTaskHourRequested(pair, hourWork, workTask);
 				hoursCriticalWorks += hourWork;
 				System.out.println("ore lavori critici3 " + hoursCriticalWorks);
 			}

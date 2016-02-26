@@ -3,6 +3,7 @@ package models;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import utils.DbConnection;
 
@@ -274,6 +275,34 @@ public class TaskDAO {
 		}
 
 		return task.getIdTask();
+	}
+	
+	public long getTaskHourRequested(Map.Entry<Integer, List<Object>> pair, long hourWork, TaskBean workTask) {
+		Connection currentConn = DbConnection.connect();
+		ResultSet rs = null;
+		PreparedStatement statement = null;
+
+		if (currentConn != null) {
+			final String getTaskHourQuery = "SELECT TD.hoursRequired AS HoursRequired "
+					+ "FROM taskdevelopment AS TD JOIN user AS U ON TD.idDeveloper = U.idUser "
+					+ "WHERE U.idUser = ? AND TD.idTask = ?";
+			try {
+				statement = currentConn.prepareStatement(getTaskHourQuery);
+				statement.setInt(1, pair.getKey());
+				statement.setInt(2, workTask.getIdTask());
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					hourWork = rs.getInt("HoursRequired");
+					System.out.println("ore Task: " + hourWork);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		return hourWork;
 	}
 
 }
