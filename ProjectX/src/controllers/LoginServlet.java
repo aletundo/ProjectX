@@ -16,7 +16,7 @@ import models.ProjectDAO;
 import models.UserBean;
 import models.UserDAO;
 
-@WebServlet(name = "LoginServlet", urlPatterns = { "/myprojects" })
+@WebServlet(name = "LoginServlet", urlPatterns = { "/login" })
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -27,7 +27,6 @@ public class LoginServlet extends HttpServlet {
 		// Get query parameters
 		String username = request.getParameter("user");
 		String pw = request.getParameter("pw");
-		RequestDispatcher dispatcher;
 
 		// Set a user bean
 		UserBean user = new UserBean();
@@ -51,40 +50,12 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("userType", user.getType());
 			// Setting session to expires in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
-			/*Cookie userName = new Cookie("user", username);
-			userName.setSecure(true);
-			userName.setMaxAge(30 * 60);
-			response.addCookie(userName);*/
 
-			dispatcher = getServletContext().getRequestDispatcher("/views/myprojects.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/myprojects");
 		} else {
-			// Redirect to home(login page)
-			response.sendRedirect(request.getContextPath());
-		}
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if(session == null || session.getAttribute("idUser") == null)
-		{
-			response.sendRedirect(request.getContextPath());
-		}
-		else{
-			Integer idUser = (Integer) session.getAttribute("idUser");
-			String userType = (String) session.getAttribute("userType");
-			UserBean user = new UserBean();
-			user.setIdUser(idUser);
-			user.setType(userType);
-			List<ProjectBean> projects = ProjectDAO.getInstance().getUserProjects(user);
-			if (!projects.isEmpty()) {
-				request.setAttribute("projects", projects);
-			}
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/myprojects.jsp");
+			request.setAttribute("errorLogin", true);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 		}
-
 	}
 }

@@ -9,34 +9,33 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import controllers.utils.security.SecureStageStrategy;
 import models.StageBean;
 import models.StageDAO;
 import models.TaskBean;
 import models.TaskDAO;
 
-@WebServlet(name= "StageDetailsServlet", urlPatterns = {"/stage"})
+@WebServlet(name = "StageDetailsServlet", urlPatterns = { "/stage" })
 public class StageDetailsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-		} else {
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			RequestDispatcher dispatcher;
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (!SecureStageStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
+			return;
 
-			List<TaskBean> tasks = TaskDAO.getInstance().getTasksByStageId(idStage);
-			StageBean stageInfo = StageDAO.getInstance().getStageInfo(idStage);
+		int idStage = Integer.parseInt(request.getParameter("idStage"));
+		RequestDispatcher dispatcher;
 
-			request.setAttribute("stage", stageInfo);
-			request.setAttribute("tasks", tasks);
+		List<TaskBean> tasks = TaskDAO.getInstance().getTasksByStageId(idStage);
+		StageBean stageInfo = StageDAO.getInstance().getStageInfo(idStage);
 
-			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-stage.jsp");
-			dispatcher.forward(request, response);
-		}
+		request.setAttribute("stage", stageInfo);
+		request.setAttribute("tasks", tasks);
+
+		dispatcher = getServletContext().getRequestDispatcher("/views/visualize-stage.jsp");
+		dispatcher.forward(request, response);
 	}
 }

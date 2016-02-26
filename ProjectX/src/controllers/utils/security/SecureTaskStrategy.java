@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import models.TaskDAO;
 import models.UserBean;
+import models.UserDAO;
 
 public class SecureTaskStrategy implements SecureResourcesStrategy {
 	
@@ -26,6 +27,26 @@ public class SecureTaskStrategy implements SecureResourcesStrategy {
 
 		return INSTANCE;
 
+	}
+	
+	@Override
+	public boolean isAuthorizedVisualize(HttpServletRequest request, HttpServletResponse response, ServletContext context)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		// If the session is not valid redirect to login
+		if (session == null || session.getAttribute("idUser") == null) {
+			response.sendError(403, "Your session is not valid! Try again.");
+			return false;
+		}
+		
+		List<Integer> involvedUsers = UserDAO.getInstance().getAllUsersInvolvedByTask(Integer.parseInt(request.getParameter("idTask")));
+		
+		if(!involvedUsers.contains(session.getAttribute("idUser"))){
+			RequestDispatcher dispatcher = context.getRequestDispatcher("/views/access-denied.jsp");
+			dispatcher.forward(request, response);
+			return false;
+		}
+		return true;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package controllers.utils.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.ProjectDAO;
+import models.UserDAO;
+
 import javax.servlet.ServletContext;
 
 public class SecureProjectStrategy implements SecureResourcesStrategy {
@@ -23,6 +26,26 @@ public class SecureProjectStrategy implements SecureResourcesStrategy {
 
 		return INSTANCE;
 
+	}
+	
+	@Override
+	public boolean isAuthorizedVisualize(HttpServletRequest request, HttpServletResponse response, ServletContext context)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		// If the session is not valid redirect to login
+		if (session == null || session.getAttribute("idUser") == null) {
+			response.sendError(403, "Your session is not valid! Try again.");
+			return false;
+		}
+		
+		List<Integer> involvedUsers = UserDAO.getInstance().getAllUsersInvolvedByProject(Integer.parseInt(request.getParameter("idProject")));
+		
+		if(!involvedUsers.contains(session.getAttribute("idUser"))){
+			RequestDispatcher dispatcher = context.getRequestDispatcher("/views/access-denied.jsp");
+			dispatcher.forward(request, response);
+			return false;
+		}
+		return true;
 	}
 
 	@Override

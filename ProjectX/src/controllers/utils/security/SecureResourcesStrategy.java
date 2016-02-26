@@ -11,5 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 public interface SecureResourcesStrategy {
 	
 	public boolean isAuthorized(HttpServletRequest req, HttpServletResponse res, ServletContext context) throws IOException, ServletException;
-
+	
+	public boolean isAuthorizedVisualize(HttpServletRequest req, HttpServletResponse res, ServletContext context) throws IOException, ServletException;
 }

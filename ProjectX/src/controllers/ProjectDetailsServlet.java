@@ -9,8 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import controllers.utils.security.SecureProjectStrategy;
 import models.ProjectBean;
 import models.ProjectDAO;
 import models.StageBean;
@@ -23,21 +23,20 @@ public class ProjectDetailsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("idUser") == null) {
-			response.sendRedirect(request.getContextPath());
-		} else {
-			int idProject = Integer.parseInt(request.getParameter("idProject"));
-			RequestDispatcher dispatcher;
 
-			List<StageBean> stagesInfo = StageDAO.getInstance().getStagesByIdProject(idProject);
-			ProjectBean projectInfo = ProjectDAO.getInstance().getProjectInfo(idProject);
+		if(!SecureProjectStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
+			return;
+			
+		int idProject = Integer.parseInt(request.getParameter("idProject"));
+		RequestDispatcher dispatcher;
 
-			request.setAttribute("project", projectInfo);
-			request.setAttribute("stages", stagesInfo);
+		List<StageBean> stagesInfo = StageDAO.getInstance().getStagesByIdProject(idProject);
+		ProjectBean projectInfo = ProjectDAO.getInstance().getProjectInfo(idProject);
 
-			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-project.jsp");
-			dispatcher.forward(request, response);
-		}
+		request.setAttribute("project", projectInfo);
+		request.setAttribute("stages", stagesInfo);
+
+		dispatcher = getServletContext().getRequestDispatcher("/views/visualize-project.jsp");
+		dispatcher.forward(request, response);
 	}
 }
