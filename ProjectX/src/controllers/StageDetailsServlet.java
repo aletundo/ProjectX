@@ -23,19 +23,23 @@ public class StageDetailsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureStageStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
-			return;
+		try {
+			if (!SecureStageStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
+				return;
 
-		int idStage = Integer.parseInt(request.getParameter("idStage"));
-		RequestDispatcher dispatcher;
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			RequestDispatcher dispatcher;
 
-		List<TaskBean> tasks = TaskDAO.getInstance().getTasksByStageId(idStage);
-		StageBean stageInfo = StageDAO.getInstance().getStageInfo(idStage);
+			List<TaskBean> tasks = TaskDAO.getInstance().getTasksByStageId(idStage);
+			StageBean stageInfo = StageDAO.getInstance().getStageInfo(idStage);
 
-		request.setAttribute("stage", stageInfo);
-		request.setAttribute("tasks", tasks);
+			request.setAttribute("stage", stageInfo);
+			request.setAttribute("tasks", tasks);
 
-		dispatcher = getServletContext().getRequestDispatcher("/views/visualize-stage.jsp");
-		dispatcher.forward(request, response);
+			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-stage.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 }

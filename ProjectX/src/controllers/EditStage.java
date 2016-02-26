@@ -18,17 +18,25 @@ public class EditStage extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-		return;
+		try {
+			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
 
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-stage.jsp");
-		dispatcher.forward(request, response);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-stage.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		try {
+			doGet(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 }

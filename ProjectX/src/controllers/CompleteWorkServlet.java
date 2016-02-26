@@ -17,21 +17,23 @@ public class CompleteWorkServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(!SecureTaskStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
-		
-		TaskBean task = new TaskBean();
-		task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
-		task.setIdDeveloper((Integer) request.getSession().getAttribute("idUser"));
-		
-		TaskDAO.getInstance().setPieceWorkCompleted(task);
-		UpdateRateCompleted.checkTaskCompleted(task.getIdTask());
-		
-		response.sendRedirect(request.getContextPath() +  "/task?idTask=" + task.getIdTask());
-		
-	}
-	
-	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			if (!SecureTaskStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
 
+			TaskBean task = new TaskBean();
+			task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
+			task.setIdDeveloper((Integer) request.getSession().getAttribute("idUser"));
+
+			TaskDAO.getInstance().setPieceWorkCompleted(task);
+			UpdateRateCompleted.checkTaskCompleted(task.getIdTask());
+
+			response.sendRedirect(request.getContextPath() + "/task?idTask=" + task.getIdTask());
+
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
+	}
 }

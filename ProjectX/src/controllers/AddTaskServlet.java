@@ -20,39 +20,46 @@ public class AddTaskServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
+		try {
+			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
 
-		int idStage = Integer.parseInt(request.getParameter("idStage"));
-		request.setAttribute("idStage", idStage);
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
-		dispatcher.forward(request, response);
-
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			request.setAttribute("idStage", idStage);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
-		TaskBean task = new TaskBean();
-		// Get parameters
-		int idStage = Integer.parseInt(request.getParameter("idStage"));
-		String name = request.getParameter("name");
-		String startDay = request.getParameter("start-day");
-		String finishDay = request.getParameter("finish-day");
+		try {
+			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
+			TaskBean task = new TaskBean();
+			// Get parameters
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			String name = request.getParameter("name");
+			String startDay = request.getParameter("start-day");
+			String finishDay = request.getParameter("finish-day");
 
-		// Set the bean
-		task.setIdStage(idStage);
-		task.setName(name);
-		task.setStartDay(startDay);
-		task.setFinishDay(finishDay);
+			// Set the bean
+			task.setIdStage(idStage);
+			task.setName(name);
+			task.setStartDay(startDay);
+			task.setFinishDay(finishDay);
 
-		int idTask = TaskDAO.getInstance().createTask(task);
+			int idTask = TaskDAO.getInstance().createTask(task);
 
-		if (idTask != 0)
-			response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask=" + idTask
-					+ "&startDay=" + startDay + "&finishDay=" + finishDay);
+			if (idTask != 0)
+				response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
+						+ idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
 
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 }

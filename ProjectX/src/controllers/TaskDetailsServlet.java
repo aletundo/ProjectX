@@ -22,18 +22,22 @@ public class TaskDetailsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureTaskStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
-			return;
+		try {
+			if (!SecureTaskStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
+				return;
 
-		RequestDispatcher dispatcher;
-		int idTask = Integer.parseInt(request.getParameter("idTask"));
+			RequestDispatcher dispatcher;
+			int idTask = Integer.parseInt(request.getParameter("idTask"));
 
-		TaskBean taskInfo = TaskDAO.getInstance().getTaskInfo(idTask);
-		List<UserBean> developers = TaskDAO.getInstance().getAllDevelopersByIdTask(idTask);
+			TaskBean taskInfo = TaskDAO.getInstance().getTaskInfo(idTask);
+			List<UserBean> developers = TaskDAO.getInstance().getAllDevelopersByIdTask(idTask);
 
-		request.setAttribute("task", taskInfo);
-		request.setAttribute("developers", developers);
-		dispatcher = getServletContext().getRequestDispatcher("/views/visualize-task.jsp");
-		dispatcher.forward(request, response);
+			request.setAttribute("task", taskInfo);
+			request.setAttribute("developers", developers);
+			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-task.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 }
