@@ -176,12 +176,15 @@ public class UserDAO {
 		if (currentConn != null) {
 			final String getUsers = "SELECT idUser AS IdUser FROM user " + "WHERE type NOT LIKE 'Junior'";
 			final String getActiveProjects = "SELECT U.idUser AS IdUser, P.idProject AS IdProject, P.start AS Start, P.deadline AS Deadline "
-					+ "FROM user AS U JOIN project AS P " + "ON U.idUser = P.idProjectManager";
+					+ "FROM user AS U JOIN project AS P " + "ON U.idUser = P.idProjectManager "
+							+ "WHERE  P.rateWorkCompleted < 100";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
-					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor";
+					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor "
+							+ "WHERE S.rateWorkCompleted < 100";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper"
-					+ "JOIN task AS T ON TD.idTask = T.idTask";
+					+ "JOIN task AS T ON TD.idTask = T.idTask "
+					+ "WHERE TD.workCompleted = 'True'";
 
 			try {
 				statement = currentConn.createStatement();
@@ -280,10 +283,11 @@ public class UserDAO {
 			final String getUsers = "SELECT idUser AS IdUser FROM user " + "WHERE type NOT LIKE 'ProjectManager'";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN stage AS S "
-					+ "ON U.idUser = S.idSupervisor WHERE U.type NOT LIKE 'ProjectManager'";
+					+ "ON U.idUser = S.idSupervisor WHERE U.type NOT LIKE 'ProjectManager' AND S.rateWorkCompleted < 100";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
-					+ "JOIN task AS T ON TD.idTask = T.idTask";
+					+ "JOIN task AS T ON TD.idTask = T.idTask "
+					+ "WHERE TD.workCompleted = 'True'";
 
 			try {
 				statement = currentConn.createStatement();
