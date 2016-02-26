@@ -19,210 +19,209 @@ public class TaskDAO {
 
 		return INSTANCE;
 	}
-	
-	public void setPieceWorkCompleted(TaskBean task){
+
+	public void setPieceWorkCompleted(TaskBean task) {
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String setTasksWeight = "UPDATE taskdevelopment AS TD SET TD.workCompleted = 'True' WHERE TD.idTask = ? AND TD.idDeveloper = ?";
-			try{
-					statement = currentConn.prepareStatement(setTasksWeight);
-					statement.setInt(1, task.getIdTask());
-					statement.setInt(2, task.getIdDeveloper());
-					statement.executeUpdate();
-				
-			}catch(SQLException e){
+			try {
+				statement = currentConn.prepareStatement(setTasksWeight);
+				statement.setInt(1, task.getIdTask());
+				statement.setInt(2, task.getIdDeveloper());
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a logger
-			}finally{
+				// TODO Handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
 		}
-		
+
 	}
-	
-	public List<UserBean> getAllDevelopersByIdTask(int idTask){
-		List<UserBean> developers = new ArrayList<UserBean>();
+
+	public List<UserBean> getAllDevelopersByIdTask(int idTask) {
+		List<UserBean> developers = new ArrayList<>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String getAllDevelopersQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper WHERE TD.idTask = ?";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getAllDevelopersQuery);
 				statement.setInt(1, idTask);
 				rs = statement.executeQuery();
-				
-				while(rs.next()){
+
+				while (rs.next()) {
 					UserBean developer = new UserBean();
 					developer.setIdUser(rs.getInt("IdUser"));
 					developer.setFullname(rs.getString("Fullname"));
 					developer.setType(rs.getString("Type"));
 					developers.add(developer);
 				}
-				
-			}catch(SQLException e){
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a Logger
-			}finally{
+				// TODO Handle with a Logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return developers;
 	}
-	
-	public TaskBean getTaskInfo(int idTask){
+
+	public TaskBean getTaskInfo(int idTask) {
 		TaskBean task = new TaskBean();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String getTaskInfoQuery = "SELECT T.idTask AS IdTask, T.name AS Name, "
 					+ "T.startDay AS StartDay, T.finishDay AS FinishDay, T.completed AS Completed "
 					+ "FROM task AS T WHERE T.idTask = ?";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getTaskInfoQuery);
 				statement.setInt(1, idTask);
 				rs = statement.executeQuery();
-				
-				while(rs.next()){
+
+				while (rs.next()) {
 					task.setIdTask(rs.getInt("IdTask"));
 					task.setName(rs.getString("Name"));
 					task.setStartDay(rs.getString("StartDay"));
 					task.setFinishDay(rs.getString("FinishDay"));
 					task.setCompleted(rs.getString("Completed"));
 				}
-				
-			}catch(SQLException e){
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a Logger
-			}finally{
+				// TODO Handle with a Logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return task;
-		
-		
+
 	}
-	
-	public TaskBean getRelativeWeight(int idTask){
+
+	public TaskBean getRelativeWeight(int idTask) {
 		TaskBean task = new TaskBean();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
-		if(currentConn != null){
-			final String getRelativeWeightQuery= "SELECT T.idStage AS IdStage, T.relativeWeight AS RelativeWeight FROM task AS T WHERE T.idTask = ?";
-			try{
+		if (currentConn != null) {
+			final String getRelativeWeightQuery = "SELECT T.idStage AS IdStage, T.relativeWeight AS RelativeWeight FROM task AS T WHERE T.idTask = ?";
+			try {
 				statement = currentConn.prepareStatement(getRelativeWeightQuery);
 				statement.setInt(1, idTask);
 				rs = statement.executeQuery();
-				while(rs.next()){
+				while (rs.next()) {
 					task.setIdStage(rs.getInt("IdStage"));
 					task.setRelativeWeight(rs.getFloat("RelativeWeight"));
 				}
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO ilaria handle with a logger
-			}finally{
+				// TODO ilaria handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
-			
+
 		}
 		return task;
 	}
-	
-	public void setTaskCompleted(int idTask){
+
+	public void setTaskCompleted(int idTask) {
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String setTasksWeight = "UPDATE task AS T SET T.completed = 'True' WHERE T.idTask = ?";
-			try{
-					statement = currentConn.prepareStatement(setTasksWeight);
-					statement.setInt(1, idTask);
-					statement.executeUpdate();
-				
-			}catch(SQLException e){
+			try {
+				statement = currentConn.prepareStatement(setTasksWeight);
+				statement.setInt(1, idTask);
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a logger
-			}finally{
+				// TODO Handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
 		}
 	}
-	
+
 	public List<String> checkDevelopersWork(int idTask) {
-		List<String> workCompletedState = new ArrayList<String>();
+		List<String> workCompletedState = new ArrayList<>();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
-		if(currentConn != null){
-			final String checkWorkQuery= "SELECT TD.workCompleted AS WorkCompleted FROM taskdevelopment AS TD WHERE TD.idTask = ?";
-			try{
+		if (currentConn != null) {
+			final String checkWorkQuery = "SELECT TD.workCompleted AS WorkCompleted FROM taskdevelopment AS TD WHERE TD.idTask = ?";
+			try {
 				statement = currentConn.prepareStatement(checkWorkQuery);
 				statement.setInt(1, idTask);
 				rs = statement.executeQuery();
-				while(rs.next()){
+				while (rs.next()) {
 					workCompletedState.add(rs.getString("WorkCompleted"));
 				}
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO ilaria handle with a logger
-			}finally{
+				// TODO ilaria handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
-			
+
 		}
-		
+
 		return workCompletedState;
 	}
-	
-	public void setTasksWeight(List<TaskBean> tasks){
+
+	public void setTasksWeight(List<TaskBean> tasks) {
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String setTasksWeight = "UPDATE task AS T SET T.relativeWeight = ? WHERE T.idTask = ?";
-			try{
-				for(TaskBean task : tasks){
+			try {
+				for (TaskBean task : tasks) {
 					statement = currentConn.prepareStatement(setTasksWeight);
 					statement.setFloat(1, task.getRelativeWeight());
 					statement.setInt(2, task.getIdTask());
 					statement.executeUpdate();
 					statement.close();
 				}
-				
-			}catch(SQLException e){
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a logger
-			}finally{
+				// TODO Handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
 		}
 	}
-	
-	public List<TaskBean> getTasksByStageId(int idStage){
-		List<TaskBean> tasks = new ArrayList<TaskBean>();
+
+	public List<TaskBean> getTasksByStageId(int idStage) {
+		List<TaskBean> tasks = new ArrayList<>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
-		if(currentConn != null){
+
+		if (currentConn != null) {
 			final String getTasksQuery = "SELECT T.idTask AS IdTask, T.name AS Name, "
 					+ "T.startDay AS StartDay, T.finishDay AS FinishDay, T.completed AS Completed "
 					+ "FROM task AS T WHERE T.idStage = ?";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getTasksQuery);
 				statement.setInt(1, idStage);
 				rs = statement.executeQuery();
-				
-				while(rs.next()){
+
+				while (rs.next()) {
 					TaskBean task = new TaskBean();
 					task.setIdTask(rs.getInt("IdTask"));
 					task.setName(rs.getString("Name"));
@@ -231,17 +230,17 @@ public class TaskDAO {
 					task.setCompleted(rs.getString("Completed"));
 					tasks.add(task);
 				}
-				
-			}catch(SQLException e){
+
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a Logger
-			}finally{
+				// TODO Handle with a Logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return tasks;
-		
+
 	}
 
 	public boolean addDeveloper(TaskBean task, long hoursRequired) {
@@ -251,11 +250,11 @@ public class TaskDAO {
 		final String addDeveloperQuery = "INSERT INTO taskdevelopment (idDeveloper, idTask, hoursRequired) VALUES (?, ?, ?)";
 		if (currentConn != null) {
 			try {
-					statement = currentConn.prepareStatement(addDeveloperQuery);
-					statement.setInt(1, task.getIdDeveloper());
-					statement.setInt(2, task.getIdTask());
-					statement.setInt(3, (int) hoursRequired);
-				
+				statement = currentConn.prepareStatement(addDeveloperQuery);
+				statement.setInt(1, task.getIdDeveloper());
+				statement.setInt(2, task.getIdTask());
+				statement.setInt(3, (int) hoursRequired);
+
 				statement.executeUpdate();
 				updated = true;
 			} catch (SQLException e) {
@@ -275,8 +274,7 @@ public class TaskDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String addTaskQuery = "INSERT INTO task (idStage, name, startDay, "
-					+ "finishDay) VALUES(?, ?, ?, ?)";
+			final String addTaskQuery = "INSERT INTO task (idStage, name, startDay, " + "finishDay) VALUES(?, ?, ?, ?)";
 			try {
 				statement = currentConn.prepareStatement(addTaskQuery, Statement.RETURN_GENERATED_KEYS);
 
@@ -300,8 +298,9 @@ public class TaskDAO {
 
 		return task.getIdTask();
 	}
-	
+
 	public long getTaskHourRequested(Map.Entry<Integer, List<Object>> pair, long hourWork, TaskBean workTask) {
+		long hourWorkTemp = hourWork;
 		Connection currentConn = DbConnection.connect();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
@@ -316,8 +315,8 @@ public class TaskDAO {
 				statement.setInt(2, workTask.getIdTask());
 				rs = statement.executeQuery();
 				while (rs.next()) {
-					hourWork = rs.getLong("HoursRequired");
-					System.out.println("ore Task: " + hourWork);
+					hourWorkTemp = rs.getLong("HoursRequired");
+					System.out.println("ore Task: " + hourWorkTemp);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -326,7 +325,7 @@ public class TaskDAO {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		return hourWork;
+		return hourWorkTemp;
 	}
 
 }

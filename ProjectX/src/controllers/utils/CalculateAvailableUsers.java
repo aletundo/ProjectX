@@ -2,7 +2,6 @@ package controllers.utils;
 
 import models.ProjectBean;
 import java.io.IOException;
-import java.lang.Math;
 
 import models.StageBean;
 import models.TaskBean;
@@ -31,11 +30,9 @@ public class CalculateAvailableUsers {
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
 
-
 	private CalculateAvailableUsers() {
 
 	}
-
 
 	// calculate the available users for a new TASK
 	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
@@ -43,7 +40,7 @@ public class CalculateAvailableUsers {
 		getProperties();
 
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
-		List<UserBean> availableUsers = new ArrayList<UserBean>();
+		List<UserBean> availableUsers = new ArrayList<>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
 		while (mapIterator.hasNext()) {
 			try {
@@ -54,19 +51,20 @@ public class CalculateAvailableUsers {
 				e1.printStackTrace();
 			}
 
-			Map.Entry<Integer, List<Object>> pair = (Map.Entry<Integer, List<Object>>) mapIterator.next();
-			List<Object> criticalWorks = new ArrayList<Object>();
+			Map.Entry<Integer, List<Object>> pair = mapIterator.next();
+			List<Object> criticalWorks = new ArrayList<>();
 
 			Iterator<Object> arrayListIterator = pair.getValue().iterator();
 			if (pair.getValue() == null) {
-				try{
-				UserBean userFree = new UserBean();
-				userFree.setIdUser(pair.getKey());
-				long hoursAvailable = HOURPERDAY*getDifferenceDays(format.parse(newTask.getStartDay()),format.parse(newTask.getFinishDay())); 
-				userFree.setTemporaryHoursAvailable(hoursAvailable);
-				availableUsers.add(userFree);
-				}catch(ParseException e){
-					//TODO handle with a logger
+				try {
+					UserBean userFree = new UserBean();
+					userFree.setIdUser(pair.getKey());
+					long hoursAvailable = HOURPERDAY * getDifferenceDays(format.parse(newTask.getStartDay()),
+							format.parse(newTask.getFinishDay()));
+					userFree.setTemporaryHoursAvailable(hoursAvailable);
+					availableUsers.add(userFree);
+				} catch (ParseException e) {
+					// TODO handle with a logger
 				}
 			}
 			while (arrayListIterator.hasNext()) {
@@ -96,7 +94,7 @@ public class CalculateAvailableUsers {
 		getProperties();
 
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
-		List<UserBean> availableUsers = new ArrayList<UserBean>();
+		List<UserBean> availableUsers = new ArrayList<>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
 		while (mapIterator.hasNext()) {
 			try {
@@ -107,19 +105,20 @@ public class CalculateAvailableUsers {
 				e1.printStackTrace();
 			}
 
-			Map.Entry<Integer, List<Object>> pair = (Map.Entry<Integer, List<Object>>) mapIterator.next();
-			List<Object> criticalWorks = new ArrayList<Object>();
+			Map.Entry<Integer, List<Object>> pair = mapIterator.next();
+			List<Object> criticalWorks = new ArrayList<>();
 
 			Iterator<Object> arrayListIterator = pair.getValue().iterator();
 			if (pair.getValue() == null) {
-				try{
-				UserBean userFree = new UserBean();
-				userFree.setIdUser(pair.getKey());
-				long hoursAvailable = HOURPERDAY*getDifferenceDays(format.parse(newStage.getStartDay()),format.parse(newStage.getFinishDay())); 
-				userFree.setTemporaryHoursAvailable(hoursAvailable);
-				availableUsers.add(userFree);
-				}catch(ParseException e){
-					//TODO handle with  logger
+				try {
+					UserBean userFree = new UserBean();
+					userFree.setIdUser(pair.getKey());
+					long hoursAvailable = HOURPERDAY * getDifferenceDays(format.parse(newStage.getStartDay()),
+							format.parse(newStage.getFinishDay()));
+					userFree.setTemporaryHoursAvailable(hoursAvailable);
+					availableUsers.add(userFree);
+				} catch (ParseException e) {
+					// TODO handle with logger
 				}
 			}
 			while (arrayListIterator.hasNext()) {
@@ -170,7 +169,8 @@ public class CalculateAvailableUsers {
 	}
 
 	// calculate the availability of a user for a new TASK
-	private static UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair, List<Object> criticalWorks) {
+	private static UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair,
+			List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
 
 		try {
@@ -308,7 +308,8 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// STAGE
-	private static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format) throws ParseException {
+	private static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
+			throws ParseException {
 		if (work instanceof models.ProjectBean) {
 			ProjectBean workProject = (ProjectBean) work;
 			// check if the referenced project does not collide through time
@@ -341,7 +342,8 @@ public class CalculateAvailableUsers {
 
 	// calculate the critical works (the ones who conflict) of a user for a new
 	// TASK
-	private static boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format) throws ParseException {
+	private static boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format)
+			throws ParseException {
 		if (work instanceof models.StageBean) {
 			StageBean workStage = (StageBean) work;
 			if (!(format.parse(workStage.getFinishDay()).before(format.parse(newTask.getStartDay()))
@@ -410,18 +412,17 @@ public class CalculateAvailableUsers {
 			// TODO Handle with a Logger
 		}
 	}
-	
-	public static long getHoursRequestedTask(String startDay, String finishDay){
+
+	public static long getHoursRequestedTask(String startDay, String finishDay) {
 		long hourRequested = 0;
-		try{
-			
-		Date start = format.parse(startDay);
-		Date finish = format.parse(finishDay);
-		hourRequested = HOURPERDAY * getDifferenceDays(start,finish);
-		
-		
-		}catch(ParseException e){
-			//TODO handle with a logger
+		try {
+
+			Date start = format.parse(startDay);
+			Date finish = format.parse(finishDay);
+			hourRequested = HOURPERDAY * getDifferenceDays(start, finish);
+
+		} catch (ParseException e) {
+			// TODO handle with a logger
 		}
 		return hourRequested;
 	}

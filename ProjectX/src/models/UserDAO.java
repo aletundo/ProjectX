@@ -24,24 +24,24 @@ public class UserDAO {
 
 		return INSTANCE;
 	}
-	
-	public List<Integer> getAllUsersInvolvedByProject(int idProject){
-		List<Integer> usersInvolved = new ArrayList<Integer>();
-		
+
+	public List<Integer> getAllUsersInvolvedByProject(int idProject) {
+		List<Integer> usersInvolved = new ArrayList<>();
+
 		usersInvolved.add(ProjectDAO.getInstance().getProjectManagerId(idProject));
-		
+
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-		
+
 		if (currentConn != null) {
 			final String getSupervisorsId = "SELECT DISTINCT S.idSupervisor AS IdSupervisor "
 					+ "FROM stage AS S JOIN project AS P ON S.idProject = ?";
-			
+
 			final String getDevelopersId = "SELECT DISTINCT TD.idDeveloper AS IdDeveloper "
 					+ "FROM taskdevelopment AS TD JOIN task AS T ON TD.idTask = T.idTask JOIN stage AS S ON T.idStage = S.idStage "
 					+ "JOIN project AS P ON S.idProject = ?";
-			
+
 			try {
 				statement = currentConn.prepareStatement(getSupervisorsId);
 				statement.setInt(1, idProject);
@@ -69,14 +69,14 @@ public class UserDAO {
 		}
 		return usersInvolved;
 	}
-	
-	public List<Integer> getAllUsersInvolvedByStage(int idStage){
+
+	public List<Integer> getAllUsersInvolvedByStage(int idStage) {
 		int idProject = 0;
-		List<Integer> usersInvolved = new ArrayList<Integer>();
+		List<Integer> usersInvolved = new ArrayList<>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-	
+
 		if (currentConn != null) {
 			final String getIdProject = "SELECT P.idProject AS IdProject "
 					+ "FROM stage AS S JOIN project AS P ON S.idProject  = P.idProject " + "WHERE S.idStage = ?";
@@ -98,14 +98,14 @@ public class UserDAO {
 		usersInvolved = getAllUsersInvolvedByProject(idProject);
 		return usersInvolved;
 	}
-	
-	public List<Integer> getAllUsersInvolvedByTask(int idTask){
+
+	public List<Integer> getAllUsersInvolvedByTask(int idTask) {
 		int idProject = 0;
-		List<Integer> usersInvolved = new ArrayList<Integer>();
+		List<Integer> usersInvolved = new ArrayList<>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
-	
+
 		if (currentConn != null) {
 			final String getIdProject = "SELECT P.idProject AS IdProject "
 					+ "FROM task AS T JOIN stage AS S ON T.idStage = S.idStage JOIN project AS P ON S.idProject  = P.idProject "
@@ -128,13 +128,13 @@ public class UserDAO {
 		usersInvolved = getAllUsersInvolvedByProject(idProject);
 		return usersInvolved;
 	}
-	
-	public String getProjectManagerMailByIdStage(int idStage){
+
+	public String getProjectManagerMailByIdStage(int idStage) {
 		String mail = "";
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
-		
+
 		if (currentConn != null) {
 			final String getUserMailQuery = "SELECT U.mail AS Mail FROM user AS U JOIN project AS P ON U.idUser = P.idProjectManager JOIN stage AS S ON S.idProject = P.idProject WHERE S.idStage = ?";
 			try {
@@ -151,7 +151,7 @@ public class UserDAO {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		
+
 		return mail;
 	}
 
@@ -187,7 +187,7 @@ public class UserDAO {
 	public List<String> getAllSupervisorsMail(int idProject) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		List<String> supervisorsMail = new ArrayList<String>();
+		List<String> supervisorsMail = new ArrayList<>();
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
@@ -247,7 +247,8 @@ public class UserDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getUsersInfoQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type " + "FROM user AS U WHERE U.idUser = ?";
+			final String getUsersInfoQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type "
+					+ "FROM user AS U WHERE U.idUser = ?";
 			try {
 				for (UserBean u : candidates) {
 					statement = currentConn.prepareStatement(getUsersInfoQuery);
@@ -273,7 +274,7 @@ public class UserDAO {
 	}
 
 	public Map<Integer, List<Object>> getCandidateSupervisors() {
-		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
+		Map<Integer, List<Object>> workMap = new HashMap<>();
 		ResultSet rs = null;
 		Statement statement = null;
 		Connection currentConn = DbConnection.connect();
@@ -281,10 +282,10 @@ public class UserDAO {
 			final String getUsers = "SELECT idUser AS IdUser FROM user " + "WHERE type NOT LIKE 'Junior'";
 			final String getActiveProjects = "SELECT U.idUser AS IdUser, P.idProject AS IdProject, P.start AS Start, P.deadline AS Deadline "
 					+ "FROM user AS U JOIN project AS P " + "ON U.idUser = P.idProjectManager "
-							+ "WHERE  P.rateWorkCompleted < 100";
+					+ "WHERE  P.rateWorkCompleted < 100";
 			final String getActiveStages = "SELECT U.idUser AS IdUser, S.idStage AS IdStage, S.startDay AS StartDay, S.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor "
-							+ "WHERE S.rateWorkCompleted < 100 AND S.outsourcing LIKE 'False'";
+					+ "WHERE S.rateWorkCompleted < 100 AND S.outsourcing LIKE 'False'";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask "
@@ -294,7 +295,7 @@ public class UserDAO {
 				statement = currentConn.createStatement();
 				rs = statement.executeQuery(getUsers);
 				while (rs.next()) {
-					List<Object> works = new ArrayList<Object>();
+					List<Object> works = new ArrayList<>();
 					Integer user = new Integer(rs.getInt("IdUser"));
 					workMap.put(user, works);
 				}
@@ -352,10 +353,9 @@ public class UserDAO {
 		return workMap;
 	}
 
-
 	public Map<Integer, List<Object>> getCandidateDevelopers() {
 
-		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
+		Map<Integer, List<Object>> workMap = new HashMap<>();
 		ResultSet rs = null;
 		Statement statement = null;
 		Connection currentConn = DbConnection.connect();
@@ -366,19 +366,18 @@ public class UserDAO {
 					+ "ON U.idUser = S.idSupervisor WHERE U.type NOT LIKE 'ProjectManager' AND S.rateWorkCompleted < 100";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
-					+ "JOIN task AS T ON TD.idTask = T.idTask "
-					+ "WHERE TD.workCompleted LIKE 'False'";
+					+ "JOIN task AS T ON TD.idTask = T.idTask " + "WHERE TD.workCompleted LIKE 'False'";
 
 			try {
 				statement = currentConn.createStatement();
 				rs = statement.executeQuery(getUsers);
 				while (rs.next()) {
-					List<Object> works = new ArrayList<Object>();
+					List<Object> works = new ArrayList<>();
 					Integer user = new Integer(rs.getInt("IdUser"));
 					workMap.put(user, works);
 				}
 				rs.close();
-				
+
 				rs = statement.executeQuery(getActiveStages);
 				while (rs.next()) {
 					StageBean stage = new StageBean();
@@ -415,7 +414,7 @@ public class UserDAO {
 			}
 		}
 		return workMap;
-	
+
 	}
 
 	public boolean signUpUser(UserBean user) {
@@ -430,12 +429,14 @@ public class UserDAO {
 		user.setHashPw(hashedPassword);
 
 		Connection currentConn = DbConnection.connect();
-		// PreparedStatement statement;
+		/* PreparedStatement statement; */
 		Statement statement = null;
 
 		if (currentConn != null) {
-			// String signUpQuery = "INSERT INTO User(username, salt, hashpw)
-			// VALUES(?, ?, ?)";
+			/*
+			 * String signUpQuery = "INSERT INTO User(username, salt, hashpw)
+			 * VALUES(?, ?, ?)";
+			 */
 			final String signUpQuery = "INSERT INTO user(username, fullname, mail, skills, salt, hashpw, type) VALUES('"
 					+ user.getUsername() + "','" + user.getFullname() + "','" + user.getMail() + "','"
 					+ user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','" + user.getType()
@@ -532,8 +533,6 @@ public class UserDAO {
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Handle with a Logger
 		}
-
 		return hash.toString();
 	}
-
 }

@@ -186,7 +186,7 @@ public class StageDAO {
 	}
 
 	public List<StageBean> getStagesByIdProject(int idProject) {
-		List<StageBean> stages = new ArrayList<StageBean>();
+		List<StageBean> stages = new ArrayList<>();
 		ResultSet rs = null;
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
@@ -197,7 +197,7 @@ public class StageDAO {
 					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing "
 					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
 					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
-			
+
 			final String getStagesOutsourcedQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
 					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
 					+ "S.outsourcing AS Outsourcing FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
@@ -219,7 +219,7 @@ public class StageDAO {
 				}
 				rs.close();
 				statement.close();
-				
+
 				statement = currentConn.prepareStatement(getStagesOutsourcedQuery);
 				statement.setInt(1, idProject);
 				rs = statement.executeQuery();
@@ -278,13 +278,12 @@ public class StageDAO {
 
 		if (currentConn != null) {
 			try {
-				if (stage.getOutsourcing().equals("True")) {
-					addSupervisorQuery = "UPDATE stage SET outsourcing = ?, "
-							+ "idSupervisor = ? WHERE idStage = ?";
+				if ("True".equals(stage.getOutsourcing())) {
+					addSupervisorQuery = "UPDATE stage SET outsourcing = ?, " + "idSupervisor = ? WHERE idStage = ?";
 					statement = currentConn.prepareStatement(addSupervisorQuery);
 					statement.setString(1, "True");
 					statement.setInt(2, stage.getIdSupervisor());
-					//statement.setString(2, stage.getCompanyName());
+					// statement.setString(2, stage.getCompanyName());
 					// statement.setString(3, stage.getCompanyMail());
 					statement.setInt(3, stage.getIdStage());
 				} else {

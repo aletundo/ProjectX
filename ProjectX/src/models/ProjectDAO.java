@@ -19,7 +19,7 @@ public class ProjectDAO {
 		return INSTANCE;
 
 	}
-	
+
 	public float getRateWorkCompleted(int idProject) {
 		float rateWorkCompleted = 0;
 		PreparedStatement statement = null;
@@ -69,26 +69,26 @@ public class ProjectDAO {
 			}
 		}
 	}
-	
-	public int getProjectManagerId(int idProject){
+
+	public int getProjectManagerId(int idProject) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		int idProjectManager = 0;
 		Connection currentConn = DbConnection.connect();
-		if(currentConn != null){
-			final String getProjectManagerQuery= "SELECT P.idProjectManager AS IdProjectManager "
+		if (currentConn != null) {
+			final String getProjectManagerQuery = "SELECT P.idProjectManager AS IdProjectManager "
 					+ "FROM project AS P WHERE P.idProject = ?";
-			try{
+			try {
 				statement = currentConn.prepareStatement(getProjectManagerQuery);
 				statement.setInt(1, idProject);
 				rs = statement.executeQuery();
-				while(rs.next()){
+				while (rs.next()) {
 					idProjectManager = rs.getInt("IdProjectManager");
 				}
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
-				//TODO Handle with a logger
-			}finally{
+				// TODO Handle with a logger
+			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
@@ -165,7 +165,7 @@ public class ProjectDAO {
 	}
 
 	public List<ProjectBean> getUserProjects(UserBean user) {
-		List<ProjectBean> projectList = new ArrayList<ProjectBean>();
+		List<ProjectBean> projectList = new ArrayList<>();
 		Connection currentConn = DbConnection.connect();
 		Statement statement = null;
 		ResultSet rs = null;
@@ -205,7 +205,7 @@ public class ProjectDAO {
 	}
 
 	public List<ProjectBean> searchProjects(String subjectArea) {
-		List<ProjectBean> projectList = new ArrayList<ProjectBean>();
+		List<ProjectBean> projectList = new ArrayList<>();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
@@ -238,14 +238,14 @@ public class ProjectDAO {
 
 	private String buildGetProjectsQueries(String userType, int idUser) {
 		String view = "";
-		if (userType.equals("ProjectManager")) {
+		if ("ProjectManager".equals(userType)) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor "
 					+ "JOIN project AS P ON S.idProject = P.idProject  WHERE U.idUser = " + idUser
 					+ " UNION SELECT P.idProject AS idProject " + "FROM project AS P WHERE P.idProjectManager = "
 					+ idUser;
 
-		} else if (userType.equals("Senior")) {
+		} else if ("Senior".equals(userType)) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor "
 					+ "JOIN project AS P ON S.idProject = P.idProject  WHERE U.idUser = " + idUser
@@ -254,7 +254,7 @@ public class ProjectDAO {
 					+ "JOIN task AS T ON TD.idTask = T.idTask " + "JOIN stage AS S ON T.idStage = S.idStage "
 					+ "JOIN project AS P ON S.idProject = P.idProject WHERE U.idUser = " + idUser;
 
-		} else if (userType.equals("Junior")) {
+		} else if ("Junior".equals(userType)) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask " + "JOIN stage AS S ON T.idStage = S.idStage "
