@@ -37,7 +37,7 @@ public class AddSupervisorServlet extends HttpServlet {
 			stage.setStartDay(startDay);
 			stage.setFinishDay(finishDay);
 			
-			Map<Integer, List<Object>> workMap = UserDAO.getInstance().newGetCandidateSupervisors();
+			Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateSupervisors();
 			List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, stage);
 			candidates = UserDAO.getInstance().getUsersInfo(candidates);
 			if(candidates.isEmpty())

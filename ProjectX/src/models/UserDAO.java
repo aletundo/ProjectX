@@ -168,7 +168,7 @@ public class UserDAO {
 		return candidates;
 	}
 
-	public Map<Integer, List<Object>> newGetCandidateSupervisors() {
+	public Map<Integer, List<Object>> getCandidateSupervisors() {
 		Map<Integer, List<Object>> workMap = new HashMap<Integer, List<Object>>();
 		ResultSet rs = null;
 		Statement statement = null;
@@ -248,30 +248,6 @@ public class UserDAO {
 		return workMap;
 	}
 
-	/*
-	 * public List<UserBean> getCandidateSupervisors() { List<UserBean>
-	 * candidates = new ArrayList<UserBean>(); ResultSet rs = null; Statement
-	 * statement = null; Connection currentConn = DbConnection.connect(); if
-	 * (currentConn != null) { final String createView =
-	 * "CREATE VIEW busyusers AS SELECT DISTINCT U.idUser AS IdUser FROM " +
-	 * "user AS U JOIN project AS P ON U.idUser = P.idProjectManager " +
-	 * "UNION SELECT DISTINCT U.idUser AS IdUser " +
-	 * "FROM user AS U JOIN stage AS S ON U.idUser = S.idSupervisor"; final
-	 * String dropView = "DROP VIEW busyusers"; final String cadidatesQuery =
-	 * "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type FROM user AS U WHERE U.type NOT LIKE 'Junior' AND U.idUser NOT IN(SELECT B.IdUser FROM busyusers AS B)"
-	 * ; try { statement = currentConn.createStatement();
-	 * statement.executeUpdate(createView); //statement =
-	 * currentConn.prepareStatement(cadidatesQuery); rs =
-	 * statement.executeQuery(cadidatesQuery); while (rs.next()) { UserBean user
-	 * = new UserBean(); user.setIdUser(rs.getInt("IdUser"));
-	 * user.setFullname(rs.getString("Fullname"));
-	 * user.setType(rs.getString("Type")); candidates.add(user); }
-	 * statement.executeUpdate(dropView); } catch (SQLException e) {
-	 * e.printStackTrace(); // TODO handle with a Logger } finally {
-	 * DbConnection.disconnect(currentConn, rs, statement); } }
-	 * 
-	 * return candidates; }
-	 */
 
 	public Map<Integer, List<Object>> getCandidateDevelopers() {
 
