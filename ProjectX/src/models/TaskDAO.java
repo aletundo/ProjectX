@@ -20,6 +20,28 @@ public class TaskDAO {
 		return INSTANCE;
 	}
 	
+	public void setPieceWorkCompleted(TaskBean task){
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String setTasksWeight = "UPDATE taskdevelopment AS TD SET TD.workCompleted = 'True' WHERE TD.idTask = ? AND TD.idDeveloper = ?";
+			try{
+					statement = currentConn.prepareStatement(setTasksWeight);
+					statement.setInt(1, task.getIdTask());
+					statement.setInt(2, task.getIdDeveloper());
+					statement.executeUpdate();
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+		
+	}
+	
 	public List<UserBean> getAllDevelopersByIdTask(int idTask){
 		List<UserBean> developers = new ArrayList<UserBean>();
 		ResultSet rs = null;
@@ -60,7 +82,7 @@ public class TaskDAO {
 		Connection currentConn = DbConnection.connect();
 		
 		if(currentConn != null){
-			final String getTaskInfoQuery = "SELECT T.name AS Name, "
+			final String getTaskInfoQuery = "SELECT T.idTask AS IdTask, T.name AS Name, "
 					+ "T.startDay AS StartDay, T.finishDay AS FinishDay, T.completed AS Completed "
 					+ "FROM task AS T WHERE T.idTask = ?";
 			try{
@@ -69,6 +91,7 @@ public class TaskDAO {
 				rs = statement.executeQuery();
 				
 				while(rs.next()){
+					task.setIdTask(rs.getInt("IdTask"));
 					task.setName(rs.getString("Name"));
 					task.setStartDay(rs.getString("StartDay"));
 					task.setFinishDay(rs.getString("FinishDay"));
@@ -94,7 +117,7 @@ public class TaskDAO {
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
 		if(currentConn != null){
-			final String getRelativeWeightQuery= "SELECT T.idStage AS IdStage, T.relativeWeight AS RelativeWeight WHERE T.idTask = ?";
+			final String getRelativeWeightQuery= "SELECT T.idStage AS IdStage, T.relativeWeight AS RelativeWeight FROM task AS T WHERE T.idTask = ?";
 			try{
 				statement = currentConn.prepareStatement(getRelativeWeightQuery);
 				statement.setInt(1, idTask);
@@ -119,7 +142,7 @@ public class TaskDAO {
 		Connection currentConn = DbConnection.connect();
 		
 		if(currentConn != null){
-			final String setTasksWeight = "UPDATE tasks AS T SET T.completed = 'True' WHERE T.idTask = ?";
+			final String setTasksWeight = "UPDATE task AS T SET T.completed = 'True' WHERE T.idTask = ?";
 			try{
 					statement = currentConn.prepareStatement(setTasksWeight);
 					statement.setInt(1, idTask);

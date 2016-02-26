@@ -1,7 +1,6 @@
 package controllers.utils;
 
 import models.ProjectBean;
-import java.sql.*;
 import java.io.IOException;
 import java.lang.Math;
 
@@ -9,7 +8,6 @@ import models.StageBean;
 import models.TaskBean;
 import models.TaskDAO;
 import models.UserBean;
-import utils.DbConnection;
 import utils.GetWorkhoursProperties;
 
 import java.util.Iterator;

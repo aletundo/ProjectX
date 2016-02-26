@@ -288,7 +288,7 @@ public class UserDAO {
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask "
-					+ "WHERE TD.workCompleted LIKE 'False'";
+					+ "WHERE TD.workCompleted LIKE 'False' AND U.type NOT LIKE 'Junior'";
 
 			try {
 				statement = currentConn.createStatement();
