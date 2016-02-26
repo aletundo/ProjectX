@@ -193,13 +193,17 @@ public class StageDAO {
 
 		if (currentConn != null) {
 			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
-					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS Supervisor, S.outsourcing AS Outsourcing "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
+					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing "
 					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
-					+ "WHERE S.idProject = ?";
+					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
+			
+			final String getStagesOutsourcedQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
+					+ "S.outsourcing AS Outsourcing FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
 			try {
 				statement = currentConn.prepareStatement(getStagesQuery);
 				statement.setInt(1, idProject);
-				statement.setInt(2, idProject);
 				rs = statement.executeQuery();
 
 				while (rs.next()) {
@@ -210,6 +214,22 @@ public class StageDAO {
 					stage.setFinishDay(rs.getString("FinishDay"));
 					stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stage.setSupervisorFullname(rs.getString("Supervisor"));
+					stage.setOutsourcing(rs.getString("Outsourcing"));
+					stages.add(stage);
+				}
+				rs.close();
+				statement.close();
+				
+				statement = currentConn.prepareStatement(getStagesOutsourcedQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					StageBean stage = new StageBean();
+					stage.setIdStage(rs.getInt("IdStage"));
+					stage.setName(rs.getString("Name"));
+					stage.setStartDay(rs.getString("StartDay"));
+					stage.setFinishDay(rs.getString("FinishDay"));
+					stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stage.setOutsourcing(rs.getString("Outsourcing"));
 					stages.add(stage);
 				}
@@ -259,13 +279,14 @@ public class StageDAO {
 		if (currentConn != null) {
 			try {
 				if (stage.getOutsourcing().equals("True")) {
-					addSupervisorQuery = "UPDATE stage SET outsourcing = ?, companyName = ?, "
-							+ "companyMail = ? WHERE idStage = ?";
+					addSupervisorQuery = "UPDATE stage SET outsourcing = ?, "
+							+ "idSupervisor = ? WHERE idStage = ?";
 					statement = currentConn.prepareStatement(addSupervisorQuery);
 					statement.setString(1, "True");
-					statement.setString(2, stage.getCompanyName());
-					statement.setString(3, stage.getCompanyMail());
-					statement.setInt(4, stage.getIdStage());
+					statement.setInt(2, stage.getIdSupervisor());
+					//statement.setString(2, stage.getCompanyName());
+					// statement.setString(3, stage.getCompanyMail());
+					statement.setInt(3, stage.getIdStage());
 				} else {
 					statement = currentConn.prepareStatement(addSupervisorQuery);
 					statement.setInt(1, stage.getIdSupervisor());
@@ -288,7 +309,7 @@ public class StageDAO {
 
 		if (currentConn != null) {
 			final String addStageQuery = "INSERT INTO stage (idProject, name, goals, requirements, startDay, "
-					+ "finishDay, estimatedDuration) VALUES(?, ?, ?, ?, ?, ?, ?)";
+					+ "finishDay) VALUES(?, ?, ?, ?, ?, ?)";
 			try {
 				statement = currentConn.prepareStatement(addStageQuery, Statement.RETURN_GENERATED_KEYS);
 
@@ -298,7 +319,6 @@ public class StageDAO {
 				statement.setString(4, stage.getRequirements());
 				statement.setString(5, stage.getStartDay());
 				statement.setString(6, stage.getFinishDay());
-				statement.setInt(7, stage.getEstimatedDuration());
 
 				statement.executeUpdate();
 				rs = statement.getGeneratedKeys();

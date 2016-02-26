@@ -73,13 +73,6 @@
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Estimated duration</span> <input
-						type="text" class="form-control"
-						placeholder="Insert the estimated duration (weeks)"
-						name="estimated-duration" />
-				</div>
-				<br>
-				<div class="input-group">
 					<span class="input-group-addon">Subject areas</span> <input
 						type="text" class="form-control"
 						placeholder="Insert the subjet areas (preferably splitted by a comma)"

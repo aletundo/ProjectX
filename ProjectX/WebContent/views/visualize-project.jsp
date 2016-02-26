@@ -34,23 +34,13 @@
 						<c:out value="${requestScope.project.clientName }"></c:out>
 					</p>
 					<div class="progress">
-						<c:choose>
-							<c:when test="${requestScope.project.rateWorkCompleted } >= 99">
-								<div
-									class="progress-bar progress-bar-success progress-bar-striped"
-									role="progressbar" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100" style="width: 100%">100% Complete</div>
-							</c:when>
-							<c:otherwise>
-								<div
-									class="progress-bar progress-bar-success progress-bar-striped"
-									role="progressbar"
-									aria-valuenow="${requestScope.project.rateWorkCompleted }"
-									aria-valuemin="0" aria-valuemax="100"
-									style="width: ${requestScope.project.rateWorkCompleted }%">${requestScope.project.rateWorkCompleted }%
-									Complete</div>
-							</c:otherwise>
-						</c:choose>
+						<div
+							class="progress-bar progress-bar-success progress-bar-striped"
+							role="progressbar"
+							aria-valuenow="${requestScope.project.rateWorkCompleted }"
+							aria-valuemin="0" aria-valuemax="100"
+							style="width: ${requestScope.project.rateWorkCompleted }%">${requestScope.project.rateWorkCompleted }%
+							Complete</div>
 					</div>
 				</div>
 
@@ -60,7 +50,7 @@
 						<th><i class="fa fa-hourglass-start"></i>&nbsp;Start</th>
 						<th><i class="fa fa-hourglass-end"></i>&nbsp;Finish</th>
 						<th><i class="fa fa-percent"></i>&nbsp;Progress</th>
-						<th><i class="fa fa-user"></i>&nbsp;Supervisor/Outsourcer</th>
+						<th><i class="fa fa-user"></i>&nbsp;Supervisor</th>
 					</tr>
 
 					<c:forEach items="${requestScope.stages}" var="stage">
@@ -71,27 +61,21 @@
 							<td><c:out value="${stage.finishDay}"></c:out></td>
 							<td>
 								<div class="progress">
-									<c:choose>
-										<c:when test="${stage.rateWorkCompleted } >= 99">
-											<div
-												class="progress-bar progress-bar-success progress-bar-striped"
-												role="progressbar" aria-valuenow="100" aria-valuemin="0"
-												aria-valuemax="100" style="width: 100%">100% Complete</div>
-										</c:when>
-										<c:otherwise>
-											<div
-												class="progress-bar progress-bar-success progress-bar-striped"
-												role="progressbar"
-												aria-valuenow="${stage.rateWorkCompleted }"
-												aria-valuemin="0" aria-valuemax="100"
-												style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%
-												Complete</div>
-										</c:otherwise>
-									</c:choose>
+									<div
+										class="progress-bar progress-bar-success progress-bar-striped"
+										role="progressbar" aria-valuenow="${stage.rateWorkCompleted }"
+										aria-valuemin="0" aria-valuemax="100"
+										style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%
+										Complete</div>
 								</div>
 							</td>
-							<td><span class="label label-warning"><c:out
-										value="${stage.supervisorFullname}"></c:out></span></td>
+							<td><c:choose>
+									<c:when test="${stage.outsourcing == 'True' }">
+										<span class="label label-danger">Outsourced</span>
+									</c:when>
+									<c:otherwise><span class="label label-warning"><c:out
+										value="${stage.supervisorFullname}"></c:out></span></c:otherwise>
+								</c:choose></td>
 						</tr>
 					</c:forEach>
 				</table>

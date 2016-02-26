@@ -182,9 +182,9 @@ public class UserDAO {
 					+ "FROM user AS U JOIN stage AS S " + "ON U.idUser = S.idSupervisor "
 							+ "WHERE S.rateWorkCompleted < 100";
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
-					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper"
+					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask "
-					+ "WHERE TD.workCompleted = 'True'";
+					+ "WHERE TD.workCompleted LIKE 'False'";
 
 			try {
 				statement = currentConn.createStatement();
@@ -263,7 +263,7 @@ public class UserDAO {
 			final String getActiveTasks = "SELECT U.idUser AS IdUser, TD.idTask AS IdTask, T.startDay AS StartDay, T.finishDay AS FinishDay "
 					+ "FROM user AS U JOIN taskdevelopment AS TD ON U.idUser = TD.idDeveloper "
 					+ "JOIN task AS T ON TD.idTask = T.idTask "
-					+ "WHERE TD.workCompleted = 'True'";
+					+ "WHERE TD.workCompleted LIKE 'False'";
 
 			try {
 				statement = currentConn.createStatement();

@@ -37,7 +37,6 @@ public class AddProjectServlet extends HttpServlet {
 		String clientName = request.getParameter("client-name");
 		String clientMail = request.getParameter("client-mail");
 		String subjectAreas = request.getParameter("subject-areas");
-		int estimatedDuration = Integer.parseInt(request.getParameter("estimated-duration"));
 		double estimatedCosts = Double.parseDouble(request.getParameter("estimated-costs"));
 		String deadline = request.getParameter("deadline"); // yyyy-MM-dd
 		String start = request.getParameter("start"); // yyyy-MM-dd
@@ -49,7 +48,6 @@ public class AddProjectServlet extends HttpServlet {
 		project.setRequirements(requirements);
 		project.setSubjectAreas(subjectAreas);
 		project.setEstimatedCosts(estimatedCosts);
-		project.setEstimatedDuration(estimatedDuration);
 		project.setStart(start);
 		project.setDeadline(deadline);
 		project.setIdProjectManager(idProjectManager);

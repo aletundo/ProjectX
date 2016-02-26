@@ -292,7 +292,7 @@ public class TaskDAO {
 				statement.setInt(2, workTask.getIdTask());
 				rs = statement.executeQuery();
 				while (rs.next()) {
-					hourWork = rs.getInt("HoursRequired");
+					hourWork = rs.getLong("HoursRequired");
 					System.out.println("ore Task: " + hourWork);
 				}
 			} catch (SQLException e) {

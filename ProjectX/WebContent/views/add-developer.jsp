@@ -14,7 +14,7 @@
 			<br> Hours to be assigned:&nbsp;&nbsp;<span class="badge">${requestScope.taskHoursRequired }</span>
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="./add-developer?idStage=${param.idStage}&idTask=${param.idTask}&startDay=${param.startDay}&finishDay=${param.finishDay}"
+				action="./adddeveloper?idStage=${param.idStage}&idTask=${param.idTask}&startDay=${param.startDay}&finishDay=${param.finishDay}"
 				method="POST" role="form" autocomplete="off">
 				<c:choose>
 					<c:when test="${requestScope.outsourcing == 'True' }">
@@ -50,6 +50,7 @@
 					</div>
 				</div>
 				<br>
+				<input type="hidden" value="${requestScope.taskHoursRequired }" name="task-hours-required"/>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">
 						<i class="fa fa-arrow-right"></i> Continue

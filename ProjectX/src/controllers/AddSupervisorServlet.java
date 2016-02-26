@@ -63,9 +63,13 @@ public class AddSupervisorServlet extends HttpServlet {
 			if(request.getParameter("company-name") != null){
 				String companyName = request.getParameter("company-name");
 				String companyMail = request.getParameter("company-mail");
+				idSupervisor = (Integer) request.getSession().getAttribute("idUser");
+				stage.setIdSupervisor(idSupervisor);
 				stage.setOutsourcing("True");
-				stage.setCompanyName(companyName);
-				stage.setCompanyMail(companyMail);
+				//TODO SEND THE MAIL TO THE OUTSOURCER
+				
+				//stage.setCompanyName(companyName);
+				//stage.setCompanyMail(companyMail);
 			}else{
 				idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
 				stage.setOutsourcing("False");

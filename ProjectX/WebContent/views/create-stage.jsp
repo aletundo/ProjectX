@@ -43,13 +43,6 @@
 						class="form-control" type="text"
 						placeholder="Insert the finish day (yyyy-MM-dd)" name="finish-day" />
 				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Estimated duration</span> <input
-						type="text" class="form-control"
-						placeholder="Insert the estimated duration (weeks)"
-						name="estimated-duration" />
-				</div>
 				<br> <br>
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">

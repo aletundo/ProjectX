@@ -41,7 +41,6 @@ public class AddStagesServlet extends HttpServlet {
 		String requirements = request.getParameter("requirements");
 		String startDay = request.getParameter("start-day");
 		String finishDay = request.getParameter("finish-day");
-		int estimatedDuration = Integer.parseInt(request.getParameter("estimated-duration"));
 
 		// Set the bean
 		stage.setName(name);
@@ -49,7 +48,6 @@ public class AddStagesServlet extends HttpServlet {
 		stage.setRequirements(requirements);
 		stage.setStartDay(startDay);
 		stage.setFinishDay(finishDay);
-		stage.setEstimatedDuration(estimatedDuration);
 		stage.setIdProject(idProject);
 
 		int idStage = StageDAO.getInstance().createStage(stage);

@@ -13,7 +13,6 @@ public class ProjectBean {
 	private String start;
 	private double estimatedCosts;
 	private String deadline;
-	private int estimatedDuration;
 	private String pmName;
 	private String clientName;
 	private float rateWorkCompleted;
@@ -118,14 +117,6 @@ public ProjectBean(){
 		this.deadline = deadline;
 	}
 
-	public int getEstimatedDuration() {
-		return estimatedDuration;
-	}
-
-	public void setEstimatedDuration(int estimatedDuration) {
-		this.estimatedDuration = estimatedDuration;
-	}
-
 	public String getStart() {
 		return start;
 	}
@@ -134,20 +125,20 @@ public ProjectBean(){
 		this.start = start;
 	}
 
-	@Override
-	public String toString() {
-		return "ProjectBean [idProject=" + idProject + ", name=" + name + ", idProjectManager=" + idProjectManager
-				+ ", budget=" + budget + ", idClient=" + idClient + ", goals=" + goals + ", requirements="
-				+ requirements + ", subjectAreas=" + subjectAreas + ", start=" + start + ", estimatedCosts="
-				+ estimatedCosts + ", deadline=" + deadline + ", estimatedDuration=" + estimatedDuration + ", pmName="
-				+ pmName + ", clientName=" + clientName + "]";
-	}
-
 	public float getRateWorkCompleted() {
 		return rateWorkCompleted;
 	}
 
 	public void setRateWorkCompleted(float rateWorkCompleted) {
 		this.rateWorkCompleted = rateWorkCompleted;
+	}
+
+	@Override
+	public String toString() {
+		return "ProjectBean [idProject=" + idProject + ", name=" + name + ", idProjectManager=" + idProjectManager
+				+ ", budget=" + budget + ", idClient=" + idClient + ", goals=" + goals + ", requirements="
+				+ requirements + ", subjectAreas=" + subjectAreas + ", start=" + start + ", estimatedCosts="
+				+ estimatedCosts + ", deadline=" + deadline + ", pmName=" + pmName + ", clientName=" + clientName
+				+ ", rateWorkCompleted=" + rateWorkCompleted + "]";
 	}
 }

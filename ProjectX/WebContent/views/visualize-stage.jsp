@@ -18,8 +18,8 @@
 					</h3>
 					<a class="btn btn-success btn-sm pull-right"
 						href="./addtask?idStage=${requestScope.stage.idStage }"><i
-						class="fa fa-plus"></i>&nbsp;Add tasks</a>
-					<a class="btn btn-danger btn-sm pull-right"
+						class="fa fa-plus"></i>&nbsp;Add tasks</a> <a
+						class="btn btn-danger btn-sm pull-right"
 						href="./editstage?idStage=${requestScope.stage.idStage }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a> <a
 						class="btn btn-info btn-sm pull-right"
@@ -37,23 +37,13 @@
 						<c:out value="${requestScope.stage.supervisorFullname }"></c:out>
 					</p>
 					<div class="progress">
-						<c:choose>
-							<c:when test="${requestScope.stage.rateWorkCompleted } >= 99">
-								<div
-									class="progress-bar progress-bar-success progress-bar-striped"
-									role="progressbar" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100" style="width: 100%">100% Complete</div>
-							</c:when>
-							<c:otherwise>
-								<div
-									class="progress-bar progress-bar-success progress-bar-striped"
-									role="progressbar"
-									aria-valuenow="${requestScope.stage.rateWorkCompleted }"
-									aria-valuemin="0" aria-valuemax="100"
-									style="width: ${requestScope.stage.rateWorkCompleted }%">${requestScope.stage.rateWorkCompleted }%
-									Complete</div>
-							</c:otherwise>
-						</c:choose>
+						<div
+							class="progress-bar progress-bar-success progress-bar-striped"
+							role="progressbar"
+							aria-valuenow="${requestScope.stage.rateWorkCompleted }"
+							aria-valuemin="0" aria-valuemax="100"
+							style="width: ${requestScope.stage.rateWorkCompleted }%">${requestScope.stage.rateWorkCompleted }%
+							Complete</div>
 					</div>
 				</div>
 
