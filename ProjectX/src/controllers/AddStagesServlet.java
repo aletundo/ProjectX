@@ -20,40 +20,49 @@ public class AddStagesServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
+		try {
+			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
 
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
-		dispatcher.forward(request, response);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-			return;
+		try {
+			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+				return;
 
-		StageBean stage = new StageBean();
-		// Get parameters
-		int idProject = Integer.parseInt(request.getParameter("idProject")); //From URL
-		String name = request.getParameter("name");
-		String goals = request.getParameter("goals");
-		String requirements = request.getParameter("requirements");
-		String startDay = request.getParameter("start-day");
-		String finishDay = request.getParameter("finish-day");
+			StageBean stage = new StageBean();
+			// Get parameters
+			int idProject = Integer.parseInt(request.getParameter("idProject")); // From
+																					// URL
+			String name = request.getParameter("name");
+			String goals = request.getParameter("goals");
+			String requirements = request.getParameter("requirements");
+			String startDay = request.getParameter("start-day");
+			String finishDay = request.getParameter("finish-day");
 
-		// Set the bean
-		stage.setName(name);
-		stage.setGoals(goals);
-		stage.setRequirements(requirements);
-		stage.setStartDay(startDay);
-		stage.setFinishDay(finishDay);
-		stage.setIdProject(idProject);
+			// Set the bean
+			stage.setName(name);
+			stage.setGoals(goals);
+			stage.setRequirements(requirements);
+			stage.setStartDay(startDay);
+			stage.setFinishDay(finishDay);
+			stage.setIdProject(idProject);
 
-		int idStage = StageDAO.getInstance().createStage(stage);
+			int idStage = StageDAO.getInstance().createStage(stage);
 
-		if (idStage != 0)
-			response.sendRedirect(request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage="
-					+ idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
+			if (idStage != 0)
+				response.sendRedirect(request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage="
+						+ idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
+		} catch (Exception e) {
+			/* TODO LOGGER */
+		}
 	}
 }
