@@ -306,6 +306,7 @@ public class StageDAO {
 	public int createStage(StageBean stage) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
+		int idStage = Integer.MIN_VALUE;
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
@@ -324,7 +325,7 @@ public class StageDAO {
 				statement.executeUpdate();
 				rs = statement.getGeneratedKeys();
 				while (rs.next())
-					stage.setIdStage(rs.getInt(1));
+					idStage = rs.getInt(1);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -334,7 +335,7 @@ public class StageDAO {
 			}
 		}
 
-		return stage.getIdStage();
+		return idStage;
 	}
 
 }

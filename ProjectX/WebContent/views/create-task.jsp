@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
@@ -17,20 +18,23 @@
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
-						class="form-control" placeholder="Insert the name" name="name" />
+						class="form-control" placeholder="Insert the name" name="name"  value="${fn:escapeXml(param.name)}" required />
 				</div>
+				<span class="help-block">${messages.name}</span> <br>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Start day</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the start day (yyyy-MM-dd)" name="start-day" />
+						placeholder="Insert the start day (yyyy-MM-dd)" name="startday"  value="${fn:escapeXml(param.startday)}" required />
 				</div>
+				<span class="help-block">${messages.startday}</span> <br>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Finish day</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the finish day (yyyy-MM-dd)" name="finish-day" />
+						placeholder="Insert the finish day (yyyy-MM-dd)" name="finishday"  value="${fn:escapeXml(param.finishday)}" required />
 				</div>
+				<span class="help-block">${messages.finishday}</span> <br>
 				<br>
 				<input type="hidden" value="${param.idTask}" name="id-task"/>
 				

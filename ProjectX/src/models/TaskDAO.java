@@ -271,6 +271,7 @@ public class TaskDAO {
 	public int createTask(TaskBean task) {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
+		int idTask = Integer.MIN_VALUE;
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
@@ -286,7 +287,7 @@ public class TaskDAO {
 				statement.executeUpdate();
 				rs = statement.getGeneratedKeys();
 				while (rs.next())
-					task.setIdTask(rs.getInt(1));
+					idTask = rs.getInt(1);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -296,7 +297,7 @@ public class TaskDAO {
 			}
 		}
 
-		return task.getIdTask();
+		return idTask;
 	}
 
 	public long getTaskHourRequested(Map.Entry<Integer, List<Object>> pair, long hourWork, TaskBean workTask) {

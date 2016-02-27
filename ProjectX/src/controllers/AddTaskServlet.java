@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureStageStrategy;
 import models.TaskBean;
 import models.TaskDAO;
@@ -39,12 +42,23 @@ public class AddTaskServlet extends HttpServlet {
 		try {
 			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 				return;
+			
+			Map<String, String> messages = new HashMap<String, String>();
+
+			request.setAttribute("messages", messages);
+
+			if (!checkParameters(request, messages)) {
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
+			
 			TaskBean task = new TaskBean();
 			// Get parameters
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
 			String name = request.getParameter("name");
-			String startDay = request.getParameter("start-day");
-			String finishDay = request.getParameter("finish-day");
+			String startDay = request.getParameter("startday");
+			String finishDay = request.getParameter("finishday");
 
 			// Set the bean
 			task.setIdStage(idStage);
@@ -54,12 +68,37 @@ public class AddTaskServlet extends HttpServlet {
 
 			int idTask = TaskDAO.getInstance().createTask(task);
 
-			if (idTask != 0)
+			if (idTask != Integer.MIN_VALUE)
 				response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
 						+ idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
 
 		} catch (Exception e) {
 			/* TODO LOGGER */
 		}
+	}
+	
+	private boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+
+		String name = request.getParameter("name");
+		String finishDay = request.getParameter("finishday");
+		String startDay = request.getParameter("startday");
+
+		if (name == null || name.trim().isEmpty()) {
+			messages.put("name", "Please, insert a valid name.");
+			return false;
+		}
+
+		if (startDay == null || startDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(startDay)) {
+
+			messages.put("startday", "Please, insert a valid one.");
+			return false;
+		}
+
+		if (finishDay == null || finishDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(finishDay)) {
+			messages.put("finishday", "Please, insert a valid one.");
+			return false;
+		}
+
+		return true;
 	}
 }
