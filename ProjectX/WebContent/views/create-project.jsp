@@ -20,7 +20,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
 						class="form-control" placeholder="Insert the name" name="name"
-						value="${fn:escapeXml(param.name)}" />
+						value="${fn:escapeXml(param.name)}" required/>
 				</div>
 				<span class="help-block">${messages.name}</span> <br>
 

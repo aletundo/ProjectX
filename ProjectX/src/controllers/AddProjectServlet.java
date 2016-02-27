@@ -3,8 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureProjectStrategy;
 import models.ClientBean;
 import models.ClientDAO;
@@ -26,25 +25,24 @@ public class AddProjectServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-        
+
 		if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
 			return;
-		
-		Map<String, String> messages = new HashMap<String, String>();
-		
-        request.setAttribute("messages", messages);
 
-		if(!checkParameters(request, messages))
-		{
+		Map<String, String> messages = new HashMap<String, String>();
+
+		request.setAttribute("messages", messages);
+
+		if (!checkParameters(request, messages)) {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
-		
+
 		ProjectBean project = new ProjectBean();
 		ClientBean client = new ClientBean();
 		Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
-			
+
 		String name = request.getParameter("name");
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");
@@ -92,7 +90,7 @@ public class AddProjectServlet extends HttpServlet {
 	}
 
 	private boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
-		
+
 		String name = request.getParameter("name");
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");
@@ -104,75 +102,59 @@ public class AddProjectServlet extends HttpServlet {
 		Double budget = Double.parseDouble(request.getParameter("budget"));
 		Double estimatedCosts = Double.parseDouble(request.getParameter("estimatedcosts"));
 
-		if (name == null || name.trim().isEmpty())
-		{
+		if (name == null || name.trim().isEmpty()) {
 			messages.put("name", "Please, insert a valid name.");
 			return false;
 		}
 
-		if (goals == null || goals.trim().isEmpty())
-		{
+		if (goals == null || goals.trim().isEmpty()) {
 			messages.put("goals", "Please, insert goals.");
 			return false;
 		}
 
-		if (requirements == null || requirements.trim().isEmpty())
-		{
+		if (requirements == null || requirements.trim().isEmpty()) {
 			messages.put("requirements", "Please, insert requirements.");
 			return false;
 		}
-
-		if (clientName == null || clientName.trim().isEmpty())
-		{
-			messages.put("clientname", "Please, insert the client.");
-			return false;
-		}
-
-		if (clientMail == null || clientMail.trim().isEmpty() || !isValidMail(clientMail))
-		{
-			messages.put("clientmail", "Please, insert a valid mail.");
-			return false;
-		}
-
-		if (subjectAreas == null || subjectAreas.trim().isEmpty())
-		{
-			messages.put("subjectareas", "Please, insert a valid one.");
-			return false;
-		}
-
-		if (deadline == null || deadline.trim().isEmpty())
-		{
-			messages.put("deadline", "Please, insert a valid one.");
-			return false;
-		}
-
-		if (start == null || start.trim().isEmpty())
-		{
-			messages.put("start", "Please, insert a valid one.");
-			return false;
-		}
 		
-		if (budget.isNaN())
-		{
+		if (budget.isNaN()) {
 			messages.put("budget", "Please, insert a valid budget.");
 			return false;
 		}
-		
-		if (estimatedCosts.isNaN())
-		{
+
+		if (estimatedCosts.isNaN()) {
 			messages.put("estimatedcosts", "Please, insert valid costs.");
 			return false;
 		}
 
+		if (clientName == null || clientName.trim().isEmpty()) {
+			messages.put("clientname", "Please, insert the client.");
+			return false;
+		}
+
+		if (clientMail == null || clientMail.trim().isEmpty() || !UtilityFunctions.isValidMail(clientMail)) {
+			messages.put("clientmail", "Please, insert a valid mail.");
+			return false;
+		}
+
+		
+		if (start == null || start.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(start)) {
+
+			messages.put("start", "Please, insert a valid one.");
+			return false;
+		}
+
+		if (deadline == null || deadline.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(deadline)) {
+			messages.put("deadline", "Please, insert a valid one.");
+			return false;
+		}
+		
+		if (subjectAreas == null || subjectAreas.trim().isEmpty()) {
+			messages.put("subjectareas", "Please, insert a valid one.");
+			return false;
+		}
+
 		return true;
-	}
-
-	private static boolean isValidMail(String email) {
-		final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-				Pattern.CASE_INSENSITIVE);
-
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
-		return matcher.find();
 	}
 
 }
