@@ -29,10 +29,6 @@ public class CalculateAvailableUsers {
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
 
-	private CalculateAvailableUsers() {
-
-	}
-
 	// calculate the available users for a new TASK
 	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
 

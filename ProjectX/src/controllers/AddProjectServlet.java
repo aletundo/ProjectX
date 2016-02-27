@@ -26,32 +26,35 @@ public class AddProjectServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+        
 		if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
 			return;
-
-		ProjectBean project = new ProjectBean();
-		ClientBean client = new ClientBean();
+		
 		Map<String, String> messages = new HashMap<String, String>();
+		
         request.setAttribute("messages", messages);
-		Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
 
 		if(!checkParameters(request, messages))
 		{
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
 			dispatcher.forward(request, response);
+			return;
 		}
-			
+		
+		ProjectBean project = new ProjectBean();
+		ClientBean client = new ClientBean();
+		Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
 			
 		String name = request.getParameter("name");
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");
-		String clientName = request.getParameter("client-name");
-		String clientMail = request.getParameter("client-mail");
-		String subjectAreas = request.getParameter("subject-areas");
+		String clientName = request.getParameter("clientname");
+		String clientMail = request.getParameter("clientmail");
+		String subjectAreas = request.getParameter("subjectareas");
 		String deadline = request.getParameter("deadline"); // yyyy-MM-dd
 		String start = request.getParameter("start"); // yyyy-MM-dd
 		double budget = Double.parseDouble(request.getParameter("budget"));
-		double estimatedCosts = Double.parseDouble(request.getParameter("estimated-costs"));
+		double estimatedCosts = Double.parseDouble(request.getParameter("estimatedcosts"));
 
 		project.setName(name);
 		project.setBudget(budget);
@@ -93,53 +96,53 @@ public class AddProjectServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");
-		String clientName = request.getParameter("client-name");
-		String clientMail = request.getParameter("client-mail");
-		String subjectAreas = request.getParameter("subject-areas");
+		String clientName = request.getParameter("clientname");
+		String clientMail = request.getParameter("clientmail");
+		String subjectAreas = request.getParameter("subjectareas");
 		String deadline = request.getParameter("deadline"); // yyyy-MM-dd
 		String start = request.getParameter("start"); // yyyy-MM-dd
 		Double budget = Double.parseDouble(request.getParameter("budget"));
-		Double estimatedCosts = Double.parseDouble(request.getParameter("estimated-costs"));
+		Double estimatedCosts = Double.parseDouble(request.getParameter("estimatedcosts"));
 
 		if (name == null || name.trim().isEmpty())
 		{
-			messages.put("name", "Please, insert a valid one.");
+			messages.put("name", "Please, insert a valid name.");
 			return false;
 		}
 
 		if (goals == null || goals.trim().isEmpty())
 		{
-			messages.put("goals", "Please, insert a valid one.");
+			messages.put("goals", "Please, insert goals.");
 			return false;
 		}
 
 		if (requirements == null || requirements.trim().isEmpty())
 		{
-			messages.put("requirements", "Please, insert a valid one.");
+			messages.put("requirements", "Please, insert requirements.");
 			return false;
 		}
 
 		if (clientName == null || clientName.trim().isEmpty())
 		{
-			messages.put("client-name", "Please, insert a valid one.");
+			messages.put("clientname", "Please, insert the client.");
 			return false;
 		}
 
 		if (clientMail == null || clientMail.trim().isEmpty() || !isValidMail(clientMail))
 		{
-			messages.put("client-mail", "Please, insert a valid one.");
+			messages.put("clientmail", "Please, insert a valid mail.");
 			return false;
 		}
 
 		if (subjectAreas == null || subjectAreas.trim().isEmpty())
 		{
-			messages.put("subjectAreas", "Please, insert a valid one.");
+			messages.put("subjectareas", "Please, insert a valid one.");
 			return false;
 		}
 
 		if (deadline == null || deadline.trim().isEmpty())
 		{
-			messages.put("deadlin", "Please, insert a valid one.");
+			messages.put("deadline", "Please, insert a valid one.");
 			return false;
 		}
 
@@ -151,13 +154,13 @@ public class AddProjectServlet extends HttpServlet {
 		
 		if (budget.isNaN())
 		{
-			messages.put("budget", "Please, insert a valid one.");
+			messages.put("budget", "Please, insert a valid budget.");
 			return false;
 		}
 		
 		if (estimatedCosts.isNaN())
 		{
-			messages.put("estimated-costs", "Please, insert a valid one.");
+			messages.put("estimatedcosts", "Please, insert valid costs.");
 			return false;
 		}
 
