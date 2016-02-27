@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.StageBean;
+import models.StageDAO;
 
 public class CriticalPath {
 
@@ -23,13 +24,15 @@ public class CriticalPath {
 
 	private static List<StageBean> criticalStages = new ArrayList<>();
 
-	public static List<StageBean> computeCriticalStages(Map<StageBean, List<StageBean>> mapPrecedences) {
+	public static List<StageBean> computeCriticalStages(int idProject) {
+		Map<StageBean, List<StageBean>> mapPrecedences = StageDAO.getInstance().getPrecedences(idProject);
+		System.out.println(mapPrecedences);
 		setLastCritical(mapPrecedences);
 		while (!mapPrecedences.isEmpty()) {
 			List<StageBean> toRemove = new ArrayList<>();
 			for (Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()) {
 				System.out.println(pair);
-				if (pair.getValue() == null) {
+				if (pair.getValue().isEmpty()) {
 					System.out.println("non ho precedenti");
 					mapES.put(pair.getKey().getIdStage(), 0);
 					toRemove.add(pair.getKey());
@@ -60,6 +63,7 @@ public class CriticalPath {
 		for (Map.Entry<StageBean, List<StageBean>> pairKey : mapPrecedences.entrySet()) {
 			boolean b = true;
 			for (Map.Entry<StageBean, List<StageBean>> pairValue : mapPrecedences.entrySet()) {
+				System.out.println(pairValue.getValue());
 				if (pairValue.getValue() != null && pairValue.getValue().contains(pairKey.getKey())) {
 					b = false;
 				}

@@ -15,7 +15,7 @@ public class CriticalPathMethodTest {
 	@Test
 	public void CriticalPath() throws ParseException {
 		Map<StageBean, List<StageBean>> map = new HashMap<>();
-		List<StageBean> precedencesA = null;
+		List<StageBean> precedencesA = new ArrayList<>();
 		List<StageBean> precedencesB = new ArrayList<>();
 		List<StageBean> precedencesC = new ArrayList<>();
 		List<StageBean> precedencesD = new ArrayList<>();
@@ -50,7 +50,7 @@ public class CriticalPathMethodTest {
 		map.put(c, precedencesC);
 		map.put(d, precedencesD);
 
-		List<StageBean> criticalStages = CriticalPath.computeCriticalStages(map);
+		List<StageBean> criticalStages = CriticalPath.computeCriticalStages(67);
 
 		for (StageBean critical : criticalStages) {
 
