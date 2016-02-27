@@ -21,7 +21,7 @@ public class CriticalPath {
 
 	private static Map<Integer, Integer> mapES = new HashMap<>();
 
-	private static List<StageBean> criticalTasks = new ArrayList<>();
+	private static List<StageBean> criticalStages = new ArrayList<>();
 
 	public static List<StageBean> computeCriticalStages(Map<StageBean, List<StageBean>> mapPrecedences) {
 		setLastCritical(mapPrecedences);
@@ -53,7 +53,7 @@ public class CriticalPath {
 		for (Map.Entry<Integer, Integer> p : mapES.entrySet()) {
 			System.out.println("mapES " + p.getValue());
 		}
-		return criticalTasks;
+		return criticalStages;
 	}
 
 	public static void setLastCritical(Map<StageBean, List<StageBean>> mapPrecedences) {
@@ -66,7 +66,7 @@ public class CriticalPath {
 			}
 			System.out.println(b);
 			if (b) {
-				criticalTasks.add(pairKey.getKey());
+				criticalStages.add(pairKey.getKey());
 			}
 		}
 	}
@@ -89,7 +89,7 @@ public class CriticalPath {
 		System.out.println(precedences);
 		for (StageBean precedence : precedences) {
 			System.out.println("sono nel for");
-			long duration = 8 * CalculateAvailableUsers.getDifferenceDays(format.parse(precedence.getStartDay()),
+			long duration = 8 * UtilityFunctions.getDifferenceDays(format.parse(precedence.getStartDay()),
 					format.parse(precedence.getFinishDay()));
 			long ES = mapES.get(precedence.getIdStage());
 			result = ES + duration;
@@ -103,8 +103,8 @@ public class CriticalPath {
 		}
 
 		for (int i = 0; i < results.size(); ++i) {
-			if (results.get(i) == max && !criticalTasks.contains(precedences.get(i))) {
-				criticalTasks.add(precedences.get(i));
+			if (results.get(i) == max && !criticalStages.contains(precedences.get(i))) {
+				criticalStages.add(precedences.get(i));
 			}
 		}
 		return max;
