@@ -41,7 +41,7 @@ public class SchedulerEventsThread implements Runnable {
 		long dataCritica;
 		for (StageBean stage : stages) {
 			try {
-				dataCritica = getDifferenceDays(format.parse(stage.getFinishDay()), format.parse(GetCurrentDateTime()));
+				dataCritica = UtilityFunctions.getDifferenceDays(format.parse(stage.getFinishDay()), format.parse(GetCurrentDateTime()));
 				System.out.println(dataCritica);
 				/* STAGE NON CRITICO IN RITARDO */
 				if (dataCritica < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())) {
@@ -93,15 +93,4 @@ public class SchedulerEventsThread implements Runnable {
 		System.out.println(dateStr);
 		return dateStr;
 	}
-
-	/* TODO si può togliere? */
-	public static long getDifferenceDays(Date d1, Date d2) {
-		long diff = d2.getTime() - d1.getTime();
-		long diff2 = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-		if (diff2 == 0) {
-			return diff2;
-		}
-		return 1 + diff2;
-	}
-
 }
