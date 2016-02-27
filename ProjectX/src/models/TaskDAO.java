@@ -82,7 +82,7 @@ public class TaskDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getTaskInfoQuery = "SELECT T.idTask AS IdTask, T.name AS Name, "
+			final String getTaskInfoQuery = "SELECT T.idTask AS IdTask, T.idStage As IdStage, T.name AS Name, "
 					+ "T.startDay AS StartDay, T.finishDay AS FinishDay, T.completed AS Completed "
 					+ "FROM task AS T WHERE T.idTask = ?";
 			try {
@@ -92,6 +92,7 @@ public class TaskDAO {
 
 				while (rs.next()) {
 					task.setIdTask(rs.getInt("IdTask"));
+					task.setIdStage(rs.getInt("idStage"));
 					task.setName(rs.getString("Name"));
 					task.setStartDay(rs.getString("StartDay"));
 					task.setFinishDay(rs.getString("FinishDay"));

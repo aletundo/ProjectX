@@ -7,7 +7,7 @@
 		<p class="pull-right">
 			<a href="#projects-panel"><button type="button"
 					class="btn btn-link">
-					<span class="glyphicon glyphicon-chevron-up"></span> Back to top
+					<span class="fa fa-chevron-up"></span> Back to top
 				</button></a>
 		</p>
 		<p>&copy; Eng.com - ProjectX</p>

@@ -14,6 +14,9 @@
 			<div id="projects-panel" class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">
+						<a href="./project?idProject=${requestScope.stage.idStage }">
+							<i class="fa fa-arrow-left"></i>
+						</a>&nbsp;&nbsp;&nbsp;
 						<c:out value="${requestScope.stage.name }"></c:out>
 					</h3>
 					<a class="btn btn-success btn-sm pull-right"

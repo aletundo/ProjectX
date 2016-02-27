@@ -14,7 +14,9 @@
 			<div id="projects-panel" class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						<i class="fa fa-tag"></i>&nbsp;
+						<a href="./stage?idStage=${requestScope.task.idStage }">
+							<i class="fa fa-arrow-left"></i>
+						</a>&nbsp;&nbsp;&nbsp;
 						<c:out value="${requestScope.task.name }"></c:out>
 					</h3>
 					<a class="btn btn-danger btn-sm pull-right"

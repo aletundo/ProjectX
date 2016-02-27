@@ -158,7 +158,7 @@ public class StageDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getProjectInfoQuery = "SELECT S.idStage as IdStage, S.name AS StageName, S.startDay AS StartDay, "
+			final String getProjectInfoQuery = "SELECT S.idStage as IdStage, S.idProject AS IdProject, S.name AS StageName, S.startDay AS StartDay, "
 					+ "S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS SupervisorFullname "
 					+ "FROM stage AS S JOIN user AS U ON S.idSupervisor = U.idUser  WHERE S.idStage = ?";
 			try {
@@ -167,7 +167,8 @@ public class StageDAO {
 
 				rs = statement.executeQuery();
 				while (rs.next()) {
-					stageInfo.setIdStage(Integer.parseInt(rs.getString("IdStage")));
+					stageInfo.setIdStage(rs.getInt("IdStage"));
+					stageInfo.setIdProject(rs.getInt("IdProject"));
 					stageInfo.setName(rs.getString("StageName"));
 					stageInfo.setStartDay(rs.getString("StartDay"));
 					stageInfo.setFinishDay(rs.getString("FinishDay"));
