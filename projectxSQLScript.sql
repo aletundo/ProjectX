@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `projectx` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `projectx`;
--- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: localhost    Database: projectx
 -- ------------------------------------------------------
--- Server version	5.5.46-0+deb8u1
+-- Server version	5.7.9
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -126,6 +124,7 @@ CREATE TABLE `stage` (
   `outsourcing` enum('False','True') DEFAULT 'False',
   `rateWorkCompleted` float DEFAULT '0',
   `relativeWeight` float DEFAULT '0',
+  `critical` enum('True','False') DEFAULT 'False',
   PRIMARY KEY (`idStage`),
   KEY `fk_Stage_Project_idx` (`idProject`),
   KEY `SupervisorStage_idx` (`idSupervisor`),
@@ -140,7 +139,7 @@ CREATE TABLE `stage` (
 
 LOCK TABLES `stage` WRITE;
 /*!40000 ALTER TABLE `stage` DISABLE KEYS */;
-INSERT INTO `stage` VALUES (55,'Requirements Analysis','2016-01-01','2016-01-07',12,60,'Requirements table','The project requirements by the client','False',50,NULL),(56,'Domain Model','2016-01-08','2016-01-15',11,60,'The domain model diagram','Requirements analysis','False',0,NULL),(57,'Stageee','2016-02-01','2016-03-01',14,61,'djjd','djjdj','False',0,NULL),(58,'stagerrr','2016-03-02','2016-03-20',11,61,'erthygdf','ertghy','False',0,NULL),(59,'Stage2','2016-01-04','2016-01-31',15,60,'hdhdhd','hdhdhd','False',0,NULL),(60,'Stage3','2016-01-31','2016-02-28',14,60,'hdhdh','eehhe','False',0,NULL),(61,'Analisi dei requisiti','2016-01-01','2016-01-15',14,62,'tabella dei requisiti, casi d\'uso','testo progetto','False',0,0),(62,'Modello di dominio','2016-01-15','2016-01-31',13,62,'diagramma del modello di dominio','casi d\'uso','False',0,0),(63,'Diagrammi SSD','2016-02-01','2016-02-15',12,62,'diagrammi ssd','modello di dominio, contratti delle operazioni','False',0,0),(64,'Faccio la spesa','2016-09-01','2016-09-15',11,63,'spesa','niente','False',0,33.3333),(65,'Calo la pasta','2016-09-16','2016-09-30',15,63,'pasta cotta','spesa, acqua sul fuoco','False',0,33.3333),(66,'Cucino l\'uovo','2016-10-01','2016-10-15',15,63,'uovo cotto','pasta nell\'acqua','False',0,33.3333),(67,'Dipo','2016-03-01','2016-03-30',9,60,'fhhf','fhhfhf','True',0,0),(68,'stage233234','2016-05-01','2016-05-30',14,64,'stage242jjdhfhd','dhhdhdhd','False',0,66.6667),(69,'Stageg48474','2016-06-01','2016-06-15',13,64,'dhfhkjdfhjk','fhjhddj','False',0,33.3333),(70,'Provaupdate1','2017-01-01','2017-01-10',10,65,'jdd','qhfhfh','False',100,29.4118),(71,'Provastageupdate2','2017-01-08','2017-01-31',16,65,'jdd','djjjdsjds','False',100,70.5882);
+INSERT INTO `stage` VALUES (55,'Requirements Analysis','2016-01-01','2016-01-07',12,60,'Requirements table','The project requirements by the client','False',50,NULL,'False'),(56,'Domain Model','2016-01-08','2016-01-15',11,60,'The domain model diagram','Requirements analysis','False',0,NULL,'False'),(57,'Stageee','2016-02-01','2016-03-01',14,61,'djjd','djjdj','False',0,NULL,'False'),(58,'stagerrr','2016-03-02','2016-03-20',11,61,'erthygdf','ertghy','False',0,NULL,'False'),(59,'Stage2','2016-01-04','2016-01-31',15,60,'hdhdhd','hdhdhd','False',0,NULL,'False'),(60,'Stage3','2016-01-31','2016-02-28',14,60,'hdhdh','eehhe','False',0,NULL,'False'),(61,'Analisi dei requisiti','2016-01-01','2016-01-15',14,62,'tabella dei requisiti, casi d\'uso','testo progetto','False',0,0,'False'),(62,'Modello di dominio','2016-01-15','2016-01-31',13,62,'diagramma del modello di dominio','casi d\'uso','False',0,0,'False'),(63,'Diagrammi SSD','2016-02-01','2016-02-15',12,62,'diagrammi ssd','modello di dominio, contratti delle operazioni','False',0,0,'False'),(64,'Faccio la spesa','2016-09-01','2016-09-15',11,63,'spesa','niente','False',0,33.3333,'False'),(65,'Calo la pasta','2016-09-16','2016-09-30',15,63,'pasta cotta','spesa, acqua sul fuoco','False',0,33.3333,'False'),(66,'Cucino l\'uovo','2016-10-01','2016-10-15',15,63,'uovo cotto','pasta nell\'acqua','False',0,33.3333,'False'),(67,'Dipo','2016-03-01','2016-03-30',9,60,'fhhf','fhhfhf','True',0,0,'False'),(68,'stage233234','2016-05-01','2016-05-30',14,64,'stage242jjdhfhd','dhhdhdhd','False',0,66.6667,'False'),(69,'Stageg48474','2016-06-01','2016-06-15',13,64,'dhfhkjdfhjk','fhjhddj','False',0,33.3333,'False'),(70,'Provaupdate1','2017-01-01','2017-01-10',10,65,'jdd','qhfhfh','False',100,29.4118,'False'),(71,'Provastageupdate2','2017-01-08','2017-01-31',16,65,'jdd','djjjdsjds','False',100,70.5882,'False');
 /*!40000 ALTER TABLE `stage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-27 10:40:05
+-- Dump completed on 2016-02-27 11:12:09

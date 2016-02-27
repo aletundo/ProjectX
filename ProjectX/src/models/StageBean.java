@@ -16,6 +16,15 @@ public class StageBean {
 	private String companyMail;
 	private float relativeWeight;
 	private float rateWorkCompleted;
+	private String critical;
+
+	public String getCritical() {
+		return critical;
+	}
+
+	public void setCritical(String critical) {
+		this.critical = critical;
+	}
 
 	public StageBean() {
 		/* Say why it's empty */

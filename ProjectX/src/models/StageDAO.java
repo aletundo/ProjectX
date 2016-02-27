@@ -194,13 +194,13 @@ public class StageDAO {
 		if (currentConn != null) {
 			final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
 					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
-					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing "
+					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
 					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
 					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
 
 			final String getStagesOutsourcedQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
 					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
-					+ "S.outsourcing AS Outsourcing FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
+					+ "S.outsourcing AS Outsourcing, S.critical AS Critical FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
 			try {
 				statement = currentConn.prepareStatement(getStagesQuery);
 				statement.setInt(1, idProject);
@@ -215,6 +215,7 @@ public class StageDAO {
 					stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stage.setSupervisorFullname(rs.getString("Supervisor"));
 					stage.setOutsourcing(rs.getString("Outsourcing"));
+					stage.setCritical(rs.getString("Critical"));
 					stages.add(stage);
 				}
 				rs.close();
@@ -231,6 +232,7 @@ public class StageDAO {
 					stage.setFinishDay(rs.getString("FinishDay"));
 					stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stage.setOutsourcing(rs.getString("Outsourcing"));
+					stage.setCritical(rs.getString("Critical"));
 					stages.add(stage);
 				}
 
