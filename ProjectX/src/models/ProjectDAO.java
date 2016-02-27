@@ -128,6 +128,34 @@ public class ProjectDAO {
 		}
 		return projectInfo;
 	}
+	
+	public boolean checkNameAlreadyExist(String name){
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		boolean exist = false;
+		Connection currentConn = DbConnection.connect();
+		
+		if(currentConn != null){
+			final String checkNameQuery = "SELECT COUNT(*) FROM project AS P WHERE P.name LIKE ?";
+			try{
+				statement = currentConn.prepareStatement(checkNameQuery);
+				statement.setString(1, name);
+				rs = statement.executeQuery();
+				rs.last(); 
+				int total = rs.getRow();
+				if(total > 0)
+					exist = true;
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				//TODO Handle with a logger
+			}finally{
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		
+		return exist;
+	}
 
 	public int addProject(ProjectBean project) {
 		PreparedStatement statement = null;

@@ -39,11 +39,19 @@ public class AddProjectServlet extends HttpServlet {
 			return;
 		}
 
+		String name = request.getParameter("name");
+		
+		if(ProjectDAO.getInstance().checkNameAlreadyExist(name)){
+			messages.put("name", "<i class='fa fa-frown-o'></i>&nbsp;Oops! Sorry, name already exist. Try another one.");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		
 		ProjectBean project = new ProjectBean();
 		ClientBean client = new ClientBean();
 		Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
-
-		String name = request.getParameter("name");
+		
 		String goals = request.getParameter("goals");
 		String requirements = request.getParameter("requirements");
 		String clientName = request.getParameter("clientname");
@@ -103,54 +111,54 @@ public class AddProjectServlet extends HttpServlet {
 		Double estimatedCosts = Double.parseDouble(request.getParameter("estimatedcosts"));
 
 		if (name == null || name.trim().isEmpty()) {
-			messages.put("name", "Please, insert a valid name.");
+			messages.put("name", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid name.");
 			return false;
 		}
 
 		if (goals == null || goals.trim().isEmpty()) {
-			messages.put("goals", "Please, insert goals.");
+			messages.put("goals", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert goals.");
 			return false;
 		}
 
 		if (requirements == null || requirements.trim().isEmpty()) {
-			messages.put("requirements", "Please, insert requirements.");
+			messages.put("requirements", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert requirements.");
 			return false;
 		}
 		
 		if (budget.isNaN()) {
-			messages.put("budget", "Please, insert a valid budget.");
+			messages.put("budget", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid budget.");
 			return false;
 		}
 
 		if (estimatedCosts.isNaN()) {
-			messages.put("estimatedcosts", "Please, insert valid costs.");
+			messages.put("estimatedcosts", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert valid costs.");
 			return false;
 		}
 
 		if (clientName == null || clientName.trim().isEmpty()) {
-			messages.put("clientname", "Please, insert the client.");
+			messages.put("clientname", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert the client.");
 			return false;
 		}
 
 		if (clientMail == null || clientMail.trim().isEmpty() || !UtilityFunctions.isValidMail(clientMail)) {
-			messages.put("clientmail", "Please, insert a valid mail.");
+			messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
 			return false;
 		}
 
 		
 		if (start == null || start.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(start)) {
 
-			messages.put("start", "Please, insert a valid one.");
+			messages.put("start", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
 			return false;
 		}
 
 		if (deadline == null || deadline.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(deadline)) {
-			messages.put("deadline", "Please, insert a valid one.");
+			messages.put("deadline", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
 			return false;
 		}
 		
 		if (subjectAreas == null || subjectAreas.trim().isEmpty()) {
-			messages.put("subjectareas", "Please, insert a valid one.");
+			messages.put("subjectareas", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
 			return false;
 		}
 
