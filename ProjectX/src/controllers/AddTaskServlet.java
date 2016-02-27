@@ -84,18 +84,18 @@ public class AddTaskServlet extends HttpServlet {
 		String startDay = request.getParameter("startday");
 
 		if (name == null || name.trim().isEmpty()) {
-			messages.put("name", "Please, insert a valid name.");
+			messages.put("name", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid name.");
 			return false;
 		}
 
 		if (startDay == null || startDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(startDay)) {
 
-			messages.put("startday", "Please, insert a valid one.");
+			messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
 			return false;
 		}
 
 		if (finishDay == null || finishDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(finishDay)) {
-			messages.put("finishday", "Please, insert a valid one.");
+			messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
 			return false;
 		}
 
