@@ -133,6 +133,7 @@ public class ProjectDAO {
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();
+		int idProject = Integer.MIN_VALUE;
 
 		if (currentConn != null) {
 			final String addProjectQuery = "INSERT INTO project (name, budget, goals, requirements, subjectAreas, "
@@ -152,7 +153,7 @@ public class ProjectDAO {
 				statement.executeUpdate();
 				rs = statement.getGeneratedKeys();
 				while (rs.next())
-					project.setIdProject(rs.getInt(1));
+					idProject = rs.getInt(1);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -161,7 +162,7 @@ public class ProjectDAO {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		return project.getIdProject();
+		return idProject;
 	}
 
 	public List<ProjectBean> getUserProjects(UserBean user) {

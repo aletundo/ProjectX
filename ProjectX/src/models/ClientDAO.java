@@ -84,12 +84,37 @@ public class ClientDAO {
 
 		return clients;
 	}
-
-	public int addClient(ClientBean client) {
-		Connection currentConn = DbConnection.connect();
+	
+	public int getClientByName(String clientName){
 		PreparedStatement statement = null;
 		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+		int idClient = Integer.MIN_VALUE;
+		if (currentConn != null) {
+			final String addClientQuery = "SELECT C.idClient AS IdClient FROM client AS C WHERE C.name LIKE ?";
+			try {
+				statement = currentConn.prepareStatement(addClientQuery, Statement.RETURN_GENERATED_KEYS);
+				statement.setString(1, clientName);
+				rs = statement.executeQuery();
+				while (rs.next())
+					idClient = rs.getInt("IdClient");
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+				// TODO Handle with a Logger
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		return idClient;
+		
+	}
 
+	public int addClient(ClientBean client) {
+	
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
 		if (currentConn != null) {
 			final String addClientQuery = "INSERT INTO client (name, mail) VALUES(?, ?)";
 			try {
@@ -107,7 +132,6 @@ public class ClientDAO {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
-		System.out.println(client.getIdClient());
 		return client.getIdClient();
 	}
 

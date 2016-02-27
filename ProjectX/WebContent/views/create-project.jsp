@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
@@ -18,7 +19,7 @@
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
-						class="form-control" placeholder="Insert the name" name="name" />
+						class="form-control" placeholder="Insert the name" name="name" required />
 				</div>
 
 				<br>
@@ -26,57 +27,57 @@
 				<div class="input-group">
 					<span class="input-group-addon">Goals</span>
 					<textarea class="form-control" placeholder="Insert the goals"
-						name="goals" rows="1"></textarea>
+						name="goals" rows="1" required></textarea>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Requirements</span>
 					<textarea class="form-control"
-						placeholder="Insert the requirements" name="requirements" rows="1"></textarea>
+						placeholder="Insert the requirements" name="requirements" rows="1" required></textarea>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Budget</span> <input type="text"
-						class="form-control" name="budget" placeholder="Insert the budget" />
+						class="form-control" name="budget" placeholder="Insert the budget" required/>
 					<span class="input-group-addon">&euro;</span>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Estimated costs</span> <input
 						type="text" class="form-control" name="estimated-costs"
-						placeholder="Insert the estimated costs" /> <span
+						placeholder="Insert the estimated costs" required/> <span
 						class="input-group-addon">&euro;</span>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Client</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the name of the client" name="client-name" />
+						placeholder="Insert the name of the client" name="client-name" required/>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Client mail</span> <input
 						class="form-control" type="text"
-						placeholder="client@domain.example" name="client-mail" />
+						placeholder="client@domain.example" name="client-mail" required/>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Start</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the start (YYYY-mm-DD)" name="start" />
+						placeholder="Insert the start (YYYY-mm-DD)" name="start" required/>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Deadline</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline" />
+						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline" required/>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Subject areas</span> <input
 						type="text" class="form-control"
 						placeholder="Insert the subjet areas (preferably splitted by a comma)"
-						name="subject-areas" />
+						name="subject-areas" required/>
 				</div>
 				<br> <br>
 				<div class="input-group pull-right">
