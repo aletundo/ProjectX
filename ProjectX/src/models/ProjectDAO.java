@@ -144,11 +144,10 @@ public class ProjectDAO {
 				statement = currentConn.prepareStatement(checkNameQuery);
 				statement.setString(1, name);
 				rs = statement.executeQuery();
-				rs.last(); 
-				int total = rs.getRow();
-				if(total > 0)
+				rs.last();
+				if(rs.getInt("COUNT(*)") > 0){
 					exist = true;
-				
+				}		
 			}catch(SQLException e){
 				LOGGER.log(Level.SEVERE,
 						"Something went wrong during checking if " + name + " project already exist", e);
