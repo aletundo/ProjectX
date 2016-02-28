@@ -1,5 +1,6 @@
 package controllers.utils;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,14 +10,36 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utils.GetWorkhoursProperties;
+
 public class UtilityFunctions {
 	
+	private UtilityFunctions(){};
+	
 	private static final Logger LOGGER = Logger.getLogger(UtilityFunctions.class.getName());
+	
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	
+	
+	public static long getHoursRequestedTask(String startDay, String finishDay) {
+		long hourRequested = 0;
+		try {
+			Integer[] propertiesValues = GetWorkhoursProperties.getInstance().getPropValues();
+			Date start = sdf.parse(startDay);
+			Date finish = sdf.parse(finishDay);
+			hourRequested = propertiesValues[0] * UtilityFunctions.getDifferenceDays(start, finish);
+
+		} catch (ParseException | IOException e) {
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
+		}
+		return hourRequested;
+	}
 	
 	public static boolean isValidDateFormat(String value) {
 		Date date = null;
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			
 			date = sdf.parse(value);
 			if (!value.equals(sdf.format(date))) {
 				return false;
@@ -67,7 +90,7 @@ public class UtilityFunctions {
 	public static String GetCurrentDateTime() {
 		/* get current date time with Calendar() */
 		Date date = new Date();
-		String dateStr = SchedulerEventsThread.format.format(date);
+		String dateStr = sdf.format(date);
 		System.out.println(dateStr);
 		return dateStr;
 	}
