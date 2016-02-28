@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import controllers.utils.CalculateAvailableUsers;
 import controllers.utils.CalculateWeights;
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureStageStrategy;
 import models.UserDAO;
 import models.TaskBean;
@@ -52,7 +53,7 @@ public class AddDeveloperServlet extends HttpServlet {
 			List<UserBean> candidatesWithInfos = UserDAO.getInstance().getUsersInfo(candidates);
 
 			if (request.getAttribute("taskHoursRequired") == null) {
-				taskHoursRequired = CalculateAvailableUsers.getHoursRequestedTask(request.getParameter("startDay"),
+				taskHoursRequired = UtilityFunctions.getHoursRequestedTask(request.getParameter("startDay"),
 						request.getParameter("finishDay"));
 			} else {
 				taskHoursRequired = (Long) (request.getAttribute("taskHoursRequired"));
