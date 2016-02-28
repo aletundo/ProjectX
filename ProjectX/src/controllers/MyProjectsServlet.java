@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,12 +18,14 @@ import models.ProjectDAO;
 import models.UserBean;
 
 @WebServlet("/myprojects")
-public class MyProjectServlet extends HttpServlet {
+public class MyProjectsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(MyProjectsServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try{
 		HttpSession session = request.getSession(false);
 		if(session == null || session.getAttribute("idUser") == null)
 		{
@@ -39,6 +43,9 @@ public class MyProjectServlet extends HttpServlet {
 			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/myprojects.jsp");
 			dispatcher.forward(request, response);
+		}
+		}catch(Exception e){
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting my projects page", e);
 		}
 
 	}

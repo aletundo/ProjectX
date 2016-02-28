@@ -3,12 +3,15 @@ package models;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import utils.DbConnection;
 
 public class ProjectDAO {
 
 	private static final ProjectDAO INSTANCE = new ProjectDAO();
+	private static final Logger LOGGER = Logger.getLogger(ProjectDAO.class.getName());
 
 	private ProjectDAO() {
 
@@ -38,8 +41,8 @@ public class ProjectDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting rate work completed of project " + idProject, e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -62,8 +65,8 @@ public class ProjectDAO {
 				statement.executeUpdate();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during setting rate work completed of project " + idProject, e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -86,9 +89,9 @@ public class ProjectDAO {
 					idProjectManager = rs.getInt("IdProjectManager");
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
-			} finally {
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting project manager of project " + idProject, e);
+			}finally{
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
 		}
@@ -120,8 +123,8 @@ public class ProjectDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting details of project " + idProject, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -147,8 +150,8 @@ public class ProjectDAO {
 					exist = true;
 				
 			}catch(SQLException e){
-				e.printStackTrace();
-				//TODO Handle with a logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during checking if " + name + " project already exist", e);
 			}finally{
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -182,10 +185,9 @@ public class ProjectDAO {
 				rs = statement.getGeneratedKeys();
 				while (rs.next())
 					idProject = rs.getInt(1);
-
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during creation of project " + project.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -224,8 +226,8 @@ public class ProjectDAO {
 				statement.executeUpdate(dropView);
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting all project which " + user.toString() + " is involved in", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -256,8 +258,8 @@ public class ProjectDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting project related to " + subjectArea, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -265,7 +267,7 @@ public class ProjectDAO {
 		return projectList;
 	}
 
-	private String buildGetProjectsQueries(String userType, int idUser) {
+	private static String buildGetProjectsQueries(String userType, int idUser) {
 		String view = "";
 		if ("ProjectManager".equals(userType)) {
 			view = "CREATE VIEW userprojects AS SELECT DISTINCT P.idProject AS idProject "

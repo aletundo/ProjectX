@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +20,7 @@ import models.UserBean;
 @WebServlet("/task")
 public class TaskDetailsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(TaskDetailsServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,7 +40,7 @@ public class TaskDetailsServlet extends HttpServlet {
 			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-task.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting task details", e);
 		}
 	}
 }

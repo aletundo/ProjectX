@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,9 +18,10 @@ import models.ProjectDAO;
 import models.StageBean;
 import models.StageDAO;
 
-@WebServlet(name = "ProjectDetailsServlet", urlPatterns = { "/project/*" })
+@WebServlet(name = "ProjectDetailsServlet", urlPatterns = { "/project" })
 public class ProjectDetailsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(ProjectDetailsServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,7 +42,7 @@ public class ProjectDetailsServlet extends HttpServlet {
 			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-project.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting project details", e);
 		}
 	}
 }

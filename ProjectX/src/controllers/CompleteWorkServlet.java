@@ -1,6 +1,9 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +18,7 @@ import models.TaskDAO;
 @WebServlet("/setworkcompleted")
 public class CompleteWorkServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(CompleteWorkServlet.class.getName());
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +37,7 @@ public class CompleteWorkServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/task?idTask=" + task.getIdTask());
 
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during setting work completed", e);
 		}
 	}
 }

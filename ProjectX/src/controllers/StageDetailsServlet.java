@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +21,7 @@ import models.TaskDAO;
 @WebServlet(name = "StageDetailsServlet", urlPatterns = { "/stage" })
 public class StageDetailsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(StageDetailsServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,7 +42,7 @@ public class StageDetailsServlet extends HttpServlet {
 			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-stage.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting stage details", e);
 		}
 	}
 }

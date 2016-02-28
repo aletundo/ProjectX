@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +21,7 @@ import models.UserDAO;
 @WebServlet(name = "OrganizeMeetingPMServlet", urlPatterns = { "/organizemeeting" })
 public class OrganizeMeetingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private static final Logger LOGGER = Logger.getLogger(OrganizeMeetingServlet.class.getName());
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -27,7 +29,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 			if (!isAuthorized(request, response))
 				return;
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during authorize to organize a meeting", e);
 		}
 
 		RequestDispatcher dispatcher;
@@ -48,7 +50,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 			}
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting organize meeting page", e);
 		}
 	}
 
@@ -58,14 +60,14 @@ public class OrganizeMeetingServlet extends HttpServlet {
 
 		String host = "localhost";
 		String port = ""; /* TODO check port */
-		final String password = ""; /* TODO check password */
+		final String pw = ""; /* TODO check password */
 		String userName = "";
 
 		try {
 			if (!isAuthorized(request, response))
 				return;
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during authorize to organize a meeting", e);
 		}
 
 		try {
@@ -78,10 +80,10 @@ public class OrganizeMeetingServlet extends HttpServlet {
 					List<String> supervisorsMail = UserDAO.getInstance()
 							.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
 					for (String mails : supervisorsMail) {
-						controllers.utils.SendEmail.sendEmail(host, port, userName, password, mails, object, message);
+						controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
 					}
-					controllers.utils.SendEmail.sendEmail(host, port, userName, password, pmMail, object, message);
-					controllers.utils.SendEmail.sendEmail(host, port, userName, password, clientMail, object, message);
+					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, pmMail, object, message);
+					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, clientMail, object, message);
 				}
 
 				/*
@@ -98,9 +100,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
 					UserDAO.getInstance()
 							.getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
 					for (String mails : developersMail) {
-						controllers.utils.SendEmail.sendEmail(host, port, userName, password, mails, object, message);
+						controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
 					}
-					controllers.utils.SendEmail.sendEmail(host, port, userName, password, supervisorMail, object,
+					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, supervisorMail, object,
 							message);
 				}
 				/*
@@ -108,7 +110,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				 */
 			}
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during organize a meeting", e);
 		}
 	}
 

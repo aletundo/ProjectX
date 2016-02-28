@@ -10,16 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import models.UserBean;
 import models.UserDAO;
 
-/**
- * Servlet implementation class SignUp
- */
 @WebServlet(name = "SignUpServlet", urlPatterns = {"/SignUp"})
 public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
     @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -38,9 +32,7 @@ public class SignUpServlet extends HttpServlet {
 		user.setType(type);
 		user.setSkills(skills);
 		user.setMail(mail);
-		
-		boolean saved = UserDAO.getInstance().signUpUser(user);
-		System.out.println("stored? " + saved);//NOPMD
+		UserDAO.getInstance().signUpUser(user);
 	}
 
 }

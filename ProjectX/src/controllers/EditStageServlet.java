@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,8 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import controllers.utils.security.SecureStageStrategy;
 
 @WebServlet("/editstage")
-public class EditStage extends HttpServlet {
+public class EditStageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(EditStageServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -25,7 +28,7 @@ public class EditStage extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-stage.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting edit stage page", e);
 		}
 	}
 
@@ -36,7 +39,7 @@ public class EditStage extends HttpServlet {
 		try {
 			doGet(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during editing project page", e);
 		}
 	}
 }
