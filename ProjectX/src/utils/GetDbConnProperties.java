@@ -4,12 +4,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GetDbConnProperties extends GetPropertiesAbstract {
 	private static final GetDbConnProperties INSTANCE = new GetDbConnProperties();
+	private static final Logger LOGGER = Logger.getLogger(GetDbConnProperties.class.getName());
 
-	public GetDbConnProperties() {
-		/* Say why it's empty */
+
+	private GetDbConnProperties() {
+		
 	}
 
 	public static GetDbConnProperties getInstance() {
@@ -44,7 +48,7 @@ public class GetDbConnProperties extends GetPropertiesAbstract {
 			properties[2] = pw;
 
 		} catch (Exception e) {
-			// TODO Handle exception
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting dbconfig properties file ", e);
 		} finally {
 			if (inputStream != null) {
 				inputStream.close();

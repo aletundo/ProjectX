@@ -4,12 +4,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GetWorkhoursProperties extends GetPropertiesAbstract {
 	private static final GetWorkhoursProperties INSTANCE = new GetWorkhoursProperties();
+	private static final Logger LOGGER = Logger.getLogger(GetWorkhoursProperties.class.getName());
 
-	public GetWorkhoursProperties() {
-		/* Say why it's empty */
+	private GetWorkhoursProperties() {
+		
 	}
 
 	public static GetWorkhoursProperties getInstance() {
@@ -44,7 +47,7 @@ public class GetWorkhoursProperties extends GetPropertiesAbstract {
 			properties[2] = stageHourPerDay;
 
 		} catch (Exception e) {
-			// TODO Handle exception
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting workhours properties", e);
 		} finally {
 			if (inputStream != null) {
 				inputStream.close();

@@ -62,7 +62,7 @@ public class AddSupervisorServlet extends HttpServlet {
 
 		String host = "localhost";
 		String port = ""; /* TODO check port */
-		final String password = ""; /* TODO check password */
+		final String pw = ""; /* TODO check password */
 		String userName = "";
 
 		try {
@@ -82,7 +82,7 @@ public class AddSupervisorServlet extends HttpServlet {
 				// TODO Modify message
 				String object = "[OUTSOURCING]";
 				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
-				controllers.utils.SendEmail.sendEmail(host, port, userName, password, companyMail, object, message);
+				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
 
 				// stage.setCompanyName(companyName);
 				// stage.setCompanyMail(companyMail);

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import models.StageBean;
 import models.StageDAO;
@@ -24,6 +26,8 @@ public class CriticalPath {
 
 	private static List<StageBean> criticalStages = new ArrayList<>();
 
+	private static final Logger LOGGER = Logger.getLogger(CriticalPath.class.getName());
+			
 	public static List<StageBean> computeCriticalStages(int idProject) {
 		Map<StageBean, List<StageBean>> mapPrecedences = StageDAO.getInstance().getPrecedences(idProject);
 		System.out.println(mapPrecedences);
@@ -43,7 +47,7 @@ public class CriticalPath {
 						mapES.put(pair.getKey().getIdStage(), (Integer) ES);
 						toRemove.add(pair.getKey());
 					} catch (ParseException e) {
-						// TODO handle with a logger
+						LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 					}
 				}
 			}

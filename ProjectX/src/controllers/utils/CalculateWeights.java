@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import models.StageBean;
 import models.StageDAO;
@@ -18,6 +20,7 @@ import utils.GetWorkhoursProperties;
 public class CalculateWeights {
 	
 	private static int HOURPERDAY;
+	private static final Logger LOGGER = Logger.getLogger(CalculateWeights.class.getName());
 
 	// Called when a supervisor add the last task
 	public static void computeTasksWeight(List<TaskBean> tasks) {
@@ -35,8 +38,7 @@ public class CalculateWeights {
 				durationMap.put(task.getIdTask(), duration);
 				durationSum += duration;
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 			}
 		}
 
@@ -64,8 +66,7 @@ public class CalculateWeights {
 				durationMap.put(stage.getIdStage(), duration);
 				durationSum += duration;
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 			}
 		}
 
@@ -82,8 +83,7 @@ public class CalculateWeights {
 			Integer[] propertiesValues = GetWorkhoursProperties.getInstance().getPropValues();
 			HOURPERDAY = propertiesValues[0];
 		} catch (IOException e1) {
-			e1.printStackTrace();
-			// TODO Handle with a Logger
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting properties values", e1);
 		}
 	}
 }

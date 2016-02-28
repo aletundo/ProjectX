@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +31,8 @@ public class CalculateAvailableUsers {
 	private static Date minStart = new Date();
 	private static Date maxFinish = new Date();
 
+	private static final Logger LOGGER = Logger.getLogger(CalculateAvailableUsers.class.getName());
+
 	// calculate the available users for a new TASK
 	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
 
@@ -37,48 +41,40 @@ public class CalculateAvailableUsers {
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
-		while (mapIterator.hasNext()) {
-			try {
+		try {
+			while (mapIterator.hasNext()) {
 				minStart = format.parse(newTask.getStartDay());
 				maxFinish = format.parse(newTask.getFinishDay());
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 
-			Map.Entry<Integer, List<Object>> pair = mapIterator.next();
-			List<Object> criticalWorks = new ArrayList<>();
+				Map.Entry<Integer, List<Object>> pair = mapIterator.next();
+				List<Object> criticalWorks = new ArrayList<>();
 
-			Iterator<Object> arrayListIterator = pair.getValue().iterator();
-			if (pair.getValue() == null) {
-				try {
+				Iterator<Object> arrayListIterator = pair.getValue().iterator();
+				if (pair.getValue() == null) {
 					UserBean userFree = new UserBean();
 					userFree.setIdUser(pair.getKey());
-					long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(format.parse(newTask.getStartDay()),
-							format.parse(newTask.getFinishDay()));
+					long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(
+							format.parse(newTask.getStartDay()), format.parse(newTask.getFinishDay()));
 					userFree.setTemporaryHoursAvailable(hoursAvailable);
 					availableUsers.add(userFree);
-				} catch (ParseException e) {
-					// TODO handle with a logger
-				}
-			}
-			while (arrayListIterator.hasNext()) {
-				try {
-					Object work = arrayListIterator.next();
-					boolean isCritical = calculateCriticalWork(work, newTask, format);
-					if (isCritical && work != null) {
-						criticalWorks.add(work);
-					}
-				} catch (ParseException e) {
-					// TODO handle exception with a logger
-					e.printStackTrace();
-				}
-			}
 
-			UserBean availableUser = isAvailable(newTask, pair, criticalWorks);
-			if (availableUser != null) {
-				availableUsers.add(availableUser);
+					while (arrayListIterator.hasNext()) {
+						Object work = arrayListIterator.next();
+						boolean isCritical = calculateCriticalWork(work, newTask, format);
+						if (isCritical && work != null) {
+							criticalWorks.add(work);
+						}
+
+					}
+				}
+
+				UserBean availableUser = isAvailable(newTask, pair, criticalWorks);
+				if (availableUser != null) {
+					availableUsers.add(availableUser);
+				}
 			}
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
 		return availableUsers;
 	}
@@ -91,48 +87,38 @@ public class CalculateAvailableUsers {
 		format.setTimeZone(TimeZone.getTimeZone("GTM"));
 		List<UserBean> availableUsers = new ArrayList<>();
 		Iterator<Map.Entry<Integer, List<Object>>> mapIterator = workMap.entrySet().iterator();
-		while (mapIterator.hasNext()) {
-			try {
+		try {
+			while (mapIterator.hasNext()) {
 				minStart = format.parse(newStage.getStartDay());
 				maxFinish = format.parse(newStage.getFinishDay());
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 
-			Map.Entry<Integer, List<Object>> pair = mapIterator.next();
-			List<Object> criticalWorks = new ArrayList<>();
+				Map.Entry<Integer, List<Object>> pair = mapIterator.next();
+				List<Object> criticalWorks = new ArrayList<>();
 
-			Iterator<Object> arrayListIterator = pair.getValue().iterator();
-			if (pair.getValue() == null) {
-				try {
+				Iterator<Object> arrayListIterator = pair.getValue().iterator();
+				if (pair.getValue() == null) {
 					UserBean userFree = new UserBean();
 					userFree.setIdUser(pair.getKey());
-					long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(format.parse(newStage.getStartDay()),
-							format.parse(newStage.getFinishDay()));
+					long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(
+							format.parse(newStage.getStartDay()), format.parse(newStage.getFinishDay()));
 					userFree.setTemporaryHoursAvailable(hoursAvailable);
 					availableUsers.add(userFree);
-				} catch (ParseException e) {
-					// TODO handle with logger
 				}
-			}
-			while (arrayListIterator.hasNext()) {
-				try {
+				while (arrayListIterator.hasNext()) {
 					Object work = arrayListIterator.next();
 					boolean isCritical = calculateCriticalWork(work, newStage, format);
 					if (isCritical && work != null) {
 						criticalWorks.add(work);
 					}
-				} catch (ParseException e) {
-					// TODO handle exception with a logger
-					e.printStackTrace();
+				}
+
+				UserBean availableUser = isAvailable(newStage, pair, criticalWorks);
+				if (availableUser != null) {
+					availableUsers.add(availableUser);
 				}
 			}
-
-			UserBean availableUser = isAvailable(newStage, pair, criticalWorks);
-			if (availableUser != null) {
-				availableUsers.add(availableUser);
-			}
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
 		return availableUsers;
 	}
@@ -144,11 +130,10 @@ public class CalculateAvailableUsers {
 		long hourNewStage = Long.MIN_VALUE;
 		try {
 			hourAvailable = calculateAvailability(criticalWorks, newStage, pair);
-			hourNewStage = STAGEHOURPERDAY
-					* (UtilityFunctions.getDifferenceDays(format.parse(newStage.getStartDay()), format.parse(newStage.getFinishDay())));
+			hourNewStage = STAGEHOURPERDAY * (UtilityFunctions.getDifferenceDays(format.parse(newStage.getStartDay()),
+					format.parse(newStage.getFinishDay())));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
 		System.out.println("ore disponibili:" + hourAvailable);
 		System.out.println("ore nuovo stage: " + hourNewStage);
@@ -170,8 +155,8 @@ public class CalculateAvailableUsers {
 
 		try {
 			hourAvailable = calculateAvailability(criticalWorks, newTask, pair);
-		} catch (ParseException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
 
 		if (hourAvailable > 0) {
@@ -203,14 +188,16 @@ public class CalculateAvailableUsers {
 				System.out.println("working hours tot" + workingHoursTOT);
 				ProjectBean workProject = (ProjectBean) work;
 				long dateDiff = UtilityFunctions.getDifferenceDays(
-						UtilityFunctions.calculateMin(format.parse(workProject.getStart()), format.parse(newStage.getStartDay())),
-						UtilityFunctions.calculateMax(format.parse(workProject.getDeadline()), format.parse(newStage.getFinishDay())));
+						UtilityFunctions.calculateMin(format.parse(workProject.getStart()),
+								format.parse(newStage.getStartDay())),
+						UtilityFunctions.calculateMax(format.parse(workProject.getDeadline()),
+								format.parse(newStage.getFinishDay())));
 
 				hourWork = PROJECTHOURPERDAY
 						* (dateDiff - (UtilityFunctions.getDifferenceDaysExclusive(format.parse(workProject.getStart()),
 								format.parse(newStage.getStartDay()))
-								+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workProject.getDeadline()),
-										format.parse(newStage.getFinishDay()))));
+						+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workProject.getDeadline()),
+								format.parse(newStage.getFinishDay()))));
 
 				hoursCriticalWorks += hourWork;
 				System.out.println("ore lavori critici1 " + hoursCriticalWorks);
@@ -219,20 +206,22 @@ public class CalculateAvailableUsers {
 			if (work instanceof models.StageBean) {
 				StageBean workStage = (StageBean) work;
 				long dateDiff = UtilityFunctions.getDifferenceDays(
-						UtilityFunctions.calculateMin(format.parse(workStage.getStartDay()), format.parse(newStage.getStartDay())),
-						UtilityFunctions.calculateMax(format.parse(workStage.getFinishDay()), format.parse(newStage.getFinishDay())));
+						UtilityFunctions.calculateMin(format.parse(workStage.getStartDay()),
+								format.parse(newStage.getStartDay())),
+						UtilityFunctions.calculateMax(format.parse(workStage.getFinishDay()),
+								format.parse(newStage.getFinishDay())));
 
-				hourWork = STAGEHOURPERDAY
-						* (dateDiff - (UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
+				hourWork = STAGEHOURPERDAY * (dateDiff
+						- (UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
 								format.parse(newStage.getStartDay()))
-								+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
-										format.parse(newStage.getFinishDay()))));
+						+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
+								format.parse(newStage.getFinishDay()))));
 				hoursCriticalWorks += hourWork;
 
-				System.out.println("diff1: " + UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
-						format.parse(newStage.getStartDay())));
-				System.out.println("diff2: " + UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
-						format.parse(newStage.getFinishDay())));
+				System.out.println("diff1: " + UtilityFunctions.getDifferenceDaysExclusive(
+						format.parse(workStage.getStartDay()), format.parse(newStage.getStartDay())));
+				System.out.println("diff2: " + UtilityFunctions.getDifferenceDaysExclusive(
+						format.parse(workStage.getFinishDay()), format.parse(newStage.getFinishDay())));
 				System.out.println("hourwork: " + hourWork);
 				System.out.println("ore lavori critici2 " + hoursCriticalWorks);
 
@@ -244,7 +233,8 @@ public class CalculateAvailableUsers {
 				System.out.println("ore lavori critici3 " + hoursCriticalWorks);
 			}
 		}
-		long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart, format.parse(newStage.getStartDay()))
+		long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart,
+				format.parse(newStage.getStartDay()))
 				+ (UtilityFunctions.getDifferenceDaysExclusive(format.parse(newStage.getFinishDay()), maxFinish)));
 		System.out.println("ore di slack: " + hourSlack);
 		long availableHoursUser = workingHoursTOT - hoursCriticalWorks - hourSlack;
@@ -267,20 +257,22 @@ public class CalculateAvailableUsers {
 			if (work instanceof models.StageBean) {
 				StageBean workStage = (StageBean) work;
 				long dateDiff = UtilityFunctions.getDifferenceDays(
-						UtilityFunctions.calculateMin(format.parse(workStage.getStartDay()), format.parse(newTask.getStartDay())),
-						UtilityFunctions.calculateMax(format.parse(workStage.getFinishDay()), format.parse(newTask.getFinishDay())));
+						UtilityFunctions.calculateMin(format.parse(workStage.getStartDay()),
+								format.parse(newTask.getStartDay())),
+						UtilityFunctions.calculateMax(format.parse(workStage.getFinishDay()),
+								format.parse(newTask.getFinishDay())));
 
-				hourWork = STAGEHOURPERDAY
-						* (dateDiff - (UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
+				hourWork = STAGEHOURPERDAY * (dateDiff
+						- (UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
 								format.parse(newTask.getStartDay()))
-								+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
-										format.parse(newTask.getFinishDay()))));
+						+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
+								format.parse(newTask.getFinishDay()))));
 				hoursCriticalWorks += hourWork;
 
-				System.out.println("diff1: " + UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
-						format.parse(newTask.getStartDay())));
-				System.out.println("diff2: " + UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
-						format.parse(newTask.getFinishDay())));
+				System.out.println("diff1: " + UtilityFunctions.getDifferenceDaysExclusive(
+						format.parse(workStage.getStartDay()), format.parse(newTask.getStartDay())));
+				System.out.println("diff2: " + UtilityFunctions.getDifferenceDaysExclusive(
+						format.parse(workStage.getFinishDay()), format.parse(newTask.getFinishDay())));
 				System.out.println("hourwork: " + hourWork);
 				System.out.println("ore lavori critici2 " + hoursCriticalWorks);
 
@@ -293,7 +285,8 @@ public class CalculateAvailableUsers {
 			}
 		}
 
-		long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart, format.parse(newTask.getStartDay()))
+		long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart,
+				format.parse(newTask.getStartDay()))
 				+ (UtilityFunctions.getDifferenceDaysExclusive(format.parse(newTask.getFinishDay()), maxFinish)));
 		System.out.println("ore di slack: " + hourSlack);
 		long availableHoursUser = workingHoursTOT - hoursCriticalWorks - hourSlack;
@@ -376,8 +369,7 @@ public class CalculateAvailableUsers {
 			PROJECTHOURPERDAY = propertiesValues[1];
 			STAGEHOURPERDAY = propertiesValues[2];
 		} catch (IOException e1) {
-			e1.printStackTrace();
-			// TODO Handle with a Logger
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting properties values", e1);
 		}
 	}
 
@@ -390,7 +382,7 @@ public class CalculateAvailableUsers {
 			hourRequested = HOURPERDAY * UtilityFunctions.getDifferenceDays(start, finish);
 
 		} catch (ParseException e) {
-			// TODO handle with a logger
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
 		return hourRequested;
 	}

@@ -7,10 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import utils.GetDbConnProperties;
 
 public class DbConnection {
+	
+	private static final Logger LOGGER = Logger.getLogger(DbConnection.class.getName());
 
 	private DbConnection() {
 
@@ -32,8 +36,7 @@ public class DbConnection {
 			user = propertiesValues[1];
 			pass = propertiesValues[2];
 		} catch (IOException e1) {
-			e1.printStackTrace();
-			// TODO Handle with a Logger
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting db properties values", e1);
 		}
 
 		Connection conn = null;
@@ -46,11 +49,9 @@ public class DbConnection {
 			conn = DriverManager.getConnection(dbUrl, user, pass);
 
 		} catch (SQLException se) {
-			// TODO Handle errors for JDBC in a Logger
-			se.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", se);
 		} catch (Exception e) {
-			// TODO Handle errors for Class.forName in a Logger
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting Class JDBC_DRIVER", e);
 		}
 		return conn;
 

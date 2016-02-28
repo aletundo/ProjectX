@@ -4,10 +4,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UtilityFunctions {
+	
+	private static final Logger LOGGER = Logger.getLogger(UtilityFunctions.class.getName());
+	
 	public static boolean isValidDateFormat(String value) {
 		Date date = null;
 		try {
@@ -17,8 +22,7 @@ public class UtilityFunctions {
 				return false;
 			}
 		} catch (ParseException ex) {
-			ex.printStackTrace();
-			// TODO Log the exception
+			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", ex);
 			return false;
 		}
 
@@ -26,10 +30,10 @@ public class UtilityFunctions {
 	}
 
 	public static boolean isValidMail(String email) {
-		final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+		final Pattern VALIDEMAILADDRESSREGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 				Pattern.CASE_INSENSITIVE);
 
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+		Matcher matcher = VALIDEMAILADDRESSREGEX.matcher(email);
 		return matcher.find();
 	}
 
