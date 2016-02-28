@@ -3,6 +3,8 @@ package controllers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +21,7 @@ import models.TaskDAO;
 @WebServlet(name = "AddTaskServlet", urlPatterns = { "/addtask" })
 public class AddTaskServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(AddTaskServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -31,8 +34,8 @@ public class AddTaskServlet extends HttpServlet {
 			request.setAttribute("idStage", idStage);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
 			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			/* TODO LOGGER */
+		} catch (Exception e){
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting create task page", e);
 		}
 	}
 
@@ -73,11 +76,11 @@ public class AddTaskServlet extends HttpServlet {
 						+ idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
 
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during adding tasks", e);
 		}
 	}
 	
-	private boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+	private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
 
 		String name = request.getParameter("name");
 		String finishDay = request.getParameter("finishday");

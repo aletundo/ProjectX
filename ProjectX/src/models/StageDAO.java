@@ -3,12 +3,16 @@ package models;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import utils.DbConnection;
 
 public class StageDAO {
 
 	private static final StageDAO INSTANCE = new StageDAO();
+	private static final Logger LOGGER = Logger.getLogger(StageDAO.class.getName());
 
 	private StageDAO() {
 
@@ -17,6 +21,10 @@ public class StageDAO {
 	public static StageDAO getInstance() {
 
 		return INSTANCE;
+	}
+	
+	public Map<StageBean, List<StageBean>> getPrecedences(int idProject){
+		return null;
 	}
 
 	public StageBean getRelativeWeight(int idStage) {
@@ -38,8 +46,7 @@ public class StageDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting relative weight of stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -64,8 +71,7 @@ public class StageDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting relative weight of stages " + stages.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -90,8 +96,7 @@ public class StageDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting rate work completed of stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -114,8 +119,7 @@ public class StageDAO {
 				statement.executeUpdate();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting rate work completed of stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -141,8 +145,7 @@ public class StageDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting either project manager or supervisor of stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -177,8 +180,7 @@ public class StageDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting details of stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -238,8 +240,7 @@ public class StageDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting all stages of project " + idProject, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -265,8 +266,7 @@ public class StageDAO {
 				}
 				added = true;
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting precedences of stage " + stage.getIdStage(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -296,8 +296,7 @@ public class StageDAO {
 				}
 				statement.executeUpdate();
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting supervisor of stage " + stage.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -329,8 +328,7 @@ public class StageDAO {
 					idStage = rs.getInt(1);
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during cretion  of stage " + stage.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}

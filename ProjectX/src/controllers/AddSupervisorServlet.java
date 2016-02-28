@@ -3,6 +3,8 @@ package controllers;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,6 +23,7 @@ import models.UserBean;
 @WebServlet(name = "AddSupervisorServlet", urlPatterns = { "/addsupervisor" })
 public class AddSupervisorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(AddSupervisorServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -49,7 +52,7 @@ public class AddSupervisorServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-supervisor.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during adding supervisors", e);
 		}
 	}
 
@@ -98,7 +101,7 @@ public class AddSupervisorServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
 			}
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during adding supervisors", e);
 		}
 	}
 }

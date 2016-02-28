@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,6 +23,7 @@ import models.StageDAO;
 @WebServlet(name = "AddPrecendencesServlet", urlPatterns = { "/addprecedences" })
 public class AddPrecedencesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(AddPrecedencesServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +49,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during adding precedences to project", e);
 		}
 	}
 
@@ -88,7 +91,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 						+ Integer.parseInt(request.getParameter("idProject")));
 			}
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during adding precedences to project", e);
 		}
 	}
 }

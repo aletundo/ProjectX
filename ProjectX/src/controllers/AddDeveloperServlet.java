@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,7 +25,8 @@ import models.UserBean;
 @WebServlet(name = "AddDeveloperServlet", urlPatterns = { "/adddeveloper" })
 public class AddDeveloperServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private static final Logger LOGGER = Logger.getLogger(AddDeveloperServlet.class.getName());
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -63,7 +66,7 @@ public class AddDeveloperServlet extends HttpServlet {
 			dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during setting developers", e);
 		}
 	}
 
@@ -108,7 +111,7 @@ public class AddDeveloperServlet extends HttpServlet {
 
 			}
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during setting developers", e);
 		}
 	}
 }

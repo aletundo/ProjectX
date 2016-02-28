@@ -7,12 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utils.DbConnection;
 
 public class ClientDAO {
 
 	private static final ClientDAO INSTANCE = new ClientDAO();
+	private static final Logger LOGGER = Logger.getLogger(ClientDAO.class.getName());
 
 	private ClientDAO() {
 
@@ -42,8 +44,7 @@ public class ClientDAO {
 					mail = rs.getString("Mail");
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Get client mail of project " + idProject + " fail.", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -75,8 +76,7 @@ public class ClientDAO {
 					clients.add(client);
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Get related clients to '" + subjectArea + "' fails.", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -100,8 +100,7 @@ public class ClientDAO {
 					idClient = rs.getInt("IdClient");
 					
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Get client " + clientName + " fails.", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -126,8 +125,7 @@ public class ClientDAO {
 				while (rs.next())
 					client.setIdClient(rs.getInt(1));
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Add client " + client.toString() + " fail.", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}

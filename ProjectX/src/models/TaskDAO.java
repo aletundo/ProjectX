@@ -4,12 +4,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import utils.DbConnection;
 
 public class TaskDAO {
 
 	private static final TaskDAO INSTANCE = new TaskDAO();
+
+	private static final Logger LOGGER = Logger.getLogger(TaskDAO.class.getName());
 
 	private TaskDAO() {
 
@@ -33,8 +37,8 @@ public class TaskDAO {
 				statement.executeUpdate();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during updating work completed of task " + task.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -65,8 +69,7 @@ public class TaskDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting all developers of task " + idTask, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -100,8 +103,7 @@ public class TaskDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting details of task " + idTask, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -127,8 +129,7 @@ public class TaskDAO {
 					task.setRelativeWeight(rs.getFloat("RelativeWeight"));
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO ilaria handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting relative weight of task " + idTask, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -149,8 +150,7 @@ public class TaskDAO {
 				statement.executeUpdate();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting completed on task " + idTask, e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -172,8 +172,7 @@ public class TaskDAO {
 					workCompletedState.add(rs.getString("WorkCompleted"));
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO ilaria handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting completion status of task " + idTask, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -199,8 +198,8 @@ public class TaskDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during setting realative weights of tasks " + tasks.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -233,8 +232,7 @@ public class TaskDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting tasks of stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -259,8 +257,7 @@ public class TaskDAO {
 				statement.executeUpdate();
 				updated = true;
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting developer of task " + task.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -291,8 +288,7 @@ public class TaskDAO {
 					idTask = rs.getInt(1);
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during creation of " + task.toString(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -318,11 +314,10 @@ public class TaskDAO {
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					hourWorkTemp = rs.getLong("HoursRequired");
-					System.out.println("ore Task: " + hourWorkTemp);
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting work hours of task " + workTask.toString()
+						+ " assigned to " + pair.getKey(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}

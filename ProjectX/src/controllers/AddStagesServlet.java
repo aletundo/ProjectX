@@ -3,6 +3,8 @@ package controllers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +21,7 @@ import models.StageDAO;
 @WebServlet(name = "AddStagesServlet", urlPatterns = { "/addstages" })
 public class AddStagesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(AddStagesServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,7 +33,7 @@ public class AddStagesServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting create stage page", e);
 		}
 	}
 
@@ -74,11 +77,11 @@ public class AddStagesServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage="
 						+ idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
 		} catch (Exception e) {
-			/* TODO LOGGER */
+			LOGGER.log(Level.SEVERE, "Something went wrong during adding stages to project", e);
 		}
 	}
 	
-	private boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+	private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
 
 		String name = request.getParameter("name");
 		String goals = request.getParameter("goals");
