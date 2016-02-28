@@ -60,4 +60,12 @@ public class UtilityFunctions {
 		return 1 + diff;
 	}
 
+	public static String GetCurrentDateTime() {
+		/* get current date time with Calendar() */
+		Date date = new Date();
+		String dateStr = SchedulerEventsThread.format.format(date);
+		System.out.println(dateStr);
+		return dateStr;
+	}
+
 }

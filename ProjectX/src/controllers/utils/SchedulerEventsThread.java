@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -23,7 +22,7 @@ public class SchedulerEventsThread implements Runnable {
 		service.scheduleAtFixedRate(new SchedulerEventsThread(),0,24,TimeUnit.HOURS);
 	}
 	
-	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	String host = "localhost";
 	String port = ""; /* TODO check port */
@@ -41,7 +40,7 @@ public class SchedulerEventsThread implements Runnable {
 		long dataCritica;
 		for (StageBean stage : stages) {
 			try {
-				dataCritica = UtilityFunctions.getDifferenceDays(format.parse(stage.getFinishDay()), format.parse(GetCurrentDateTime()));
+				dataCritica = UtilityFunctions.getDifferenceDays(format.parse(stage.getFinishDay()), format.parse(UtilityFunctions.GetCurrentDateTime()));
 				System.out.println(dataCritica);
 				/* STAGE NON CRITICO IN RITARDO */
 				if (dataCritica < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())) {
@@ -84,13 +83,5 @@ public class SchedulerEventsThread implements Runnable {
 			}
 		}
 
-	}
-
-	public static String GetCurrentDateTime() {
-		/* get current date time with Calendar() */
-		Date date = new Date();
-		String dateStr = format.format(date);
-		System.out.println(dateStr);
-		return dateStr;
 	}
 }
