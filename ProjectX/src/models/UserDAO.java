@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import models.UserBean;
 import utils.DbConnection;
@@ -15,6 +17,7 @@ import utils.DbConnection;
 public class UserDAO {
 
 	private static final UserDAO INSTANCE = new UserDAO();
+	private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getName());
 
 	private UserDAO() {
 
@@ -61,8 +64,8 @@ public class UserDAO {
 				rs.close();
 				statement.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting all the users involved in project " + idProject, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -89,8 +92,8 @@ public class UserDAO {
 					idProject = rs.getInt("IdProject");
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting all the users involved in stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -119,8 +122,8 @@ public class UserDAO {
 					idProject = rs.getInt("IdProject");
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting all the users involved in task " + idTask, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -145,8 +148,8 @@ public class UserDAO {
 					mail = rs.getString("Mail");
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting the project manager mail associated to stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -173,8 +176,8 @@ public class UserDAO {
 					developersMail.add(rs.getString("Mail"));
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting all developer's mail who are working on stage " + idStage, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -202,8 +205,8 @@ public class UserDAO {
 					supervisorsMail.add(rs.getString("Mail"));
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting all supervisor's mail associated to project " + idProject, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -230,8 +233,8 @@ public class UserDAO {
 					mail = rs.getString("Mail");
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting user " + idUser + " mail", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -263,8 +266,8 @@ public class UserDAO {
 					statement.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting info on user " + candidates, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -344,8 +347,8 @@ public class UserDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting the list of available supervisors", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -407,8 +410,8 @@ public class UserDAO {
 				}
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				// TODO handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during getting the list of available developers", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -453,7 +456,8 @@ public class UserDAO {
 				statement.executeUpdate(signUpQuery);
 				stored = true;
 			} catch (SQLException e) {
-				e.printStackTrace(); // TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during the sign up of user " + user.getIdUser(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -492,7 +496,8 @@ public class UserDAO {
 					user.setType(rs.getString("Type"));
 				}
 			} catch (SQLException e) {
-				e.printStackTrace(); // TODO Handle with a Logger
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during the validation of user " + user.getIdUser(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -531,7 +536,8 @@ public class UserDAO {
 				hash.append(digits[b & 0x0f]);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Handle with a Logger
+			LOGGER.log(Level.SEVERE,
+					"Something went wrong during the generation of hash", e);
 		}
 		return hash.toString();
 	}
