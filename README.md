@@ -4,13 +4,13 @@ ProjectX
 ##Synopsis
 A web application to manage software projects.
 
-##Build with
+##Developed with
 * JDK 1.8
 * Dynamic Web Module 3.1
 * MySQL 5.6
 * Tomcat 8.0.32
 
-##Maven Dependences
+##Maven Dependencies
 * jstl 1.2
 * javax.servlet-api 3.1.0
 * javax.servlet.jsp-api 2.3.1
