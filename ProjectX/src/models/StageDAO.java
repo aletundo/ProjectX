@@ -282,12 +282,10 @@ public class StageDAO {
 		if (currentConn != null) {
 			try {
 				if ("True".equals(stage.getOutsourcing())) {
-					addSupervisorQuery = "UPDATE stage SET outsourcing = ?, " + "idSupervisor = ? WHERE idStage = ?";
+					addSupervisorQuery = "UPDATE stage SET outsourcing ?, " + "idSupervisor = ? WHERE idStage = ?";
 					statement = currentConn.prepareStatement(addSupervisorQuery);
 					statement.setString(1, "True");
 					statement.setInt(2, stage.getIdSupervisor());
-					// statement.setString(2, stage.getCompanyName());
-					// statement.setString(3, stage.getCompanyMail());
 					statement.setInt(3, stage.getIdStage());
 				} else {
 					statement = currentConn.prepareStatement(addSupervisorQuery);

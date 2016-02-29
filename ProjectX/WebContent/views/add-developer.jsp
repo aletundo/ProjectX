@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <jsp:include page="/views/sharable/head-imports.jsp" />
@@ -27,14 +28,14 @@
 						<div class="input-group">
 							<span class="input-group-addon">Company name</span> <input
 								class="form-control" type="text"
-								placeholder="Insert company name" name="company-name" />
+								placeholder="Insert company name" name="companyname" value="${fn:escapeXml(param.companymail)}" required />
 						</div>
 						<br>
 						<div class="input-group">
 							<span class="input-group-addon">Mail</span> <input
 								class="form-control" type="text"
 								placeholder="Insert mail (company@domain.example)"
-								name="company-mail" />
+								name="companymail" value="${fn:escapeXml(param.companymail)}" required />
 						</div>
 					</c:when>
 					<c:otherwise>

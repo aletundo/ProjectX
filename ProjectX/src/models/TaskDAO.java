@@ -23,6 +23,40 @@ public class TaskDAO {
 
 		return INSTANCE;
 	}
+	
+	public void removeTasksWhenOutsourcing(int idStage){
+		
+		List<TaskBean> tasksToRemove = getTasksByStageId(idStage);
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String deleteTaskDevelopment = "DELETE FROM taskdevelopment WHERE idTask = ?";
+			final String deleteTask = "DELETE FROM task WHERE idTask = ?";
+			try {
+				for(TaskBean task : tasksToRemove){
+					statement = currentConn.prepareStatement(deleteTaskDevelopment);
+					statement.setInt(1, task.getIdTask());
+					statement.executeUpdate();
+					statement.close();
+				}
+				
+				for(TaskBean task : tasksToRemove){
+					statement = currentConn.prepareStatement(deleteTask);
+					statement.setInt(1, task.getIdTask());
+					statement.executeUpdate();
+					statement.close();
+				}
+				
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during deleting work tasks for stage " + idStage, e);
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+		
+	}
 
 	public void setPieceWorkCompleted(TaskBean task) {
 		PreparedStatement statement = null;

@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,6 +20,8 @@ import controllers.utils.CalculateWeights;
 import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureStageStrategy;
 import models.UserDAO;
+import models.StageBean;
+import models.StageDAO;
 import models.TaskBean;
 import models.TaskDAO;
 import models.UserBean;
@@ -74,9 +77,48 @@ public class AddDeveloperServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String host = "localhost";
+		String port = ""; /* TODO check port */
+		final String pw = ""; /* TODO check password */
+		String userName = "";
+		Map<String, String> messages = new HashMap<String, String>();
+		request.setAttribute("messages", messages);
+		
 		try {
 			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 				return;
+			
+			if (request.getParameter("companyname") != null) {
+
+				String companyName = request.getParameter("companyname");
+				String companyMail = request.getParameter("companymail");
+				if (companyMail == null || companyMail.trim().isEmpty() || !UtilityFunctions.isValidMail(companyMail)) {
+					messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
+					RequestDispatcher dispatcher = getServletContext()
+							.getRequestDispatcher("/views/add-developer.jsp");
+					dispatcher.forward(request, response);
+					return;
+				}
+				int idSupervisor = (Integer) request.getSession().getAttribute("idUser");
+				int idStage = Integer.parseInt(request.getParameter("idStage"));
+				StageBean stage = new StageBean();
+				stage.setIdSupervisor(idSupervisor);
+				stage.setIdStage(idStage);
+				stage.setOutsourcing("True");
+				// TODO Modify message
+				String object = "[OUTSOURCING]";
+				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
+				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
+				
+				TaskDAO.getInstance().removeTasksWhenOutsourcing(idStage);
+				StageDAO.getInstance().addSupervisor(stage);
+				
+				request.getSession().removeAttribute("candidates");
+				response.sendRedirect(request.getContextPath() + "/stage?idStage="
+						+ Integer.parseInt(request.getParameter("idStage")));
+				return;
+
+			}
 
 			TaskBean task = new TaskBean();
 			int idTask = Integer.parseInt(request.getParameter("idTask"));

@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controllers.utils.CalculateAvailableUsers;
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureProjectStrategy;
 import models.UserDAO;
 import models.StageBean;
@@ -64,6 +66,8 @@ public class AddSupervisorServlet extends HttpServlet {
 		String port = ""; /* TODO check port */
 		final String pw = ""; /* TODO check password */
 		String userName = "";
+		Map<String, String> messages = new HashMap<String, String>();
+		request.setAttribute("messages", messages);
 
 		try {
 			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
@@ -73,9 +77,17 @@ public class AddSupervisorServlet extends HttpServlet {
 			int idStage = Integer.parseInt(request.getParameter("idStage"));
 			int idProject = Integer.parseInt(request.getParameter("idProject"));
 			int idSupervisor;
-			if (request.getParameter("company-name") != null) {
-				String companyName = request.getParameter("company-name");
-				String companyMail = request.getParameter("company-mail");
+			if (request.getParameter("companyname") != null) {
+
+				String companyName = request.getParameter("companyname");
+				String companyMail = request.getParameter("companymail");
+				if (companyMail == null || companyMail.trim().isEmpty() || !UtilityFunctions.isValidMail(companyMail)) {
+					messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
+					RequestDispatcher dispatcher = getServletContext()
+							.getRequestDispatcher("/views/add-supervisor.jsp");
+					dispatcher.forward(request, response);
+					return;
+				}
 				idSupervisor = (Integer) request.getSession().getAttribute("idUser");
 				stage.setIdSupervisor(idSupervisor);
 				stage.setOutsourcing("True");
@@ -84,8 +96,6 @@ public class AddSupervisorServlet extends HttpServlet {
 				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
 				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
 
-				// stage.setCompanyName(companyName);
-				// stage.setCompanyMail(companyMail);
 			} else {
 				idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
 				stage.setOutsourcing("False");
