@@ -122,8 +122,8 @@ public class UserDAO {
 					idProject = rs.getInt("IdProject");
 				}
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting all the users involved in task " + idTask, e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting all the users involved in task " + idTask,
+						e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -149,7 +149,8 @@ public class UserDAO {
 				}
 			} catch (SQLException e) {
 				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting the project manager mail associated to stage " + idStage, e);
+						"Something went wrong during getting the project manager mail associated to stage " + idStage,
+						e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -177,7 +178,8 @@ public class UserDAO {
 				}
 			} catch (SQLException e) {
 				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting all developer's mail who are working on stage " + idStage, e);
+						"Something went wrong during getting all developer's mail who are working on stage " + idStage,
+						e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -206,7 +208,8 @@ public class UserDAO {
 				}
 			} catch (SQLException e) {
 				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting all supervisor's mail associated to project " + idProject, e);
+						"Something went wrong during getting all supervisor's mail associated to project " + idProject,
+						e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -233,8 +236,7 @@ public class UserDAO {
 					mail = rs.getString("Mail");
 				}
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting user " + idUser + " mail", e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting user " + idUser + " mail", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -250,7 +252,8 @@ public class UserDAO {
 		Connection currentConn = DbConnection.connect();
 
 		if (currentConn != null) {
-			final String getUsersInfoQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type "
+			final String getUsersInfoQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type, "
+					+ "U.skills AS Skills "
 					+ "FROM user AS U WHERE U.idUser = ?";
 			try {
 				for (UserBean u : candidates) {
@@ -260,14 +263,14 @@ public class UserDAO {
 					while (rs.next()) {
 						u.setIdUser(rs.getInt("IdUser"));
 						u.setFullname(rs.getString("Fullname"));
+						u.setSkills(rs.getString("Skills"));
 						u.setType(rs.getString("Type"));
 					}
 					rs.close();
 					statement.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting info on user " + candidates, e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting info on user " + candidates, e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -347,8 +350,7 @@ public class UserDAO {
 				}
 
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting the list of available supervisors", e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting the list of available supervisors", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -410,8 +412,7 @@ public class UserDAO {
 				}
 
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during getting the list of available developers", e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting the list of available developers", e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -456,8 +457,7 @@ public class UserDAO {
 				statement.executeUpdate(signUpQuery);
 				stored = true;
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during the sign up of user " + user.getIdUser(), e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during the sign up of user " + user.getIdUser(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, statement);
 			}
@@ -496,8 +496,7 @@ public class UserDAO {
 					user.setType(rs.getString("Type"));
 				}
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during the validation of user " + user.getIdUser(), e);
+				LOGGER.log(Level.SEVERE, "Something went wrong during the validation of user " + user.getIdUser(), e);
 			} finally {
 				DbConnection.disconnect(currentConn, rs, statement);
 			}
@@ -536,8 +535,7 @@ public class UserDAO {
 				hash.append(digits[b & 0x0f]);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			LOGGER.log(Level.SEVERE,
-					"Something went wrong during the generation of hash", e);
+			LOGGER.log(Level.SEVERE, "Something went wrong during the generation of hash", e);
 		}
 		return hash.toString();
 	}

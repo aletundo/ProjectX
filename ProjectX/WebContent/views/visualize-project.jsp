@@ -26,12 +26,20 @@
 
 				<div class="panel-body">
 					<p>
-						Start:&nbsp;
+						<strong>Start:</strong>&nbsp;
 						<c:out value="${requestScope.project.start }"></c:out>
-						<br> Deadline:&nbsp;
+						<br> <strong>Deadline:</strong>&nbsp;
 						<c:out value="${requestScope.project.deadline }"></c:out>
-						<br> Client:&nbsp;
+						<br> <strong>Client:</strong>&nbsp;
 						<c:out value="${requestScope.project.clientName }"></c:out>
+						<br> <strong>Goals:</strong>&nbsp;
+						<c:out value="${requestScope.project.goals }"></c:out>
+						<br> <strong>Requirements:</strong>&nbsp;
+						<c:out value="${requestScope.project.requirements }"></c:out>
+						<br> <strong>Budget:</strong>&nbsp;<span class="label label-danger">
+						<c:out value="${requestScope.project.budget }"></c:out></span>
+						<br> <strong>Estimated costs:</strong>&nbsp;<span class="label label-warning">
+						<c:out value="${requestScope.project.estimatedCosts }"></c:out></span>
 					</p>
 					<div class="progress">
 						<div
@@ -44,40 +52,46 @@
 					</div>
 				</div>
 
-				<table class="table">
-					<tr>
-						<th><i class="fa fa-tag"></i>&nbsp;Stage</th>
-						<th><i class="fa fa-hourglass-start"></i>&nbsp;Start</th>
-						<th><i class="fa fa-hourglass-end"></i>&nbsp;Finish</th>
-						<th><i class="fa fa-percent"></i>&nbsp;Progress</th>
-						<th><i class="fa fa-user"></i>&nbsp;Supervisor</th>
-					</tr>
-
-					<c:forEach items="${requestScope.stages}" var="stage">
+				<table class="table table-responsive table-striped">
+					<thead>
 						<tr>
-							<td><a href="./stage?idStage=${stage.idStage}"><strong><c:out
-											value="${stage.name}"></c:out></strong></a></td>
-							<td><c:out value="${stage.startDay}"></c:out></td>
-							<td><c:out value="${stage.finishDay}"></c:out></td>
-							<td>
-								<div class="progress">
-									<div
-										class="progress-bar progress-bar-info progress-bar-striped"
-										role="progressbar" aria-valuenow="${stage.rateWorkCompleted }"
-										aria-valuemin="0" aria-valuemax="100"
-										style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%
-										Complete</div>
-								</div>
-							</td>
-							<td><c:choose>
-									<c:when test="${stage.outsourcing == 'True' }">
-										<span class="label label-danger">Outsourced</span>
-									</c:when>
-									<c:otherwise><span class="label label-warning"><c:out
-										value="${stage.supervisorFullname}"></c:out></span></c:otherwise>
-								</c:choose></td>
+							<th><i class="fa fa-tag"></i>&nbsp;Stage</th>
+							<th><i class="fa fa-hourglass-start"></i>&nbsp;Start</th>
+							<th><i class="fa fa-hourglass-end"></i>&nbsp;Finish</th>
+							<th><i class="fa fa-percent"></i>&nbsp;Progress</th>
+							<th><i class="fa fa-user"></i>&nbsp;Supervisor</th>
 						</tr>
-					</c:forEach>
+					</thead>
+					<tbody>
+						<c:forEach items="${requestScope.stages}" var="stage">
+							<tr>
+								<td><a href="./stage?idStage=${stage.idStage}"><strong><c:out
+												value="${stage.name}"></c:out></strong></a></td>
+								<td><c:out value="${stage.startDay}"></c:out></td>
+								<td><c:out value="${stage.finishDay}"></c:out></td>
+								<td>
+									<div class="progress">
+										<div
+											class="progress-bar progress-bar-info progress-bar-striped"
+											role="progressbar"
+											aria-valuenow="${stage.rateWorkCompleted }" aria-valuemin="0"
+											aria-valuemax="100"
+											style="width: ${stage.rateWorkCompleted }%">${stage.rateWorkCompleted }%
+											Complete</div>
+									</div>
+								</td>
+								<td><c:choose>
+										<c:when test="${stage.outsourcing == 'True' }">
+											<span class="label label-danger">Outsourced</span>
+										</c:when>
+										<c:otherwise>
+											<span class="label label-warning"><c:out
+													value="${stage.supervisorFullname}"></c:out></span>
+										</c:otherwise>
+									</c:choose></td>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 			</div>
 		</div>

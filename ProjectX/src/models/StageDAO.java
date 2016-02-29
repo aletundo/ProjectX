@@ -267,7 +267,7 @@ public class StageDAO {
 
 		if (currentConn != null) {
 			final String getProjectInfoQuery = "SELECT S.idStage as IdStage, S.idProject AS IdProject, S.name AS StageName, S.startDay AS StartDay, "
-					+ "S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS SupervisorFullname "
+					+ "S.finishDay AS FinishDay, S.goals AS Goals, S.requirements AS Requirements, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS SupervisorFullname "
 					+ "FROM stage AS S JOIN user AS U ON S.idSupervisor = U.idUser  WHERE S.idStage = ?";
 			try {
 				statement = currentConn.prepareStatement(getProjectInfoQuery);
@@ -280,6 +280,8 @@ public class StageDAO {
 					stageInfo.setName(rs.getString("StageName"));
 					stageInfo.setStartDay(rs.getString("StartDay"));
 					stageInfo.setFinishDay(rs.getString("FinishDay"));
+					stageInfo.setGoals(rs.getString("Goals"));
+					stageInfo.setRequirements(rs.getString("Requirements"));
 					stageInfo.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					stageInfo.setSupervisorFullname(rs.getString("SupervisorFullname"));
 				}

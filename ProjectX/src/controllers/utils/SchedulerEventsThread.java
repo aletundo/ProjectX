@@ -39,7 +39,7 @@ public class SchedulerEventsThread implements Runnable {
 	public static void main(String[] args) {
 		final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 		SchedulerEventsThread scheduler = new SchedulerEventsThread(74);
-		service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
+		service.scheduleAtFixedRate(scheduler, 0, 24, TimeUnit.HOURS);
 	}
 
 	static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");

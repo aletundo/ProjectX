@@ -52,8 +52,8 @@
 					<ul class="list-group">
 						<c:forEach items="${requestScope.developers }" var="developer">
 							<li class="list-group-item"><c:out
-									value="${developer.fullname }"></c:out> &nbsp;|&nbsp;<c:out
-									value="${developer.type }"></c:out></li>
+									value="${developer.fullname }"></c:out> &nbsp;|&nbsp;<span class="label label-warning"><c:out
+									value="${developer.type }"></c:out></span></li>
 						</c:forEach>
 					</ul>
 				</div>

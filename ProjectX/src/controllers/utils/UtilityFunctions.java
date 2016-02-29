@@ -1,6 +1,7 @@
 package controllers.utils;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,9 +19,7 @@ public class UtilityFunctions {
 	
 	private static final Logger LOGGER = Logger.getLogger(UtilityFunctions.class.getName());
 	
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-	
+	private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public static long getHoursRequestedTask(String startDay, String finishDay) {
 		long hourRequested = 0;

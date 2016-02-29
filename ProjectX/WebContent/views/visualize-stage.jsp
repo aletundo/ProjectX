@@ -14,7 +14,7 @@
 			<div id="projects-panel" class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						<a href="./project?idProject=${requestScope.stage.idStage }">
+						<a href="./project?idProject=${requestScope.stage.idProject }">
 							<i class="fa fa-arrow-left"></i>
 						</a>&nbsp;&nbsp;&nbsp;
 						<c:out value="${requestScope.stage.name }"></c:out>
@@ -32,12 +32,16 @@
 
 				<div class="panel-body">
 					<p>
-						Start-Day:&nbsp;
+						<strong>Start-Day:</strong>&nbsp;
 						<c:out value="${requestScope.stage.startDay }"></c:out>
-						<br> Finish-Day:&nbsp;
+						<br> <strong>Finish-Day:</strong>&nbsp;
 						<c:out value="${requestScope.stage.finishDay }"></c:out>
-						<br> Supervisor:&nbsp;
-						<c:out value="${requestScope.stage.supervisorFullname }"></c:out>
+						<br> <strong>Supervisor:</strong>&nbsp;<span class="label label-warning">
+						<c:out value="${requestScope.stage.supervisorFullname }"></c:out></span>
+						<br> <strong>Goals:</strong>&nbsp;
+						<c:out value="${requestScope.stage.goals }"></c:out>
+						<br> <strong>Requirements:</strong>&nbsp;
+						<c:out value="${requestScope.stage.requirements }"></c:out>
 					</p>
 					<div class="progress">
 						<div
@@ -50,30 +54,33 @@
 					</div>
 				</div>
 
-				<table class="table">
-					<tr>
-						<th><i class="fa fa-tag"></i>&nbsp;Task</th>
-						<th><i class="fa fa-hourglass-start"></i>&nbsp;Start</th>
-						<th><i class="fa fa-hourglass-end"></i>&nbsp;Finish</th>
-						<th><i class="fa fa-check-circle-o"></i>&nbsp;Completed</th>
-					</tr>
-
-					<c:forEach items="${requestScope.tasks}" var="task">
+				<table class="table table-responsive table-striped">
+					<thead>
 						<tr>
-							<td><a href="./task?idTask=${task.idTask}"><strong><c:out
-											value="${task.name}"></c:out></strong></a></td>
-							<td><c:out value="${task.startDay}"></c:out></td>
-							<td><c:out value="${task.finishDay}"></c:out></td>
-							<td><c:choose>
-									<c:when test="${task.completed == 'True' }">
-										<i class="fa fa-check"></i>
-									</c:when>
-									<c:otherwise>
-										<i class="fa fa-times"></i>
-									</c:otherwise>
-								</c:choose></td>
+							<th><i class="fa fa-tag"></i>&nbsp;Task</th>
+							<th><i class="fa fa-hourglass-start"></i>&nbsp;Start</th>
+							<th><i class="fa fa-hourglass-end"></i>&nbsp;Finish</th>
+							<th><i class="fa fa-check-circle-o"></i>&nbsp;Completed</th>
 						</tr>
-					</c:forEach>
+					</thead>
+					<tbody>
+						<c:forEach items="${requestScope.tasks}" var="task">
+							<tr>
+								<td><a href="./task?idTask=${task.idTask}"><strong><c:out
+												value="${task.name}"></c:out></strong></a></td>
+								<td><c:out value="${task.startDay}"></c:out></td>
+								<td><c:out value="${task.finishDay}"></c:out></td>
+								<td><c:choose>
+										<c:when test="${task.completed == 'True' }">
+											<i class="fa fa-check"></i>
+										</c:when>
+										<c:otherwise>
+											<i class="fa fa-times"></i>
+										</c:otherwise>
+									</c:choose></td>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 			</div>
 		</div>

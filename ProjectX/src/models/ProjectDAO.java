@@ -106,7 +106,8 @@ public class ProjectDAO {
 
 		if (currentConn != null) {
 			final String getProjectInfoQuery = "SELECT P.idProject as IdProject, P.name AS ProjectName,"
-					+ " P.rateWorkCompleted AS RateWorkCompleted, P.start AS Start, P.deadline AS Deadline, C.name AS ClientName "
+					+ " P.rateWorkCompleted AS RateWorkCompleted, P.start AS Start, P.deadline AS Deadline, "
+					+ "P.goals AS Goals, P.requirements AS Requirements, P.budget AS Budget, P.estimatedCosts AS EstimatedCosts, C.name AS ClientName "
 					+ "FROM project AS P JOIN client AS C ON P.idClient = C.idClient  WHERE P.idProject = ?";
 			try {
 				statement = currentConn.prepareStatement(getProjectInfoQuery);
@@ -119,6 +120,10 @@ public class ProjectDAO {
 					projectInfo.setStart(rs.getString("Start"));
 					projectInfo.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
 					projectInfo.setDeadline(rs.getString("Deadline"));
+					projectInfo.setGoals(rs.getString("Goals"));
+					projectInfo.setRequirements(rs.getString("Requirements"));
+					projectInfo.setBudget(rs.getDouble("Budget"));
+					projectInfo.setEstimatedCosts(rs.getDouble("EstimatedCosts"));
 					projectInfo.setClientName(rs.getString("ClientName"));
 				}
 
