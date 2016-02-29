@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controllers.utils.CalculateWeights;
+import controllers.utils.CriticalPath;
+import controllers.utils.SchedulerEventsThread;
 import controllers.utils.security.SecureProjectStrategy;
 import models.StageBean;
 import models.StageDAO;
@@ -84,9 +89,15 @@ public class AddPrecedencesServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 			} else {
 				CalculateWeights.computeStagesWeight((List<StageBean>) request.getSession().getAttribute("stages"));
+				System.out.println(request.getParameter("idProject"));
+				
+				CriticalPath.computeCriticalStages(request.getParameter("idProject"));
+				SchedulerEventsThread scheduler = new SchedulerEventsThread();
+				scheduler.setIdProject(Integer.parseInt(request.getParameter("idProject")));
+				final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+				service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
 				request.getSession().removeAttribute("stages");
 				request.getSession().removeAttribute("stagesQueue");
-				request.getSession().removeAttribute("idProject");
 				response.sendRedirect(request.getContextPath() + "/project?idProject="
 						+ Integer.parseInt(request.getParameter("idProject")));
 			}

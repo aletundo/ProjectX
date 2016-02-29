@@ -50,11 +50,7 @@ public class CriticalPathMethodTest {
 		map.put(c, precedencesC);
 		map.put(d, precedencesD);
 
-		List<StageBean> criticalStages = CriticalPath.computeCriticalStages(67);
+		CriticalPath.computeCriticalStages("67");
 
-		for (StageBean critical : criticalStages) {
-
-			System.out.println("critico " + critical.getIdStage());
-		}
 	}
 }

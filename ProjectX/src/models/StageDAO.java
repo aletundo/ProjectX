@@ -69,8 +69,38 @@ public class StageDAO {
 					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
 					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor JOIN  precedences AS P ON S.idStage = P.idPrecedence  "
 					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
+			final String getPrecendecesOutsourcedQuery = "SELECT P.idStage AS IdStage, P.idPrecedence AS IdPrecedence, S.name AS Name, "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
+					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
+					+ "FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
 			try {
 				statement = currentConn.prepareStatement(getPrecedencesQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					StageBean precedence = new StageBean();
+					precedence.setIdStage(rs.getInt("IdPrecedence"));
+					precedence.setName(rs.getString("Name"));
+					precedence.setStartDay(rs.getString("StartDay"));
+					precedence.setFinishDay(rs.getString("FinishDay"));
+					precedence.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
+					precedence.setSupervisorFullname(rs.getString("Supervisor"));
+					precedence.setOutsourcing(rs.getString("Outsourcing"));
+					precedence.setCritical(rs.getString("Critical"));
+					
+					for(Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()){
+						if(pair.getKey().getIdStage() == rs.getInt("IdStage")){
+							List<StageBean> updatedValue = pair.getValue();
+							updatedValue.add(precedence);
+							mapPrecedences.put(pair.getKey(),updatedValue);
+						}
+					}
+				}
+				
+				rs.close();
+				statement.close();
+				
+				statement = currentConn.prepareStatement(getPrecendecesOutsourcedQuery);
 				statement.setInt(1, idProject);
 				rs = statement.executeQuery();
 				while (rs.next()) {

@@ -28,7 +28,9 @@ public class CriticalPath {
 
 	private static final Logger LOGGER = Logger.getLogger(CriticalPath.class.getName());
 			
-	public static List<StageBean> computeCriticalStages(int idProject) {
+	public static void computeCriticalStages(String idProjectString) {
+		System.out.println(idProjectString);
+		int idProject = Integer.parseInt(idProjectString);
 		Map<StageBean, List<StageBean>> mapPrecedences = StageDAO.getInstance().getPrecedences(idProject);
 		System.out.println(mapPrecedences);
 		setLastCritical(mapPrecedences);
@@ -60,7 +62,7 @@ public class CriticalPath {
 		for (Map.Entry<Integer, Integer> p : mapES.entrySet()) {
 			System.out.println("mapES " + p.getValue());
 		}
-		return criticalStages;
+		StageDAO.getInstance().setCriticalStages(criticalStages);
 	}
 
 	public static void setLastCritical(Map<StageBean, List<StageBean>> mapPrecedences) {
@@ -110,7 +112,7 @@ public class CriticalPath {
 			}
 		}
 		for (int i = 0; i < results.size(); ++i) {
-			if (results.get(i) == max && !criticalStages.contains(precedences.get(i).getIdStage())) {
+			if (results.get(i) == max && !criticalStages.contains(precedences.get(i))) {
 				criticalStages.add(precedences.get(i));
 			}
 		}

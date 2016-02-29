@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,7 +34,9 @@ public class SchedulerEventsThread implements Runnable {
 
 	public static void main(String[] args) {
 		final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-		service.scheduleAtFixedRate(new SchedulerEventsThread(), 0, 24, TimeUnit.HOURS);
+		SchedulerEventsThread scheduler = new SchedulerEventsThread();
+		scheduler.setIdProject(74);
+		service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
 	}
 
 	static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -45,19 +48,22 @@ public class SchedulerEventsThread implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("entro");
 		List<StageBean> stages = new ArrayList<>();
 
 		stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
-
+		System.out.println("ho preso gli stage dal db");
 		long criticalDate;
 		for (StageBean stage : stages) {
 			try {
-				criticalDate = UtilityFunctions.getDifferenceDays(format.parse(stage.getFinishDay()),
+				System.out.println("sono nel try");
+				criticalDate = getDifferenceDays(format.parse(stage.getFinishDay()),
 						format.parse(UtilityFunctions.GetCurrentDateTime()));
 				System.out.println(criticalDate);
 				//non critical stage delay
+				System.out.println("stage is critical? " + stage.getCritical());
 				if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())) {
-
+					System.out.println("stage non critico");
 					toAddress = models.UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 
 					final String userName = stage.getSupervisorFullname();
@@ -67,7 +73,7 @@ public class SchedulerEventsThread implements Runnable {
 					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, toAddress, subject, message);
 				} //critical stage delay
 				else if (criticalDate < 0 && stage.getRateWorkCompleted() < 99 && "True".equals(stage.getCritical())) {
-
+					System.out.println("stage non critico");
 					UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 
 					final String userName = stage.getSupervisorFullname();
@@ -90,5 +96,15 @@ public class SchedulerEventsThread implements Runnable {
 			}
 		}
 
+	}
+	public static long getDifferenceDays(Date d1, Date d2) {
+		long diff = d1.getTime() - d2.getTime();
+		if(diff < 0){
+			return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)) - 1;
+		}
+		if(diff > 0){
+			return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)) + 1;
+		}
+		return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
 	}
 }
