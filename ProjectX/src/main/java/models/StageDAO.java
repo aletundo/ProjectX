@@ -72,7 +72,7 @@ public class StageDAO {
 			final String getPrecendecesOutsourcedQuery = "SELECT P.idStage AS IdStage, P.idPrecedence AS IdPrecedence, S.name AS Name, "
 					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
 					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
-					+ "FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
+					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor JOIN precedences AS P ON S.idStage = P.idPrecedence WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
 			try {
 				statement = currentConn.prepareStatement(getPrecedencesQuery);
 				statement.setInt(1, idProject);
