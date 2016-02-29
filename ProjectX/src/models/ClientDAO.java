@@ -54,7 +54,7 @@ public class ClientDAO {
 	}
 
 	public List<ClientBean> getRelatedClients(String subjectArea) {
-		List<ClientBean> clients = new ArrayList<ClientBean>();
+		List<ClientBean> clients = new ArrayList<>();
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		Connection currentConn = DbConnection.connect();

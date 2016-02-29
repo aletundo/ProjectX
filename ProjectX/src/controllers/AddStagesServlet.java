@@ -44,7 +44,7 @@ public class AddStagesServlet extends HttpServlet {
 			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 				return;
 			
-			Map<String, String> messages = new HashMap<String, String>();
+			Map<String, String> messages = new HashMap<>();
 
 			request.setAttribute("messages", messages);
 

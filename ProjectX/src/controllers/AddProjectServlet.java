@@ -33,7 +33,7 @@ public class AddProjectServlet extends HttpServlet {
 			if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
 				return;
 
-			Map<String, String> messages = new HashMap<String, String>();
+			Map<String, String> messages = new HashMap<>();
 
 			request.setAttribute("messages", messages);
 

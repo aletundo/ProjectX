@@ -66,7 +66,7 @@ public class AddSupervisorServlet extends HttpServlet {
 		String port = ""; /* TODO check port */
 		final String pw = ""; /* TODO check password */
 		String userName = "";
-		Map<String, String> messages = new HashMap<String, String>();
+		Map<String, String> messages = new HashMap<>();
 		request.setAttribute("messages", messages);
 
 		try {

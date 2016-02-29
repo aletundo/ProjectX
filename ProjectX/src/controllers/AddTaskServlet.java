@@ -46,7 +46,7 @@ public class AddTaskServlet extends HttpServlet {
 			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
 				return;
 			
-			Map<String, String> messages = new HashMap<String, String>();
+			Map<String, String> messages = new HashMap<>();
 
 			request.setAttribute("messages", messages);
 
