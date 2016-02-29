@@ -67,12 +67,12 @@ public class CriticalPath {
 		for (Map.Entry<StageBean, List<StageBean>> pairKey : mapPrecedences.entrySet()) {
 			boolean b = true;
 			for (Map.Entry<StageBean, List<StageBean>> pairValue : mapPrecedences.entrySet()) {
-				System.out.println(pairValue.getValue());
-				if (pairValue.getValue() != null && pairValue.getValue().contains(pairKey.getKey())) {
-					b = false;
-				}
+				for(StageBean precedence : pairValue.getValue()){
+					if (pairValue.getValue() != null && precedence.getIdStage() == pairKey.getKey().getIdStage()) {
+						b = false;
+					}	
+				}	
 			}
-			System.out.println(b);
 			if (b) {
 				criticalStages.add(pairKey.getKey());
 			}
@@ -109,12 +109,12 @@ public class CriticalPath {
 				max = result;
 			}
 		}
-
 		for (int i = 0; i < results.size(); ++i) {
-			if (results.get(i) == max && !criticalStages.contains(precedences.get(i))) {
+			if (results.get(i) == max && !criticalStages.contains(precedences.get(i).getIdStage())) {
 				criticalStages.add(precedences.get(i));
 			}
 		}
+		
 		return max;
 	}
 }

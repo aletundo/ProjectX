@@ -2,6 +2,7 @@ package models;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,8 +24,82 @@ public class StageDAO {
 		return INSTANCE;
 	}
 	
+	public void setCriticalStages(List<StageBean> criticalStages){
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String setCriticalStagesQuery = "UPDATE stage AS S SET S.critical = 'True' WHERE S.idStage = ?";
+			try {
+				for (StageBean critical : criticalStages) {
+					statement = currentConn.prepareStatement(setCriticalStagesQuery);
+					statement.setFloat(1, critical.getIdStage());
+					statement.executeUpdate();
+					statement.close();
+				}
+
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE, "Something went wrong during setting the critical status of stages" + criticalStages.toString(), e);
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+	
+	
 	public Map<StageBean, List<StageBean>> getPrecedences(int idProject){
-		return null;
+
+		Map<StageBean, List<StageBean>> mapPrecedences = new HashMap<>();
+
+		List<StageBean> stages = getStagesByIdProject(idProject);
+		for (StageBean stage : stages) {
+			List<StageBean> precedences = new ArrayList<>();
+			mapPrecedences.put(stage, precedences);
+		}
+		
+		System.out.println(mapPrecedences);
+
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String getPrecedencesQuery = "SELECT P.idStage AS IdStage, P.idPrecedence AS IdPrecedence, S.name AS Name, "
+					+ "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
+					+ "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
+					+ "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor JOIN  precedences AS P ON S.idStage = P.idPrecedence  "
+					+ "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
+			try {
+				statement = currentConn.prepareStatement(getPrecedencesQuery);
+				statement.setInt(1, idProject);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					StageBean precedence = new StageBean();
+					precedence.setIdStage(rs.getInt("IdPrecedence"));
+					precedence.setName(rs.getString("Name"));
+					precedence.setStartDay(rs.getString("StartDay"));
+					precedence.setFinishDay(rs.getString("FinishDay"));
+					precedence.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
+					precedence.setSupervisorFullname(rs.getString("Supervisor"));
+					precedence.setOutsourcing(rs.getString("Outsourcing"));
+					precedence.setCritical(rs.getString("Critical"));
+					
+					for(Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()){
+						if(pair.getKey().getIdStage() == rs.getInt("IdStage")){
+							List<StageBean> updatedValue = pair.getValue();
+							updatedValue.add(precedence);
+							mapPrecedences.put(pair.getKey(),updatedValue);
+						}
+					}
+				}
+
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE, "Something went wrong during getting stages precedences of project " + idProject, e);
+			} finally {
+				DbConnection.disconnect(currentConn, rs, statement);
+			}
+		}
+		return mapPrecedences;
 	}
 
 	public StageBean getRelativeWeight(int idStage) {

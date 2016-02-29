@@ -18,6 +18,16 @@ import models.StageBean;
 import models.UserDAO;
 
 public class SchedulerEventsThread implements Runnable {
+	
+	private int idProject;
+
+	public int getIdProject() {
+		return idProject;
+	}
+
+	public void setIdProject(int idProject) {
+		this.idProject = idProject;
+	}
 
 	private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
 
@@ -37,17 +47,16 @@ public class SchedulerEventsThread implements Runnable {
 	public void run() {
 		List<StageBean> stages = new ArrayList<>();
 
-		// stages =
-		// models.StageDAO.getInstance().getStagesByIdProject(idproject);
+		stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
 
-		long dataCritica;
+		long criticalDate;
 		for (StageBean stage : stages) {
 			try {
-				dataCritica = UtilityFunctions.getDifferenceDays(format.parse(stage.getFinishDay()),
+				criticalDate = UtilityFunctions.getDifferenceDays(format.parse(stage.getFinishDay()),
 						format.parse(UtilityFunctions.GetCurrentDateTime()));
-				System.out.println(dataCritica);
-				/* STAGE NON CRITICO IN RITARDO */
-				if (dataCritica < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())) {
+				System.out.println(criticalDate);
+				//non critical stage delay
+				if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())) {
 
 					toAddress = models.UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 
@@ -56,8 +65,8 @@ public class SchedulerEventsThread implements Runnable {
 					final String message = "The stage should have ended but it has not yet done it.";
 
 					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, toAddress, subject, message);
-				} /* STAGE CRITICO IN RITARDO */
-				else if (dataCritica < 0 && stage.getRateWorkCompleted() < 99 && "True".equals(stage.getCritical())) {
+				} //critical stage delay
+				else if (criticalDate < 0 && stage.getRateWorkCompleted() < 99 && "True".equals(stage.getCritical())) {
 
 					UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 
