@@ -51,6 +51,7 @@ public class AddDeveloperServlet extends HttpServlet {
 				request.setAttribute("outsourcing", "True");
 				dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
 				dispatcher.forward(request, response);
+				return;
 			}
 
 			List<UserBean> candidatesWithInfos = UserDAO.getInstance().getUsersInfo(candidates);
@@ -108,10 +109,11 @@ public class AddDeveloperServlet extends HttpServlet {
 				// TODO Modify message
 				String object = "[OUTSOURCING]";
 				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
-				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
 				
 				TaskDAO.getInstance().removeTasksWhenOutsourcing(idStage);
 				StageDAO.getInstance().addSupervisor(stage);
+				
+				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
 				
 				request.getSession().removeAttribute("candidates");
 				response.sendRedirect(request.getContextPath() + "/stage?idStage="

@@ -20,6 +20,10 @@ import models.UserDAO;
 
 public class SchedulerEventsThread implements Runnable {
 	
+	public SchedulerEventsThread(int idProject){
+		this.idProject = idProject;
+	}
+	
 	private int idProject;
 
 	public int getIdProject() {
@@ -34,8 +38,7 @@ public class SchedulerEventsThread implements Runnable {
 
 	public static void main(String[] args) {
 		final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-		SchedulerEventsThread scheduler = new SchedulerEventsThread();
-		scheduler.setIdProject(74);
+		SchedulerEventsThread scheduler = new SchedulerEventsThread(74);
 		service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
 	}
 
@@ -61,9 +64,10 @@ public class SchedulerEventsThread implements Runnable {
 						format.parse(UtilityFunctions.GetCurrentDateTime()));
 				System.out.println(criticalDate);
 				//non critical stage delay
+				System.out.println(stage.getIdStage());
 				System.out.println("stage is critical? " + stage.getCritical());
-				if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())) {
-					System.out.println("stage non critico");
+				if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equalsIgnoreCase(stage.getCritical())) {
+					System.out.println("RITARDO NON CRITICO");
 					toAddress = models.UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 
 					final String userName = stage.getSupervisorFullname();
@@ -73,7 +77,7 @@ public class SchedulerEventsThread implements Runnable {
 					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, toAddress, subject, message);
 				} //critical stage delay
 				else if (criticalDate < 0 && stage.getRateWorkCompleted() < 99 && "True".equals(stage.getCritical())) {
-					System.out.println("stage non critico");
+					System.out.println("RITARDO CRITICO");
 					UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 
 					final String userName = stage.getSupervisorFullname();
