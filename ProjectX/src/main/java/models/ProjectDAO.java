@@ -2,7 +2,9 @@ package models;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,26 +25,37 @@ public class ProjectDAO {
 
 	}
 	
-	public void updateProject(ProjectBean project){
+	
+	public void updateProject(ProjectBean project, Map<String, Object> attributes){
 		PreparedStatement statement = null;
 		Connection currentConn = DbConnection.connect();
+		String query = "UPDATE project AS P SET";
+		
+		for(Map.Entry<String, Object> pair : attributes.entrySet()){
+			if(pair.getValue() != ""){
+				query = query + " P." + pair.getKey() + " = ?,";
+			}
+		}
+		
+		if(query.charAt(query.length() - 1) == ','){
+			query = query.substring(0,query.length() - 1);
+		}
+		
+		query = query + " WHERE P.idProject = ?";
+		System.out.println(query);
 
 		if (currentConn != null) {
-			final String updateProjectQuery = "UPDATE project AS P SET P.name = ?, P.budget = ?, P.goals = ?, P.requirements = ?, "
-					+ "P.subjectAreas = ?, P.estimatedCosts = ?, P.start = ?, P.deadline = ?, P.idClient = ? "
-					+ "WHERE P.idProject = ? ";
+			final String updateProjectQuery = query;
 			try {
 				statement = currentConn.prepareStatement(updateProjectQuery);
-				statement.setString(1, project.getName());
-				statement.setDouble(2, project.getBudget());
-				statement.setString(3, project.getGoals());
-				statement.setString(4, project.getRequirements());
-				statement.setString(5, project.getSubjectAreas());
-				statement.setDouble(6, project.getEstimatedCosts());
-				statement.setString(7, project.getStart());
-				statement.setString(8, project.getDeadline());
-				statement.setInt(9, project.getIdClient());
-				statement.setInt(10, project.getIdProject());
+				int i = 1;
+				for(Map.Entry<String, Object> pair : attributes.entrySet()){
+					if(pair.getValue() != ""){
+						statement.setObject(i, pair.getValue());
+						++i;
+					}
+				}
+				statement.setInt(i, project.getIdProject());
 				statement.executeUpdate();
 
 			} catch (SQLException e) {

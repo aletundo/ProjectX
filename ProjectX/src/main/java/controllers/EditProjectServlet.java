@@ -1,6 +1,8 @@
 package controllers;
 
+import java.util.List;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -63,7 +65,7 @@ public class EditProjectServlet extends HttpServlet {
 					dispatcher.forward(request, response);
 					return;
 				0}*/
-
+		
 				String name = request.getParameter("name");
 				
 
@@ -79,30 +81,36 @@ public class EditProjectServlet extends HttpServlet {
 				ClientBean client = new ClientBean();
 				Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
 				
-				System.out.println(request.getParameter("idProject"));
 				int idProject = Integer.parseInt(request.getParameter("idProject"));
+				project.setIdProject(idProject);
 				
-				System.out.println(idProject);
+				Map<String, Object> attributes = new HashMap<>();
+				
+				attributes.put("name",name);
 				String goals = request.getParameter("goals");
+				attributes.put("goals",goals);
 				String requirements = request.getParameter("requirements");
+				attributes.put("requirements",requirements);
 				String clientName = request.getParameter("clientname");
 				String clientMail = request.getParameter("clientmail");
 				String subjectAreas = request.getParameter("subjectareas");
+				attributes.put("subjectAreas",subjectAreas);
 				String deadline = request.getParameter("deadline");
+				attributes.put("deadline",deadline);
 				String start = request.getParameter("start");
-				double budget = Double.parseDouble(request.getParameter("budget"));
-				double estimatedCosts = Double.parseDouble(request.getParameter("estimatedcosts"));
-				
-				project.setIdProject(idProject);
-				project.setName(name);
-				project.setBudget(budget);
-				project.setGoals(goals);
-				project.setRequirements(requirements);
-				project.setSubjectAreas(subjectAreas);
-				project.setEstimatedCosts(estimatedCosts);
-				project.setStart(start);
-				project.setDeadline(deadline);
-				project.setIdProjectManager(idProjectManager);
+				attributes.put("start",start);
+				if(request.getParameter("budget") == ""){
+					attributes.put("budget", "");
+				}else{
+					Double budget = Double.parseDouble(request.getParameter("budget"));
+					attributes.put("budget", budget);
+				}
+				if(request.getParameter("estimatedcosts") == ""){
+					attributes.put("estimatedCosts","");
+				}else{
+					double estimatedCosts = Double.parseDouble(request.getParameter("estimatedcosts"));
+				attributes.put("estimatedCosts",(Double)estimatedCosts);
+				}
 
 				int idClient = ClientDAO.getInstance().getClientByName(clientName);
 				if (idClient != Integer.MIN_VALUE)
@@ -113,7 +121,7 @@ public class EditProjectServlet extends HttpServlet {
 					idClient = ClientDAO.getInstance().addClient(client);
 					project.setIdClient(idClient);
 				}
-				ProjectDAO.getInstance().updateProject(project);
+				ProjectDAO.getInstance().updateProject(project, attributes);
 				if (idProject != Integer.MIN_VALUE) {
 					response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
 				}

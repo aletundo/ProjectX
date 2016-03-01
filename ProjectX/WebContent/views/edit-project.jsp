@@ -19,27 +19,27 @@
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
 						class="form-control" placeholder="${requestScope.project.name}" name="name"
-						value="${fn:escapeXml(param.name)}" required/>
+						value="${fn:escapeXml(param.name)}"/>
 				</div>
 				<span class="help-block">${messages.name}</span> <br>
 
 				<div class="input-group">
 					<span class="input-group-addon">Goals</span>
 					<textarea class="form-control" placeholder="${requestScope.project.goals}"
-						name="goals" rows="1" required></textarea>
+						name="goals" rows="1" ></textarea>
 				</div>
 				<span class="help-block">${messages.goals}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Requirements</span>
 					<textarea class="form-control"
 						placeholder="${requestScope.project.requirements}" name="requirements" rows="1"
-						required></textarea>
+						></textarea>
 				</div>
 				<span class="help-block">${messages.requirements}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Budget</span> <input type="text"
 						class="form-control" name="budget" placeholder="${requestScope.project.budget}"
-						value="${fn:escapeXml(param.budget)}" required /> <span
+						value="${fn:escapeXml(param.budget)}"  /> <span
 						class="input-group-addon">&euro;</span>
 				</div>
 				<span class="help-block">${messages.budget}</span> <br>
@@ -47,7 +47,7 @@
 					<span class="input-group-addon">Estimated costs</span> <input
 						type="text" class="form-control" name="estimatedcosts"
 						placeholder="${requestScope.project.estimatedCosts}"
-						value="${fn:escapeXml(param.estimatedcosts)}" required /> <span
+						value="${fn:escapeXml(param.estimatedcosts)}"  /> <span
 						class="input-group-addon">&euro;</span>
 				</div>
 				<span class="help-block">${messages.estimatedcosts}</span> <br>
@@ -55,28 +55,28 @@
 					<span class="input-group-addon">Client</span> <input
 						class="form-control" type="text"
 						placeholder="Insert the name of the client" name="clientname"
-						value="${fn:escapeXml(param.clientname)}" required />
+						value="${fn:escapeXml(param.clientname)}"  />
 				</div>
 				<span class="help-block">${messages.clientname}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Client mail</span> <input
 						class="form-control" type="text"
 						placeholder="client@domain.example" name="clientmail"
-						value="${fn:escapeXml(param.clientmail)}" required />
+						value="${fn:escapeXml(param.clientmail)}"  />
 				</div>
 				<span class="help-block">${messages.clientmail}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Start</span> <input
 						class="form-control" type="text"
 						placeholder="${requestScope.project.start}" name="start"
-						value="${fn:escapeXml(param.start)}" required />
+						value="${fn:escapeXml(param.start)}" />
 				</div>
 				<span class="help-block">${messages.start}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Deadline</span> <input
 						class="form-control" type="text"
 						placeholder="${requestScope.project.deadline}" name="deadline"
-						value="${fn:escapeXml(param.deadline)}" required />
+						value="${fn:escapeXml(param.deadline)}"/>
 				</div>
 				<span class="help-block">${messages.deadline}</span> <br>
 				<div class="input-group">
@@ -84,7 +84,7 @@
 						type="text" class="form-control"
 						placeholder="${requestScope.project.subjectAreas}"
 						name="subjectareas" value="${fn:escapeXml(param.subjectareas)}"
-						required />
+						/>
 				</div>
 				<span class="help-block">${messages.subjectareas}</span> <br> <br>
 				<div class="input-group pull-right">
