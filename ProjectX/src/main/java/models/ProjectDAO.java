@@ -42,7 +42,6 @@ public class ProjectDAO {
 		}
 		
 		query = query + " WHERE P.idProject = ?";
-		System.out.println(query);
 
 		if (currentConn != null) {
 			final String updateProjectQuery = query;

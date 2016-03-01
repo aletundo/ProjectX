@@ -1,8 +1,6 @@
 package controllers;
 
-import java.util.List;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -64,7 +62,7 @@ public class EditProjectServlet extends HttpServlet {
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-project.jsp");
 					dispatcher.forward(request, response);
 					return;
-				0}*/
+				}*/
 		
 				String name = request.getParameter("name");
 				
@@ -134,10 +132,4 @@ public class EditProjectServlet extends HttpServlet {
 		}
 	}
 	
-	/*public String checkValue(HttpServletRequest request, String value, String attribute){
-		if(request.getParameter(value) == null){
-			ProjectBean project = (ProjectBean)request.getAttribute("project");
-			
-		}
-	}*/
 }

@@ -24,6 +24,46 @@ public class TaskDAO {
 		return INSTANCE;
 	}
 	
+	public void updateTask(TaskBean task, Map<String, Object> attributes){
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		String query = "UPDATE task AS P SET";
+		
+		for(Map.Entry<String, Object> pair : attributes.entrySet()){
+			if(pair.getValue() != ""){
+				query = query + " P." + pair.getKey() + " = ?,";
+			}
+		}
+		
+		if(query.charAt(query.length() - 1) == ','){
+			query = query.substring(0,query.length() - 1);
+		}
+		
+		query = query + " WHERE P.idTask = ?";
+
+		if (currentConn != null) {
+			final String updateProjectQuery = query;
+			try {
+				statement = currentConn.prepareStatement(updateProjectQuery);
+				int i = 1;
+				for(Map.Entry<String, Object> pair : attributes.entrySet()){
+					if(pair.getValue() != ""){
+						statement.setObject(i, pair.getValue());
+						++i;
+					}
+				}
+				statement.setInt(i, task.getIdTask());
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during updating task " + task.getIdTask(), e);
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
+	
 	public void removeTasksWhenOutsourcing(int idStage){
 		
 		List<TaskBean> tasksToRemove = getTasksByStageId(idStage);
