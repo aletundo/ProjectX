@@ -92,9 +92,9 @@ public class AddPrecedencesServlet extends HttpServlet {
 				System.out.println(request.getParameter("idProject"));
 				
 				CriticalPath.computeCriticalStages(request.getParameter("idProject"));
-				SchedulerEventsThread scheduler = new SchedulerEventsThread(Integer.parseInt(request.getParameter("idProject")));
-				final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-				service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
+//				SchedulerEventsThread scheduler = new SchedulerEventsThread(Integer.parseInt(request.getParameter("idProject")));
+//				final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+//				service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
 				request.getSession().removeAttribute("stages");
 				request.getSession().removeAttribute("stagesQueue");
 				response.sendRedirect(request.getContextPath() + "/project?idProject="
