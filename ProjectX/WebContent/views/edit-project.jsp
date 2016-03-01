@@ -11,34 +11,34 @@
 	<jsp:include page="/views/sharable/navbar.jsp" />
 	<div class="row center-block">
 		<div class="col-md-9 col-xs-12">
-			Enter your changes and update the project.
+			Enter your changes and update the project or continue to add stages to it.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/addproject" method="POST"
+				action="${pageContext.request.contextPath}/editproject?idProject=${requestScope.project.idProject}" method="POST"
 				role="form" autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
-						class="form-control" placeholder="Insert the name" name="name"
+						class="form-control" placeholder="${requestScope.project.name}" name="name"
 						value="${fn:escapeXml(param.name)}" required/>
 				</div>
 				<span class="help-block">${messages.name}</span> <br>
 
 				<div class="input-group">
 					<span class="input-group-addon">Goals</span>
-					<textarea class="form-control" placeholder="Insert the goals"
+					<textarea class="form-control" placeholder="${requestScope.project.goals}"
 						name="goals" rows="1" required></textarea>
 				</div>
 				<span class="help-block">${messages.goals}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Requirements</span>
 					<textarea class="form-control"
-						placeholder="Insert the requirements" name="requirements" rows="1"
+						placeholder="${requestScope.project.requirements}" name="requirements" rows="1"
 						required></textarea>
 				</div>
 				<span class="help-block">${messages.requirements}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Budget</span> <input type="text"
-						class="form-control" name="budget" placeholder="Insert the budget"
+						class="form-control" name="budget" placeholder="${requestScope.project.budget}"
 						value="${fn:escapeXml(param.budget)}" required /> <span
 						class="input-group-addon">&euro;</span>
 				</div>
@@ -46,7 +46,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">Estimated costs</span> <input
 						type="text" class="form-control" name="estimatedcosts"
-						placeholder="Insert the estimated costs"
+						placeholder="${requestScope.project.estimatedCosts}"
 						value="${fn:escapeXml(param.estimatedcosts)}" required /> <span
 						class="input-group-addon">&euro;</span>
 				</div>
@@ -68,21 +68,21 @@
 				<div class="input-group">
 					<span class="input-group-addon">Start</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the start (YYYY-mm-DD)" name="start"
+						placeholder="${requestScope.project.start}" name="start"
 						value="${fn:escapeXml(param.start)}" required />
 				</div>
 				<span class="help-block">${messages.start}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Deadline</span> <input
 						class="form-control" type="text"
-						placeholder="Insert the deadline (YYYY-mm-DD)" name="deadline"
+						placeholder="${requestScope.project.deadline}" name="deadline"
 						value="${fn:escapeXml(param.deadline)}" required />
 				</div>
 				<span class="help-block">${messages.deadline}</span> <br>
 				<div class="input-group">
 					<span class="input-group-addon">Subject areas</span> <input
 						type="text" class="form-control"
-						placeholder="Insert the subjet areas (preferably splitted by a comma)"
+						placeholder="${requestScope.project.subjectAreas}"
 						name="subjectareas" value="${fn:escapeXml(param.subjectareas)}"
 						required />
 				</div>
