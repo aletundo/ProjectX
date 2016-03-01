@@ -62,7 +62,7 @@ public class DbConnection {
 			if (rs != null)
 				rs.close();
 		} catch (SQLException e) {
-			/* ignored */ }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
 		disconnect(conn, statement);
 	}
 
@@ -71,12 +71,12 @@ public class DbConnection {
 			if (statement != null)
 				statement.close();
 		} catch (SQLException e) {
-			/* ignored */ }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
 		try {
 			if (conn != null)
 				conn.close();
 		} catch (SQLException se) {
-			// Ignored
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", se);
 		}
 	}
 
@@ -85,12 +85,12 @@ public class DbConnection {
 			if (statement != null)
 				statement.close();
 		} catch (SQLException e) {
-			/* ignored */ }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
 		try {
 			if (conn != null)
 				conn.close();
 		} catch (SQLException se) {
-			// Ignored
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", se);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class DbConnection {
 			if (rs != null)
 				rs.close();
 		} catch (SQLException e) {
-			/* ignored */ }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
 		disconnect(conn, statement);
 	}
 }
