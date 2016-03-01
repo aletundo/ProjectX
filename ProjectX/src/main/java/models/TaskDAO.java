@@ -42,25 +42,31 @@ public class TaskDAO {
 		query = query + " WHERE P.idTask = ?";
 
 		if (currentConn != null) {
-			final String updateProjectQuery = query;
-			try {
-				statement = currentConn.prepareStatement(updateProjectQuery);
-				int i = 1;
-				for(Map.Entry<String, Object> pair : attributes.entrySet()){
-					if(pair.getValue() != ""){
-						statement.setObject(i, pair.getValue());
-						++i;
-					}
-				}
-				statement.setInt(i, task.getIdTask());
-				statement.executeUpdate();
+			updateProjectQuesry(task, attributes, statement, currentConn, query);
+		}
+	}
 
-			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during updating task " + task.getIdTask(), e);
-			} finally {
-				DbConnection.disconnect(currentConn, statement);
+	private void updateProjectQuesry(TaskBean task, Map<String, Object> attributes, PreparedStatement statement,
+			Connection currentConn, String query) {
+		PreparedStatement statementTmp = statement;
+		final String updateProjectQuery = query;
+		try {
+			statementTmp = currentConn.prepareStatement(updateProjectQuery);
+			int i = 1;
+			for(Map.Entry<String, Object> pair : attributes.entrySet()){
+				if(pair.getValue() != ""){
+					statementTmp.setObject(i, pair.getValue());
+					++i;
+				}
 			}
+			statementTmp.setInt(i, task.getIdTask());
+			statementTmp.executeUpdate();
+
+		} catch (SQLException e) {
+			LOGGER.log(Level.SEVERE,
+					"Something went wrong during updating task " + task.getIdTask(), e);
+		} finally {
+			DbConnection.disconnect(currentConn, statementTmp);
 		}
 	}
 	

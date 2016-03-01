@@ -77,25 +77,7 @@ public class StageDAO {
 				statement = currentConn.prepareStatement(getPrecedencesQuery);
 				statement.setInt(1, idProject);
 				rs = statement.executeQuery();
-				while (rs.next()) {
-					StageBean precedence = new StageBean();
-					precedence.setIdStage(rs.getInt("IdPrecedence"));
-					precedence.setName(rs.getString("Name"));
-					precedence.setStartDay(rs.getString("StartDay"));
-					precedence.setFinishDay(rs.getString("FinishDay"));
-					precedence.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
-					precedence.setSupervisorFullname(rs.getString("Supervisor"));
-					precedence.setOutsourcing(rs.getString("Outsourcing"));
-					precedence.setCritical(rs.getString("Critical"));
-					
-					for(Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()){
-						if(pair.getKey().getIdStage() == rs.getInt("IdStage")){
-							List<StageBean> updatedValue = pair.getValue();
-							updatedValue.add(precedence);
-							mapPrecedences.put(pair.getKey(),updatedValue);
-						}
-					}
-				}
+				helperQueryMethod(mapPrecedences, rs);
 				
 				rs.close();
 				statement.close();
@@ -103,25 +85,7 @@ public class StageDAO {
 				statement = currentConn.prepareStatement(getPrecendecesOutsourcedQuery);
 				statement.setInt(1, idProject);
 				rs = statement.executeQuery();
-				while (rs.next()) {
-					StageBean precedence = new StageBean();
-					precedence.setIdStage(rs.getInt("IdPrecedence"));
-					precedence.setName(rs.getString("Name"));
-					precedence.setStartDay(rs.getString("StartDay"));
-					precedence.setFinishDay(rs.getString("FinishDay"));
-					precedence.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
-					precedence.setSupervisorFullname(rs.getString("Supervisor"));
-					precedence.setOutsourcing(rs.getString("Outsourcing"));
-					precedence.setCritical(rs.getString("Critical"));
-					
-					for(Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()){
-						if(pair.getKey().getIdStage() == rs.getInt("IdStage")){
-							List<StageBean> updatedValue = pair.getValue();
-							updatedValue.add(precedence);
-							mapPrecedences.put(pair.getKey(),updatedValue);
-						}
-					}
-				}
+				helperQueryMethod(mapPrecedences, rs);
 
 			} catch (SQLException e) {
 				LOGGER.log(Level.SEVERE, "Something went wrong during getting stages precedences of project " + idProject, e);
@@ -130,6 +94,28 @@ public class StageDAO {
 			}
 		}
 		return mapPrecedences;
+	}
+
+	private void helperQueryMethod(Map<StageBean, List<StageBean>> mapPrecedences, ResultSet rs) throws SQLException {
+		while (rs.next()) {
+			StageBean precedence = new StageBean();
+			precedence.setIdStage(rs.getInt("IdPrecedence"));
+			precedence.setName(rs.getString("Name"));
+			precedence.setStartDay(rs.getString("StartDay"));
+			precedence.setFinishDay(rs.getString("FinishDay"));
+			precedence.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
+			precedence.setSupervisorFullname(rs.getString("Supervisor"));
+			precedence.setOutsourcing(rs.getString("Outsourcing"));
+			precedence.setCritical(rs.getString("Critical"));
+			
+			for(Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()){
+				if(pair.getKey().getIdStage() == rs.getInt("IdStage")){
+					List<StageBean> updatedValue = pair.getValue();
+					updatedValue.add(precedence);
+					mapPrecedences.put(pair.getKey(),updatedValue);
+				}
+			}
+		}
 	}
 
 	public StageBean getRelativeWeight(int idStage) {

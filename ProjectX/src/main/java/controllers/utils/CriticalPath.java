@@ -72,14 +72,15 @@ public class CriticalPath {
 
 	private static boolean calculateSetLastCritical(Map<StageBean, List<StageBean>> mapPrecedences,
 			Map.Entry<StageBean, List<StageBean>> pairKey, boolean b) {
+			boolean c = b;
 		for (Map.Entry<StageBean, List<StageBean>> pairValue : mapPrecedences.entrySet()) {
 			for(StageBean precedence : pairValue.getValue()){
 				if (pairValue.getValue() != null && precedence.getIdStage() == pairKey.getKey().getIdStage()) {
-					b = false;
+					c = false;
 				}	
 			}	
 		}
-		return b;
+		return c;
 	}
 
 	public static boolean precedencesHasES(Map.Entry<StageBean, List<StageBean>> pair) {

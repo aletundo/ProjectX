@@ -1,9 +1,9 @@
 package utils;
 
 import java.io.IOException;
+@FunctionalInterface
+public interface GetPropertiesAbstract {
 
-public abstract class GetPropertiesAbstract {
-
-	abstract Object[] getPropValues() throws IOException;
+	public Object[] getPropValues() throws IOException;
 
 }

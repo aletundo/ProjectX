@@ -255,28 +255,35 @@ public class UserDAO {
 			final String getUsersInfoQuery = "SELECT U.idUser AS IdUser, U.fullname AS Fullname, U.type AS Type, "
 					+ "U.skills AS Skills "
 					+ "FROM user AS U WHERE U.idUser = ?";
-			try {
-				for (UserBean u : candidates) {
-					statement = currentConn.prepareStatement(getUsersInfoQuery);
-					statement.setInt(1, u.getIdUser());
-					rs = statement.executeQuery();
-					while (rs.next()) {
-						u.setIdUser(rs.getInt("IdUser"));
-						u.setFullname(rs.getString("Fullname"));
-						u.setSkills(rs.getString("Skills"));
-						u.setType(rs.getString("Type"));
-					}
-					rs.close();
-					statement.close();
-				}
-			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, "Something went wrong during getting info on user " + candidates, e);
-			} finally {
-				DbConnection.disconnect(currentConn, rs, statement);
-			}
+			queryGetUsersInfo(candidates, statement, rs, currentConn, getUsersInfoQuery);
 		}
 
 		return candidates;
+	}
+
+	private void queryGetUsersInfo(List<UserBean> candidates, PreparedStatement statement, ResultSet rs,
+			Connection currentConn, final String getUsersInfoQuery) {
+		PreparedStatement statementTmp = statement;
+		ResultSet rsTmp = rs;
+		try {
+			for (UserBean u : candidates) {
+				statementTmp = currentConn.prepareStatement(getUsersInfoQuery);
+				statementTmp.setInt(1, u.getIdUser());
+				rsTmp = statementTmp.executeQuery();
+				while (rsTmp.next()) {
+					u.setIdUser(rsTmp.getInt("IdUser"));
+					u.setFullname(rsTmp.getString("Fullname"));
+					u.setSkills(rsTmp.getString("Skills"));
+					u.setType(rsTmp.getString("Type"));
+				}
+				rsTmp.close();
+				statementTmp.close();
+			}
+		} catch (SQLException e) {
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting info on user " + candidates, e);
+		} finally {
+			DbConnection.disconnect(currentConn, rsTmp, statementTmp);
+		}
 	}
 
 	public Map<Integer, List<Object>> getCandidateSupervisors() {

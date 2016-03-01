@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GetWorkhoursProperties extends GetPropertiesAbstract {
+public class GetWorkhoursProperties implements GetPropertiesAbstract {
 	private static final GetWorkhoursProperties INSTANCE = new GetWorkhoursProperties();
 	private static final Logger LOGGER = Logger.getLogger(GetWorkhoursProperties.class.getName());
 

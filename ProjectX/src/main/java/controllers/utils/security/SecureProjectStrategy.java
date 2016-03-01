@@ -87,15 +87,15 @@ public class SecureProjectStrategy implements SecureResourcesStrategy {
 		return true;
 	}
 
+	
 	/**
 	 * @param request
 	 * @param response
-	 * @throws IOException
 	 * @throws ServletException
 	 * @return boolean
 	 */
 	public boolean isAuthorizedCreate(HttpServletRequest request, HttpServletResponse response, ServletContext context)
-			throws IOException, ServletException {
+			throws ServletException {
 		try {
 			HttpSession session = request.getSession();
 			// If the session is not valid redirect to login

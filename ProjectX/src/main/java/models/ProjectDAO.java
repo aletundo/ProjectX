@@ -2,7 +2,6 @@ package models;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,25 +43,31 @@ public class ProjectDAO {
 		query = query + " WHERE P.idProject = ?";
 
 		if (currentConn != null) {
-			final String updateProjectQuery = query;
-			try {
-				statement = currentConn.prepareStatement(updateProjectQuery);
-				int i = 1;
-				for(Map.Entry<String, Object> pair : attributes.entrySet()){
-					if(pair.getValue() != ""){
-						statement.setObject(i, pair.getValue());
-						++i;
-					}
-				}
-				statement.setInt(i, project.getIdProject());
-				statement.executeUpdate();
+			queryUpdateProject(project, attributes, statement, currentConn, query);
+		}
+	}
 
-			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE,
-						"Something went wrong during updating project " + project.getIdProject(), e);
-			} finally {
-				DbConnection.disconnect(currentConn, statement);
+	private void queryUpdateProject(ProjectBean project, Map<String, Object> attributes, PreparedStatement statement,
+			Connection currentConn, String query) {
+		PreparedStatement statementTmp = statement;
+		final String updateProjectQuery = query;
+		try {
+			statementTmp = currentConn.prepareStatement(updateProjectQuery);
+			int i = 1;
+			for(Map.Entry<String, Object> pair : attributes.entrySet()){
+				if(pair.getValue() != ""){
+					statementTmp.setObject(i, pair.getValue());
+					++i;
+				}
 			}
+			statementTmp.setInt(i, project.getIdProject());
+			statementTmp.executeUpdate();
+
+		} catch (SQLException e) {
+			LOGGER.log(Level.SEVERE,
+					"Something went wrong during updating project " + project.getIdProject(), e);
+		} finally {
+			DbConnection.disconnect(currentConn, statementTmp);
 		}
 	}
 

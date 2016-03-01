@@ -14,6 +14,21 @@ import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
 
+	private static final class AuthenticatorTmp extends Authenticator {
+		private final String userName;
+		private final String password;
+
+		private AuthenticatorTmp(String userName, String password) {
+			this.userName = userName;
+			this.password = password;
+		}
+
+		@Override
+		public PasswordAuthentication getPasswordAuthentication() {
+			return new PasswordAuthentication(userName, password);
+		}
+	}
+
 	private SendEmail() {
 
 	}
@@ -29,12 +44,7 @@ public class SendEmail {
 		properties.put("mail.smtp.starttls.enable", "true");
 
 		// creates a new session with an authenticator
-		Authenticator auth = new Authenticator() {
-			@Override
-			public PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(userName, password);
-			}
-		};
+		Authenticator auth = new AuthenticatorTmp(userName, password);
 
 		Session session = Session.getInstance(properties, auth);
 
@@ -52,4 +62,5 @@ public class SendEmail {
 		Transport.send(msg);
 
 	}
+
 }

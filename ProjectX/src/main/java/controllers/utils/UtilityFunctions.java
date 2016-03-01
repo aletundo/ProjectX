@@ -90,7 +90,6 @@ public class UtilityFunctions {
 		/* get current date time with Calendar() */
 		Date date = new Date();
 		String dateStr = sdf.format(date);
-		System.out.println(dateStr);
 		return dateStr;
 	}
 

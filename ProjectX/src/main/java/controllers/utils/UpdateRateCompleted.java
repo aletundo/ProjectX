@@ -10,6 +10,10 @@ import models.TaskDAO;
 
 public class UpdateRateCompleted {
 
+	private UpdateRateCompleted() {
+
+	}
+
 	public static void checkTaskCompleted(int idTask) {
 		List<String> workCompletedState = TaskDAO.getInstance().checkDevelopersWork(idTask);
 		boolean isTaskCompleted = true;

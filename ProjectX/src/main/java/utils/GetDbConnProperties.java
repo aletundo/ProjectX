@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GetDbConnProperties extends GetPropertiesAbstract {
+public class GetDbConnProperties implements GetPropertiesAbstract {
 	private static final GetDbConnProperties INSTANCE = new GetDbConnProperties();
 	private static final Logger LOGGER = Logger.getLogger(GetDbConnProperties.class.getName());
 
