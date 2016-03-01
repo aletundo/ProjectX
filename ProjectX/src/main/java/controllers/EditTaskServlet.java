@@ -70,14 +70,6 @@ public class EditTaskServlet extends HttpServlet {
 				String name = request.getParameter("name");
 				
 
-				if (ProjectDAO.getInstance().checkNameAlreadyExist(name)) {
-					messages.put("name",
-							"<i class='fa fa-frown-o'></i>&nbsp;Oops! Sorry, name already exist. Try another one.");
-					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
-					dispatcher.forward(request, response);
-					return;
-				}
-
 				TaskBean task = new TaskBean();
 				
 				int idTask = Integer.parseInt(request.getParameter("idTask"));
