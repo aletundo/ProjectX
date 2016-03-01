@@ -22,6 +22,37 @@ public class ProjectDAO {
 		return INSTANCE;
 
 	}
+	
+	public void updateProject(ProjectBean project){
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+
+		if (currentConn != null) {
+			final String updateProjectQuery = "UPDATE project AS P SET P.name = ?, P.budget = ?, P.goals = ?, P.requirements = ?, "
+					+ "P.subjectAreas = ?, P.estimatedCosts = ?, P.start = ?, P.deadline = ?, P.idClient = ? "
+					+ "WHERE P.idProject = ? ";
+			try {
+				statement = currentConn.prepareStatement(updateProjectQuery);
+				statement.setString(1, project.getName());
+				statement.setDouble(2, project.getBudget());
+				statement.setString(3, project.getGoals());
+				statement.setString(4, project.getRequirements());
+				statement.setString(5, project.getSubjectAreas());
+				statement.setDouble(6, project.getEstimatedCosts());
+				statement.setString(7, project.getStart());
+				statement.setString(8, project.getDeadline());
+				statement.setInt(9, project.getIdClient());
+				statement.setInt(10, project.getIdProject());
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
+				LOGGER.log(Level.SEVERE,
+						"Something went wrong during updating project " + project.getIdProject(), e);
+			} finally {
+				DbConnection.disconnect(currentConn, statement);
+			}
+		}
+	}
 
 	public float getRateWorkCompleted(int idProject) {
 		float rateWorkCompleted = 0;
@@ -107,7 +138,7 @@ public class ProjectDAO {
 		if (currentConn != null) {
 			final String getProjectInfoQuery = "SELECT P.idProject as IdProject, P.name AS ProjectName,"
 					+ " P.rateWorkCompleted AS RateWorkCompleted, P.start AS Start, P.deadline AS Deadline, "
-					+ "P.goals AS Goals, P.requirements AS Requirements, P.budget AS Budget, P.estimatedCosts AS EstimatedCosts, C.name AS ClientName "
+					+ "P.goals AS Goals, P.requirements AS Requirements, P.budget AS Budget, P.estimatedCosts AS EstimatedCosts, P.subjectAreas AS SubjectAreas, C.name AS ClientName "
 					+ "FROM project AS P JOIN client AS C ON P.idClient = C.idClient  WHERE P.idProject = ?";
 			try {
 				statement = currentConn.prepareStatement(getProjectInfoQuery);
@@ -124,6 +155,7 @@ public class ProjectDAO {
 					projectInfo.setRequirements(rs.getString("Requirements"));
 					projectInfo.setBudget(rs.getDouble("Budget"));
 					projectInfo.setEstimatedCosts(rs.getDouble("EstimatedCosts"));
+					projectInfo.setSubjectAreas(rs.getString("SubjectAreas"));
 					projectInfo.setClientName(rs.getString("ClientName"));
 				}
 
