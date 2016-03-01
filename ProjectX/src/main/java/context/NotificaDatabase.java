@@ -6,7 +6,7 @@ import java.sql.*;
 
 import models.StageBean;
 
-public class NotificaGateway {
+public class NotificaDatabase {
 	
 	List<StageBean> stages = new ArrayList<>();
 
