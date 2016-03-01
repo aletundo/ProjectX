@@ -15,11 +15,15 @@ import utils.GetWorkhoursProperties;
 
 public class UtilityFunctions {
 	
-	private UtilityFunctions(){};
-	
 	private static final Logger LOGGER = Logger.getLogger(UtilityFunctions.class.getName());
 	
 	private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	private UtilityFunctions(){
+		// private constructor
+	};
+	
+	
 	
 	public static long getHoursRequestedTask(String startDay, String finishDay) {
 		long hourRequested = 0;

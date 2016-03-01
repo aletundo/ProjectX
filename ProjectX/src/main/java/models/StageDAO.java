@@ -96,7 +96,7 @@ public class StageDAO {
 		return mapPrecedences;
 	}
 
-	private void helperQueryMethod(Map<StageBean, List<StageBean>> mapPrecedences, ResultSet rs) throws SQLException {
+	private static void helperQueryMethod(Map<StageBean, List<StageBean>> mapPrecedences, ResultSet rs) throws SQLException {
 		while (rs.next()) {
 			StageBean precedence = new StageBean();
 			precedence.setIdStage(rs.getInt("IdPrecedence"));

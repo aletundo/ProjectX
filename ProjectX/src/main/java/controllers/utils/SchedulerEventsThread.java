@@ -16,12 +16,22 @@ import context.Subject;
 import models.StageBean;
 
 public class SchedulerEventsThread extends Subject implements Runnable {
+	private int idProject;
+	static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+	String host = "localhost";
+	String port = "8080"; /* TODO check port */
+	final String pw = "bla"; /* TODO check password */
+	String toAddress = "asd@mail.com";
+	private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
+
+	public SchedulerEventsThread() {
+		super();
+	}
 
 	public SchedulerEventsThread(int idProject) {
 		this.idProject = idProject;
 	}
-
-	private int idProject;
 
 	public int getIdProject() {
 		return idProject;
@@ -31,8 +41,6 @@ public class SchedulerEventsThread extends Subject implements Runnable {
 		this.idProject = idProject;
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
-
 	// public static void main(String[] args) {
 	// final ScheduledExecutorService service =
 	// Executors.newSingleThreadScheduledExecutor();
@@ -40,17 +48,6 @@ public class SchedulerEventsThread extends Subject implements Runnable {
 	// scheduler.attach(new StagesObserver(scheduler));
 	// service.scheduleAtFixedRate(scheduler, 0, 24, TimeUnit.HOURS);
 	// }
-
-	public SchedulerEventsThread() {
-		super();
-	}
-
-	static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-	String host = "localhost";
-	String port = "8080"; /* TODO check port */
-	final String pw = "bla"; /* TODO check password */
-	String toAddress = "asd@mail.com";
 
 	@Override
 	public void run() {
@@ -60,7 +57,7 @@ public class SchedulerEventsThread extends Subject implements Runnable {
 		stagesCritical = getStagesCritical();
 		stagesNonCritical = getStagesNonCritical();
 
-		long criticalDate = 0;
+		long criticalDate;
 		for (StageBean stageNonCritical : stagesNonCritical) {
 			try {
 				criticalDate = getDifferenceDays(format.parse(stageNonCritical.getFinishDay()),
@@ -99,7 +96,7 @@ public class SchedulerEventsThread extends Subject implements Runnable {
 
 	@Override
 	public List<StageBean> getStagesNonCritical() {
-		List<StageBean> stages = new ArrayList<>();
+		List<StageBean> stages;
 		/* TODO QUERY */
 		stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
 		return stages;
@@ -107,7 +104,7 @@ public class SchedulerEventsThread extends Subject implements Runnable {
 
 	@Override
 	public List<StageBean> getStagesCritical() {
-		List<StageBean> stages = new ArrayList<>();
+		List<StageBean> stages;
 		/* TODO QUERY */
 		stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
 		return stages;

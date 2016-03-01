@@ -25,7 +25,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(OrganizeMeetingServlet.class.getName());
 	static String host = "localhost";
 	static String port = ""; /* TODO check port */
-	final String pw = ""; /* TODO check password */
+	static final String pw = ""; /* TODO check password */
 	static String userName = "";
 
 	@Override

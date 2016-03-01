@@ -16,10 +16,6 @@ import models.StageDAO;
 
 public class CriticalPath {
 
-	private CriticalPath() {
-
-	}
-
 	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	private static Map<Integer, Integer> mapES = new HashMap<>();
@@ -27,7 +23,11 @@ public class CriticalPath {
 	private static List<StageBean> criticalStages = new ArrayList<>();
 
 	private static final Logger LOGGER = Logger.getLogger(CriticalPath.class.getName());
-			
+
+	private CriticalPath() {
+
+	}
+
 	public static void computeCriticalStages(String idProjectString) {
 		int idProject = Integer.parseInt(idProjectString);
 		Map<StageBean, List<StageBean>> mapPrecedences = StageDAO.getInstance().getPrecedences(idProject);
@@ -46,7 +46,7 @@ public class CriticalPath {
 				mapPrecedences.remove(removable);
 			}
 		}
-		
+
 		StageDAO.getInstance().setCriticalStages(criticalStages);
 	}
 
@@ -72,13 +72,13 @@ public class CriticalPath {
 
 	private static boolean calculateSetLastCritical(Map<StageBean, List<StageBean>> mapPrecedences,
 			Map.Entry<StageBean, List<StageBean>> pairKey, boolean b) {
-			boolean c = b;
+		boolean c = b;
 		for (Map.Entry<StageBean, List<StageBean>> pairValue : mapPrecedences.entrySet()) {
-			for(StageBean precedence : pairValue.getValue()){
+			for (StageBean precedence : pairValue.getValue()) {
 				if (pairValue.getValue() != null && precedence.getIdStage() == pairKey.getKey().getIdStage()) {
 					c = false;
-				}	
-			}	
+				}
+			}
 		}
 		return c;
 	}
@@ -112,7 +112,7 @@ public class CriticalPath {
 				criticalStages.add(precedences.get(i));
 			}
 		}
-		
+
 		return max;
 	}
 }

@@ -18,16 +18,16 @@ public class StageBean {
 	private float rateWorkCompleted;
 	private String critical;
 
+	public StageBean() {
+		// public constructor
+	}
+
 	public String getCritical() {
 		return critical;
 	}
 
 	public void setCritical(String critical) {
 		this.critical = critical;
-	}
-
-	public StageBean() {
-		/* Say why it's empty */
 	}
 
 	public int getIdStage() {

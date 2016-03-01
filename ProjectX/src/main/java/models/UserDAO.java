@@ -261,7 +261,7 @@ public class UserDAO {
 		return candidates;
 	}
 
-	private void queryGetUsersInfo(List<UserBean> candidates, PreparedStatement statement, ResultSet rs,
+	private static void queryGetUsersInfo(List<UserBean> candidates, PreparedStatement statement, ResultSet rs,
 			Connection currentConn, final String getUsersInfoQuery) {
 		PreparedStatement statementTmp = statement;
 		ResultSet rsTmp = rs;

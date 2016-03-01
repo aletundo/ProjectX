@@ -46,7 +46,7 @@ public class TaskDAO {
 		}
 	}
 
-	private void updateProjectQuesry(TaskBean task, Map<String, Object> attributes, PreparedStatement statement,
+	private static void updateProjectQuesry(TaskBean task, Map<String, Object> attributes, PreparedStatement statement,
 			Connection currentConn, String query) {
 		PreparedStatement statementTmp = statement;
 		final String updateProjectQuery = query;

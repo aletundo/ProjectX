@@ -47,7 +47,7 @@ public class ProjectDAO {
 		}
 	}
 
-	private void queryUpdateProject(ProjectBean project, Map<String, Object> attributes, PreparedStatement statement,
+	private static void queryUpdateProject(ProjectBean project, Map<String, Object> attributes, PreparedStatement statement,
 			Connection currentConn, String query) {
 		PreparedStatement statementTmp = statement;
 		final String updateProjectQuery = query;

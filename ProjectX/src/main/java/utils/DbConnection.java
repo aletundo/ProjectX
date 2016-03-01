@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import utils.GetDbConnProperties;
 
 public class DbConnection {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(DbConnection.class.getName());
 
 	private DbConnection() {
@@ -62,7 +62,8 @@ public class DbConnection {
 			if (rs != null)
 				rs.close();
 		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e);
+		}
 		disconnect(conn, statement);
 	}
 
@@ -71,7 +72,8 @@ public class DbConnection {
 			if (statement != null)
 				statement.close();
 		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e);
+		}
 		try {
 			if (conn != null)
 				conn.close();
@@ -85,7 +87,8 @@ public class DbConnection {
 			if (statement != null)
 				statement.close();
 		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e);
+		}
 		try {
 			if (conn != null)
 				conn.close();
@@ -99,7 +102,8 @@ public class DbConnection {
 			if (rs != null)
 				rs.close();
 		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e); }
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting connection", e);
+		}
 		disconnect(conn, statement);
 	}
 }
