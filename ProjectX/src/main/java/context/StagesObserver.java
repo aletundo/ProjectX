@@ -22,15 +22,15 @@ public class StagesObserver implements Observer {
 		this.subj = subj;
 	}
 
-	public StagesObserver() {
-		// TODO Auto-generated constructor stub
-	}
+//	public StagesObserver() {
+//		// TODO Auto-generated constructor stub
+//	}
 
 	public static void main(String[] args) throws ParseException {
 		// create watched and watcher objects
 		ObservedObject watched = new ObservedObject("Original Value");
 		// watcher object listens to object change
-		StagesObserver watcher = new StagesObserver();
+//		StagesObserver watcher = new StagesObserver();
 		// add observer to the watched object
 //		watched.addObserver(watcher);
 
@@ -145,10 +145,15 @@ public class StagesObserver implements Observer {
 		List<StageBean> stages = subj.getStages();
 		System.out.println("sono dell' update");
 		if (stages.isEmpty()) {
+			System.out.println("sono nell'if");
 			return;
+			
+
 		}
 
 		try {
+			System.out.println("sono nel try");
+
 			controllers.utils.SendEmail.sendEmail(null, null, null, null, null, null, null);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block

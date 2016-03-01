@@ -5,15 +5,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import context.NotificaGateway;
+import context.NotificaDatabase;
 import models.StageBean;
 
 public class DatabaseSubject extends Subject implements Runnable {
 	
 	public static void main(String[] args) {
-	final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-	DatabaseSubject scheduler = new DatabaseSubject();
-	service.scheduleAtFixedRate(scheduler, 0, 5, TimeUnit.SECONDS);
+	
+		final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+		DatabaseSubject dbSubj = new DatabaseSubject();
+		
+	
+	
+	dbSubj.attach(new StagesObserver(dbSubj));
+	
+	service.scheduleAtFixedRate(dbSubj, 0, 5, TimeUnit.SECONDS);
 	}
 	
 	public DatabaseSubject() {
@@ -25,7 +31,7 @@ public class DatabaseSubject extends Subject implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("ci sono");
-		NotificaGateway n = new NotificaGateway();
+		NotificaDatabase n = new NotificaDatabase();
 		System.out.println(stages);
 		stages = n.getStages();
 		System.out.println(stages);
@@ -34,9 +40,9 @@ public class DatabaseSubject extends Subject implements Runnable {
 
 	@Override
 	public List<StageBean> getStages() {
-		System.out.println("sono in getStages");
-		StageBean a = new StageBean();
-		stages.add(a);
+//		System.out.println("sono in getStages");
+//		StageBean a = new StageBean();
+//		stages.add(a);
 		return stages;
 	}
 }
