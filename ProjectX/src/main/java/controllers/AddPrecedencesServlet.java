@@ -88,9 +88,7 @@ public class AddPrecedencesServlet extends HttpServlet {
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-precedences.jsp");
 				dispatcher.forward(request, response);
 			} else {
-				CalculateWeights.computeStagesWeight((List<StageBean>) request.getSession().getAttribute("stages"));
-				System.out.println(request.getParameter("idProject"));
-				
+				CalculateWeights.computeStagesWeight((List<StageBean>) request.getSession().getAttribute("stages"));				
 				CriticalPath.computeCriticalStages(request.getParameter("idProject"));
 //				SchedulerEventsThread scheduler = new SchedulerEventsThread(Integer.parseInt(request.getParameter("idProject")));
 //				final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();

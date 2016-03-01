@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -77,13 +78,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				String object = request.getParameter("object");
 				String message = request.getParameter("message");
 				if ("Yes".equals(request.getParameter("invite-supervisors"))) {
-					List<String> supervisorsMail = UserDAO.getInstance()
-							.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
-					for (String mails : supervisorsMail) {
-						controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
-					}
-					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, pmMail, object, message);
-					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, clientMail, object, message);
+					sendEmailToSupervisors(request, host, port, pw, userName, pmMail, clientMail, object, message);
 				}
 
 				/*
@@ -97,13 +92,8 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				List<String> developersMail = UserDAO.getInstance()
 						.getAllDevelopersMail(Integer.parseInt(request.getParameter("idStage")));
 				if ("Yes".equals(request.getParameter("invite-project-manager"))) {
-					UserDAO.getInstance()
-							.getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
-					for (String mails : developersMail) {
-						controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
-					}
-					controllers.utils.SendEmail.sendEmail(host, port, userName, pw, supervisorMail, object,
-							message);
+					sendEmailToDevelopers(request, host, port, pw, userName, supervisorMail, object, message,
+							developersMail);
 				}
 				/*
 				 * TODO get the name of the developers and maybe extract method
@@ -112,6 +102,29 @@ public class OrganizeMeetingServlet extends HttpServlet {
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during organize a meeting", e);
 		}
+	}
+
+	private void sendEmailToDevelopers(HttpServletRequest request, String host, String port, final String pw,
+			String userName, String supervisorMail, String object, String message, List<String> developersMail)
+					throws MessagingException {
+		UserDAO.getInstance()
+				.getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
+		for (String mails : developersMail) {
+			controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
+		}
+		controllers.utils.SendEmail.sendEmail(host, port, userName, pw, supervisorMail, object,
+				message);
+	}
+
+	private void sendEmailToSupervisors(HttpServletRequest request, String host, String port, final String pw, String userName,
+			String pmMail, String clientMail, String object, String message) throws MessagingException {
+		List<String> supervisorsMail = UserDAO.getInstance()
+				.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
+		for (String mails : supervisorsMail) {
+			controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
+		}
+		controllers.utils.SendEmail.sendEmail(host, port, userName, pw, pmMail, object, message);
+		controllers.utils.SendEmail.sendEmail(host, port, userName, pw, clientMail, object, message);
 	}
 
 	/**

@@ -22,6 +22,9 @@ public class CalculateWeights {
 	private static int HOURPERDAY;
 	private static final Logger LOGGER = Logger.getLogger(CalculateWeights.class.getName());
 
+	private CalculateWeights(){
+		
+	}
 	// Called when a supervisor add the last task
 	public static void computeTasksWeight(List<TaskBean> tasks) {
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

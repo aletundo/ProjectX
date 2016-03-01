@@ -32,8 +32,9 @@ public class CalculateAvailableUsers {
 	private static Date maxFinish = new Date();
 
 	private static final Logger LOGGER = Logger.getLogger(CalculateAvailableUsers.class.getName());
-	
-	private CalculateAvailableUsers(){};
+
+	private CalculateAvailableUsers() {
+	};
 
 	// calculate the available users for a new TASK
 	public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
@@ -49,7 +50,6 @@ public class CalculateAvailableUsers {
 				maxFinish = format.parse(newTask.getFinishDay());
 
 				Map.Entry<Integer, List<Object>> pair = mapIterator.next();
-				
 
 				Iterator<Object> arrayListIterator = pair.getValue().iterator();
 				availableUsers = getAvailableUsers(newTask, availableUsers, pair, arrayListIterator);
@@ -59,27 +59,26 @@ public class CalculateAvailableUsers {
 		}
 		return availableUsers;
 	}
-	
-	//return the list of available users for a TASK
+
+	// return the list of available users for a TASK
 	private static List<UserBean> getAvailableUsers(TaskBean newTask, List<UserBean> availableUsers,
-			Map.Entry<Integer, List<Object>> pair, Iterator<Object> arrayListIterator)
-					throws ParseException {
+			Map.Entry<Integer, List<Object>> pair, Iterator<Object> arrayListIterator) throws ParseException {
 		List<Object> criticalWorks = new ArrayList<>();
 		if (pair.getValue() == null) {
 			UserBean userFree = new UserBean();
 			userFree.setIdUser(pair.getKey());
-			long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(
-					format.parse(newTask.getStartDay()), format.parse(newTask.getFinishDay()));
+			long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(format.parse(newTask.getStartDay()),
+					format.parse(newTask.getFinishDay()));
 			userFree.setTemporaryHoursAvailable(hoursAvailable);
 			availableUsers.add(userFree);
 		}
 
-			while (arrayListIterator.hasNext()) {
-				Object work = arrayListIterator.next();
-				boolean isCritical = calculateCriticalWork(work, newTask, format);
-				if (isCritical && work != null) {
-					criticalWorks.add(work);
-				}
+		while (arrayListIterator.hasNext()) {
+			Object work = arrayListIterator.next();
+			boolean isCritical = calculateCriticalWork(work, newTask, format);
+			if (isCritical && work != null) {
+				criticalWorks.add(work);
+			}
 		}
 
 		UserBean availableUser = isAvailable(newTask, pair, criticalWorks);
@@ -93,13 +92,13 @@ public class CalculateAvailableUsers {
 	private static UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair,
 			List<Object> criticalWorks) {
 		long hourAvailable = Long.MIN_VALUE;
-	
+
 		try {
 			hourAvailable = getAvailableHours(criticalWorks, newTask, pair);
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
-	
+
 		if (hourAvailable > 0) {
 			UserBean availableUser = new UserBean();
 			if (pair != null) {
@@ -109,20 +108,19 @@ public class CalculateAvailableUsers {
 			}
 		}
 		return null;
-	
+
 	}
+
 	// calculate the available hours of a user for a new TASK
 	private static long getAvailableHours(List<Object> criticalWorks, TaskBean newTask,
 			Map.Entry<Integer, List<Object>> pair) throws ParseException {
 		long dateDiffTOT = UtilityFunctions.getDifferenceDays(minStart, maxFinish);
-		System.out.println("dateDiffTOT: " + dateDiffTOT);
 		long workingHoursTOT = HOURPERDAY * (dateDiffTOT);
-		System.out.println("ore lavorative disponibili: " + workingHoursTOT);
 		long hoursCriticalWorks = 0;
 		for (Object work : criticalWorks) {
-	
+
 			long hourWork = 0;
-	
+
 			if (work instanceof models.StageBean) {
 				StageBean workStage = (StageBean) work;
 				long dateDiff = UtilityFunctions.getDifferenceDays(
@@ -130,36 +128,26 @@ public class CalculateAvailableUsers {
 								format.parse(newTask.getStartDay())),
 						UtilityFunctions.calculateMax(format.parse(workStage.getFinishDay()),
 								format.parse(newTask.getFinishDay())));
-	
+
 				hourWork = STAGEHOURPERDAY * (dateDiff
 						- (UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getStartDay()),
 								format.parse(newTask.getStartDay()))
 						+ UtilityFunctions.getDifferenceDaysExclusive(format.parse(workStage.getFinishDay()),
 								format.parse(newTask.getFinishDay()))));
 				hoursCriticalWorks += hourWork;
-	
-				System.out.println("diff1: " + UtilityFunctions.getDifferenceDaysExclusive(
-						format.parse(workStage.getStartDay()), format.parse(newTask.getStartDay())));
-				System.out.println("diff2: " + UtilityFunctions.getDifferenceDaysExclusive(
-						format.parse(workStage.getFinishDay()), format.parse(newTask.getFinishDay())));
-				System.out.println("hourwork: " + hourWork);
-				System.out.println("ore lavori critici2 " + hoursCriticalWorks);
-	
 			}
 			if (work instanceof models.TaskBean) {
 				TaskBean workTask = (TaskBean) work;
 				hourWork = TaskDAO.getInstance().getTaskHourRequested(pair, hourWork, workTask);
 				hoursCriticalWorks += hourWork;
-				System.out.println("ore lavori critici3 " + hoursCriticalWorks);
 			}
 		}
-	
+
 		long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart,
 				format.parse(newTask.getStartDay()))
 				+ (UtilityFunctions.getDifferenceDaysExclusive(format.parse(newTask.getFinishDay()), maxFinish)));
-		System.out.println("ore di slack: " + hourSlack);
 		long availableHoursUser = workingHoursTOT - hoursCriticalWorks - hourSlack;
-	
+
 		return availableHoursUser;
 	}
 
@@ -175,7 +163,7 @@ public class CalculateAvailableUsers {
 				return true;
 			}
 		}
-	
+
 		if (work instanceof models.TaskBean) {
 			TaskBean workTask = (TaskBean) work;
 			if (!(format.parse(workTask.getFinishDay()).before(format.parse(newTask.getStartDay()))
@@ -210,15 +198,16 @@ public class CalculateAvailableUsers {
 		}
 		return availableUsers;
 	}
-	//return the list of available users for a STAGE
+
+	// return the list of available users for a STAGE
 	private static List<UserBean> getAvailableUsers(StageBean newStage, List<UserBean> availableUsers,
 			Map.Entry<Integer, List<Object>> pair, Iterator<Object> arrayListIterator) throws ParseException {
 		List<Object> criticalWorks = new ArrayList<>();
 		if (pair.getValue() == null) {
 			UserBean userFree = new UserBean();
 			userFree.setIdUser(pair.getKey());
-			long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(
-					format.parse(newStage.getStartDay()), format.parse(newStage.getFinishDay()));
+			long hoursAvailable = HOURPERDAY * UtilityFunctions.getDifferenceDays(format.parse(newStage.getStartDay()),
+					format.parse(newStage.getFinishDay()));
 			userFree.setTemporaryHoursAvailable(hoursAvailable);
 			availableUsers.add(userFree);
 		}
@@ -249,8 +238,6 @@ public class CalculateAvailableUsers {
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
 		}
-		System.out.println("ore disponibili:" + hourAvailable);
-		System.out.println("ore nuovo stage: " + hourNewStage);
 		if (hourAvailable >= hourNewStage) {
 			UserBean availableUser = new UserBean();
 			if (pair != null) {
@@ -266,9 +253,7 @@ public class CalculateAvailableUsers {
 	private static long getAvailableHours(List<Object> criticalWorks, StageBean newStage,
 			Map.Entry<Integer, List<Object>> pair) throws ParseException {
 		long dateDiffTOT = UtilityFunctions.getDifferenceDays(minStart, maxFinish);
-		System.out.println("dateDiffTOT: " + dateDiffTOT);
 		long workingHoursTOT = HOURPERDAY * (dateDiffTOT);
-		System.out.println("ore lavorative disponibili: " + workingHoursTOT);
 		long hoursCriticalWorks = 0;
 		for (Object work : criticalWorks) {
 
@@ -276,7 +261,6 @@ public class CalculateAvailableUsers {
 
 			if (work instanceof models.ProjectBean) {
 
-				System.out.println("working hours tot" + workingHoursTOT);
 				ProjectBean workProject = (ProjectBean) work;
 				long dateDiff = UtilityFunctions.getDifferenceDays(
 						UtilityFunctions.calculateMin(format.parse(workProject.getStart()),
@@ -291,7 +275,6 @@ public class CalculateAvailableUsers {
 								format.parse(newStage.getFinishDay()))));
 
 				hoursCriticalWorks += hourWork;
-				System.out.println("ore lavori critici1 " + hoursCriticalWorks);
 			}
 
 			if (work instanceof models.StageBean) {
@@ -309,25 +292,16 @@ public class CalculateAvailableUsers {
 								format.parse(newStage.getFinishDay()))));
 				hoursCriticalWorks += hourWork;
 
-				System.out.println("diff1: " + UtilityFunctions.getDifferenceDaysExclusive(
-						format.parse(workStage.getStartDay()), format.parse(newStage.getStartDay())));
-				System.out.println("diff2: " + UtilityFunctions.getDifferenceDaysExclusive(
-						format.parse(workStage.getFinishDay()), format.parse(newStage.getFinishDay())));
-				System.out.println("hourwork: " + hourWork);
-				System.out.println("ore lavori critici2 " + hoursCriticalWorks);
-
 			}
 			if (work instanceof models.TaskBean) {
 				TaskBean workTask = (TaskBean) work;
 				hourWork = TaskDAO.getInstance().getTaskHourRequested(pair, hourWork, workTask);
 				hoursCriticalWorks += hourWork;
-				System.out.println("ore lavori critici3 " + hoursCriticalWorks);
 			}
 		}
 		long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart,
 				format.parse(newStage.getStartDay()))
 				+ (UtilityFunctions.getDifferenceDaysExclusive(format.parse(newStage.getFinishDay()), maxFinish)));
-		System.out.println("ore di slack: " + hourSlack);
 		long availableHoursUser = workingHoursTOT - hoursCriticalWorks - hourSlack;
 
 		return availableHoursUser;

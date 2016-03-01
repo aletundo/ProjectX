@@ -10,7 +10,7 @@ public abstract class Subject {
 	protected List<Observer> observers;
 
 	public Subject() {
-		observers = new ArrayList<Observer>();
+		observers = new ArrayList<>();
 	}
 
 	public Subject(Subject subject) {
