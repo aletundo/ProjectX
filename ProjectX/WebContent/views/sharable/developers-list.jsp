@@ -23,8 +23,8 @@
 				varStatus="k">
 				<tr>
 					<td><div class="radio">
-							<label><input type="radio" name="id-supervisor"
-								value="${candidate.idUser}"> <strong><c:out
+							<label><input type="radio" name="index"
+								value="${k.count}"> <strong><c:out
 										value="${candidate.fullname}"></c:out></strong></label>
 						</div></td>
 					<td><div class="radiotext">

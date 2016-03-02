@@ -59,7 +59,7 @@ public class TaskDAO {
 				}
 			}
 			statement.setInt(i, task.getIdTask());
-			if(!"UPDATE task AS T SET WHERE T.idTask = ?".equals(query) && checkForNotNull(attributes)){
+			if(!"UPDATE task AS T SET WHERE T.idTask = ?".equals(query)){
 				statement.executeUpdate();
 			}
 
@@ -71,14 +71,6 @@ public class TaskDAO {
 		}
 	}
 	
-	private static boolean checkForNotNull(Map<String, Object> attributes){
-		for(Map.Entry<String, Object> pair : attributes.entrySet()){
-			if(pair.getValue() == null){
-				return false;
-			}
-		}
-		return true;
-	}
 	
 	public void removeTasksWhenOutsourcing(int idStage){
 		
