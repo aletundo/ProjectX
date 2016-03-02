@@ -48,64 +48,17 @@ public class StageDAO {
         }
     }
     
-    public static void setDelayStatusStage(int idStage) {
+    public static void setStatusStage(int idStage, String status) {
         PreparedStatement statement = null;
         Connection currentConn = DbConnection.connect();
 
         if (currentConn != null) {
-            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = 'Delay' WHERE S.idStage = ?";
+            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = ? WHERE S.idStage = ?";
             try {
                 
                     statement = currentConn.prepareStatement(setStatusStagesQuery);
-                    statement.setInt(1, idStage);
-                    statement.executeUpdate();
-                    statement.close();
-                
-
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE,
-                        "Something went wrong during setting the status of the stage",
-                        e);
-            } finally {
-                DbConnection.disconnect(currentConn, statement);
-            }
-        }
-    }
-    
-    public static void setCriticalDelayStatusStage(int idStage) {
-        PreparedStatement statement = null;
-        Connection currentConn = DbConnection.connect();
-
-        if (currentConn != null) {
-            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = 'CriticalDelay' WHERE S.idStage = ?";
-            try {
-                
-                    statement = currentConn.prepareStatement(setStatusStagesQuery);
-                    statement.setInt(1, idStage);
-                    statement.executeUpdate();
-                    statement.close();
-                
-
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE,
-                        "Something went wrong during setting the status of the stage",
-                        e);
-            } finally {
-                DbConnection.disconnect(currentConn, statement);
-            }
-        }
-    }
-    
-    public static void setStartStatusStage(int idStage) {
-        PreparedStatement statement = null;
-        Connection currentConn = DbConnection.connect();
-
-        if (currentConn != null) {
-            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = 'Started' WHERE S.idStage = ?";
-            try {
-                
-                    statement = currentConn.prepareStatement(setStatusStagesQuery);
-                    statement.setInt(1, idStage);
+                    statement.setString(1, status);
+                    statement.setInt(2, idStage);
                     statement.executeUpdate();
                     statement.close();
                 
@@ -139,12 +92,12 @@ public class StageDAO {
         if (currentConn != null) {
             final String getPrecedencesQuery = "SELECT P.idStage AS IdStage, P.idPrecedence AS IdPrecedence, S.name AS Name, "
                     + "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
-                    + "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
+                    + "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical, S.status AS Status "
                     + "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor JOIN  precedences AS P ON S.idStage = P.idPrecedence  "
                     + "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
             final String getPrecendecesOutsourcedQuery = "SELECT P.idStage AS IdStage, P.idPrecedence AS IdPrecedence, S.name AS Name, "
                     + "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
-                    + "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
+                    + "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical, S.status AS Status "
                     + "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor JOIN precedences AS P ON S.idStage = P.idPrecedence WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
             try {
                 statement = currentConn.prepareStatement(getPrecedencesQuery);
@@ -182,6 +135,7 @@ public class StageDAO {
             precedence.setSupervisorFullname(rs.getString("Supervisor"));
             precedence.setOutsourcing(rs.getString("Outsourcing"));
             precedence.setCritical(rs.getString("Critical"));
+            precedence.setStatus(rs.getString("Status"));
 
             for (Map.Entry<StageBean, List<StageBean>> pair : mapPrecedences.entrySet()) {
                 if (pair.getKey().getIdStage() == rs.getInt("IdStage")) {
@@ -333,7 +287,7 @@ public class StageDAO {
 
         if (currentConn != null) {
             final String getProjectInfoQuery = "SELECT S.idStage as IdStage, S.idProject AS IdProject, S.name AS StageName, S.startDay AS StartDay, "
-                    + "S.finishDay AS FinishDay, S.goals AS Goals, S.requirements AS Requirements, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS SupervisorFullname "
+                    + "S.finishDay AS FinishDay, S.goals AS Goals, S.requirements AS Requirements, S.rateWorkCompleted AS RateWorkCompleted, U.fullname AS SupervisorFullname, S.critical AS Critical, S.status AS Status "
                     + "FROM stage AS S JOIN user AS U ON S.idSupervisor = U.idUser  WHERE S.idStage = ?";
             try {
                 statement = currentConn.prepareStatement(getProjectInfoQuery);
@@ -350,6 +304,8 @@ public class StageDAO {
                     stageInfo.setRequirements(rs.getString("Requirements"));
                     stageInfo.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
                     stageInfo.setSupervisorFullname(rs.getString("SupervisorFullname"));
+                    stageInfo.setCritical(rs.getString("Critical"));
+                    stageInfo.setStatus(rs.getString("Status"));
                 }
 
             } catch (SQLException e) {
@@ -370,13 +326,13 @@ public class StageDAO {
         if (currentConn != null) {
             final String getStagesQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
                     + "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
-                    + "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical "
+                    + "U.fullname AS Supervisor, S.outsourcing AS Outsourcing, S.critical AS Critical, S.status AS Status "
                     + "FROM stage AS S JOIN user AS U ON U.idUser = S.idSupervisor "
                     + "WHERE S.idProject = ? AND S.outsourcing LIKE 'False'";
 
             final String getStagesOutsourcedQuery = "SELECT S.idStage AS IdStage, S.name AS Name, "
                     + "S.startDay AS StartDay, S.finishDay AS FinishDay, S.rateWorkCompleted AS RateWorkCompleted, "
-                    + "S.outsourcing AS Outsourcing, S.critical AS Critical FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
+                    + "S.outsourcing AS Outsourcing, S.critical AS Critical, S.status AS Status FROM stage AS S WHERE S.idProject = ? AND S.outsourcing LIKE 'True'";
             try {
                 statement = currentConn.prepareStatement(getStagesQuery);
                 statement.setInt(1, idProject);
@@ -409,6 +365,7 @@ public class StageDAO {
                     stage.setRateWorkCompleted(rs.getFloat("RateWorkCompleted"));
                     stage.setOutsourcing(rs.getString("Outsourcing"));
                     stage.setCritical(rs.getString("Critical"));
+                    stage.setStatus(rs.getString("Status"));
                     stages.add(stage);
                 }
 

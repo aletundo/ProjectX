@@ -5,11 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import context.CriticalStagesObserver;
+import context.DelayStartStagesObserver;
 import context.StagesNonCriticalObserver;
 import context.StartStagesObserver;
 import models.StageBean;
@@ -37,20 +39,14 @@ public class SchedulerEventsThread implements Runnable {
         this.idProject = idProject;
     }
 
-    // public static void main(String[] args) {
-    // final ScheduledExecutorService service =
-    // Executors.newSingleThreadScheduledExecutor();
-    // SchedulerEventsThread scheduler = new SchedulerEventsThread(74);
-    // scheduler.attach(new StagesObserver(scheduler));
-    // service.scheduleAtFixedRate(scheduler, 0, 24, TimeUnit.HOURS);
-    // }
-
     @Override
     public void run() {
         List<StageBean> stages;
         stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
         long criticalDate;
         long startDate;
+        Map<StageBean, List<StageBean>> mapPrecedences = models.StageDAO.getInstance()
+                .getPrecedences(this.getIdProject());
 
         for (StageBean stage : stages) {
             try {
@@ -60,20 +56,35 @@ public class SchedulerEventsThread implements Runnable {
                         format.parse(UtilityFunctions.GetCurrentDateTime()));
                 if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())
                         && !"Delay".equals(stage.getStatus())) {
-                    StageDAO.setDelayStatusStage(stage.getIdStage());
+                    StageDAO.setStatusStage(stage.getIdStage(), "Delay");
                     StagesNonCriticalObserver.update(stage.getIdSupervisor());
                 } else if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "True".equals(stage.getCritical())
                         && !"CriticalDelay".equals(stage.getStatus())) {
-                    StageDAO.setCriticalDelayStatusStage(stage.getIdStage());
+                    StageDAO.setStatusStage(stage.getIdStage(), "CriticalDelay");
                     CriticalStagesObserver.update(stage.getIdSupervisor(), stage.getIdProject());
-                } else if (startDate < 0 && !"Started".equals(stage.getStatus())) {
-                    StageDAO.setStartStatusStage(stage.getIdStage());
-                    StartStagesObserver.update(stage.getIdSupervisor());
+                } else if (startDate == 0 && !"Started".equals(stage.getStatus())) {
+                    if (arePrecedencesCompleted(mapPrecedences, stage)) {
+                        StageDAO.setStatusStage(stage.getIdStage(), "Started");
+                        StartStagesObserver.update(stage.getIdSupervisor());
+                    } else {
+                        DelayStartStagesObserver.update(stage.getIdSupervisor());
+                    }
+
                 }
             } catch (ParseException e) {
                 LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
             }
         }
+    }
+
+    public boolean arePrecedencesCompleted(Map<StageBean, List<StageBean>> mapPrecedences, StageBean stage) {
+        List<StageBean> precedences = mapPrecedences.get(stage);
+        for (StageBean precedence : precedences) {
+            if (precedence.getRateWorkCompleted() < 100) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static long getDifferenceDays(Date d1, Date d2) {
