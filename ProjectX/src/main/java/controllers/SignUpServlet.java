@@ -10,29 +10,29 @@ import javax.servlet.http.HttpServletResponse;
 import models.UserBean;
 import models.UserDAO;
 
-@WebServlet(name = "SignUpServlet", urlPatterns = {"/SignUp"})
+@WebServlet(name = "SignUpServlet", urlPatterns = { "/SignUp" })
 public class SignUpServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     @Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String username = request.getParameter("user");
-		String pw = request.getParameter("pw");
-		String type = request.getParameter("type");
-		String fullname = request.getParameter("fullname");
-		String mail = request.getParameter("mail");
-		String skills = request.getParameter("skills");
-		
-		
-		UserBean user = new UserBean();
-		user.setUsername(username);
-		user.setPw(pw);
-		user.setFullname(fullname);
-		user.setType(type);
-		user.setSkills(skills);
-		user.setMail(mail);
-		UserDAO.getInstance().signUpUser(user);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String username = request.getParameter("user");
+        String pw = request.getParameter("pw");
+        String type = request.getParameter("type");
+        String fullname = request.getParameter("fullname");
+        String mail = request.getParameter("mail");
+        String skills = request.getParameter("skills");
+
+        UserBean user = new UserBean();
+        user.setUsername(username);
+        user.setPw(pw);
+        user.setFullname(fullname);
+        user.setType(type);
+        user.setSkills(skills);
+        user.setMail(mail);
+        UserDAO.getInstance().signUpUser(user);
+    }
 
 }

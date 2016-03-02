@@ -17,27 +17,27 @@ import models.TaskDAO;
 
 @WebServlet("/setworkcompleted")
 public class CompleteWorkServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(CompleteWorkServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(CompleteWorkServlet.class.getName());
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureTaskStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureTaskStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			TaskBean task = new TaskBean();
-			task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
-			task.setIdDeveloper((Integer) request.getSession().getAttribute("idUser"));
+            TaskBean task = new TaskBean();
+            task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
+            task.setIdDeveloper((Integer) request.getSession().getAttribute("idUser"));
 
-			TaskDAO.getInstance().setPieceWorkCompleted(task);
-			UpdateRateCompleted.checkTaskCompleted(task.getIdTask());
+            TaskDAO.getInstance().setPieceWorkCompleted(task);
+            UpdateRateCompleted.checkTaskCompleted(task.getIdTask());
 
-			response.sendRedirect(request.getContextPath() + "/task?idTask=" + task.getIdTask());
+            response.sendRedirect(request.getContextPath() + "/task?idTask=" + task.getIdTask());
 
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during setting work completed", e);
-		}
-	}
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during setting work completed", e);
+        }
+    }
 }

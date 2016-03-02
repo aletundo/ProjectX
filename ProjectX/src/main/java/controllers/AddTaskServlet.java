@@ -20,88 +20,88 @@ import models.TaskDAO;
 
 @WebServlet(name = "AddTaskServlet", urlPatterns = { "/addtask" })
 public class AddTaskServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(AddTaskServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(AddTaskServlet.class.getName());
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			request.setAttribute("idStage", idStage);
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e){
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting create task page", e);
-		}
-	}
+            int idStage = Integer.parseInt(request.getParameter("idStage"));
+            request.setAttribute("idStage", idStage);
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during getting create task page", e);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
-			
-			Map<String, String> messages = new HashMap<>();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			request.setAttribute("messages", messages);
+            Map<String, String> messages = new HashMap<>();
 
-			if (!checkParameters(request, messages)) {
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
-				dispatcher.forward(request, response);
-				return;
-			}
-			
-			TaskBean task = new TaskBean();
-			// Get parameters
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			String name = request.getParameter("name");
-			String startDay = request.getParameter("startday");
-			String finishDay = request.getParameter("finishday");
+            request.setAttribute("messages", messages);
 
-			// Set the bean
-			task.setIdStage(idStage);
-			task.setName(name);
-			task.setStartDay(startDay);
-			task.setFinishDay(finishDay);
+            if (!checkParameters(request, messages)) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-task.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
 
-			int idTask = TaskDAO.getInstance().createTask(task);
+            TaskBean task = new TaskBean();
+            // Get parameters
+            int idStage = Integer.parseInt(request.getParameter("idStage"));
+            String name = request.getParameter("name");
+            String startDay = request.getParameter("startday");
+            String finishDay = request.getParameter("finishday");
 
-			if (idTask != Integer.MIN_VALUE)
-				response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
-						+ idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
+            // Set the bean
+            task.setIdStage(idStage);
+            task.setName(name);
+            task.setStartDay(startDay);
+            task.setFinishDay(finishDay);
 
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during adding tasks", e);
-		}
-	}
-	
-	private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+            int idTask = TaskDAO.getInstance().createTask(task);
 
-		String name = request.getParameter("name");
-		String finishDay = request.getParameter("finishday");
-		String startDay = request.getParameter("startday");
+            if (idTask != Integer.MIN_VALUE)
+                response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
+                        + idTask + "&startDay=" + startDay + "&finishDay=" + finishDay);
 
-		if (name == null || name.trim().isEmpty()) {
-			messages.put("name", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid name.");
-			return false;
-		}
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during adding tasks", e);
+        }
+    }
 
-		if (startDay == null || startDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(startDay)) {
+    private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
 
-			messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
-			return false;
-		}
+        String name = request.getParameter("name");
+        String finishDay = request.getParameter("finishday");
+        String startDay = request.getParameter("startday");
 
-		if (finishDay == null || finishDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(finishDay)) {
-			messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
-			return false;
-		}
+        if (name == null || name.trim().isEmpty()) {
+            messages.put("name", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid name.");
+            return false;
+        }
 
-		return true;
-	}
+        if (startDay == null || startDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(startDay)) {
+
+            messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        if (finishDay == null || finishDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(finishDay)) {
+            messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        return true;
+    }
 }

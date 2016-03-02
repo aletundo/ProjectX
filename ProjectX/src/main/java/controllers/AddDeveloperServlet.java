@@ -28,135 +28,134 @@ import models.UserBean;
 
 @WebServlet(name = "AddDeveloperServlet", urlPatterns = { "/adddeveloper" })
 public class AddDeveloperServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(AddDeveloperServlet.class.getName());
-	
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(AddDeveloperServlet.class.getName());
 
-			RequestDispatcher dispatcher;
-			long taskHoursRequired;
-			TaskBean task = new TaskBean();
-			task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
-			task.setStartDay(request.getParameter("startDay"));
-			task.setFinishDay(request.getParameter("finishDay"));
-			Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateDevelopers();
-			List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, task);
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			if (candidates.isEmpty()) {
-				request.setAttribute("outsourcing", "True");
-				dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
-				dispatcher.forward(request, response);
-				return;
-			}
+            RequestDispatcher dispatcher;
+            long taskHoursRequired;
+            TaskBean task = new TaskBean();
+            task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
+            task.setStartDay(request.getParameter("startDay"));
+            task.setFinishDay(request.getParameter("finishDay"));
+            Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateDevelopers();
+            List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, task);
 
-			List<UserBean> candidatesWithInfos = UserDAO.getInstance().getUsersInfo(candidates);
+            if (candidates.isEmpty()) {
+                request.setAttribute("outsourcing", "True");
+                dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
 
-			if (request.getAttribute("taskHoursRequired") == null) {
-				taskHoursRequired = UtilityFunctions.getHoursRequestedTask(request.getParameter("startDay"),
-						request.getParameter("finishDay"));
-			} else {
-				taskHoursRequired = (Long) (request.getAttribute("taskHoursRequired"));
-			}
-			
-			Serializable candidatesWithInfosSer = (Serializable) candidatesWithInfos;
-			
-			request.setAttribute("taskHoursRequired", taskHoursRequired);
-			request.getSession().setAttribute("candidates", candidatesWithInfosSer);
+            List<UserBean> candidatesWithInfos = UserDAO.getInstance().getUsersInfo(candidates);
 
-			dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during setting developers", e);
-		}
-	}
+            if (request.getAttribute("taskHoursRequired") == null) {
+                taskHoursRequired = UtilityFunctions.getHoursRequestedTask(request.getParameter("startDay"),
+                        request.getParameter("finishDay"));
+            } else {
+                taskHoursRequired = (Long) (request.getAttribute("taskHoursRequired"));
+            }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String host = "localhost";
-		String port = ""; /* TODO check port */
-		final String pw = ""; /* TODO check password */
-		String userName = "";
-		Map<String, String> messages = new HashMap<>();
-		request.setAttribute("messages", messages);
-		
-		try {
-			if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
-			
-			if (request.getParameter("companyname") != null) {
+            Serializable candidatesWithInfosSer = (Serializable) candidatesWithInfos;
 
-				String companyName = request.getParameter("companyname");
-				String companyMail = request.getParameter("companymail");
-				if (companyMail == null || companyMail.trim().isEmpty() || !UtilityFunctions.isValidMail(companyMail)) {
-					messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
-					RequestDispatcher dispatcher = getServletContext()
-							.getRequestDispatcher("/views/add-developer.jsp");
-					dispatcher.forward(request, response);
-					return;
-				}
-				int idSupervisor = (Integer) request.getSession().getAttribute("idUser");
-				int idStage = Integer.parseInt(request.getParameter("idStage"));
-				StageBean stage = new StageBean();
-				stage.setIdSupervisor(idSupervisor);
-				stage.setIdStage(idStage);
-				stage.setOutsourcing("True");
-				// TODO Modify message
-				String object = "[OUTSOURCING]";
-				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
-				
-				TaskDAO.getInstance().removeTasksWhenOutsourcing(idStage);
-				StageDAO.getInstance().addSupervisor(stage);
-				
-				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
-				
-				request.getSession().removeAttribute("candidates");
-				response.sendRedirect(request.getContextPath() + "/stage?idStage="
-						+ Integer.parseInt(request.getParameter("idStage")));
-				return;
+            request.setAttribute("taskHoursRequired", taskHoursRequired);
+            request.getSession().setAttribute("candidates", candidatesWithInfosSer);
 
-			}
+            dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during setting developers", e);
+        }
+    }
 
-			TaskBean task = new TaskBean();
-			int idTask = Integer.parseInt(request.getParameter("idTask"));
-			int indexDeveloper = Integer.parseInt(request.getParameter("index")) - 1;
-			long taskHoursRequired = Long.parseLong(request.getParameter("task-hours-required"));
-			@SuppressWarnings("unchecked")
-			List<UserBean> candidatesFromPage = (List<UserBean>) request.getSession().getAttribute("candidates");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String host = "localhost";
+        String port = ""; /* TODO check port */
+        final String pw = ""; /* TODO check password */
+        String userName = "";
+        Map<String, String> messages = new HashMap<>();
+        request.setAttribute("messages", messages);
 
-			long developerFreeHours = candidatesFromPage.get(indexDeveloper).getTemporaryHoursAvailable();
-			long updatedTaskHoursRequired = taskHoursRequired - developerFreeHours;
+        try {
+            if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			task.setIdDeveloper(candidatesFromPage.get(indexDeveloper).getIdUser());
-			task.setIdTask(idTask);
+            if (request.getParameter("companyname") != null) {
 
-			if (updatedTaskHoursRequired > 0) {
-				TaskDAO.getInstance().addDeveloper(task, developerFreeHours);
-				request.setAttribute("taskHoursRequired", updatedTaskHoursRequired);
-				request.getSession().removeAttribute("candidates");
-				doGet(request, response);
-			} else {
-				TaskDAO.getInstance().addDeveloper(task, taskHoursRequired);
-				request.getSession().removeAttribute("candidates");
-				if (request.getParameter("completed") != null) {
-					List<TaskBean> tasks = TaskDAO.getInstance()
-							.getTasksByStageId(Integer.parseInt(request.getParameter("idStage")));
-					CalculateWeights.computeTasksWeight(tasks);
-					response.sendRedirect(request.getContextPath() + "/stage?idStage="
-							+ Integer.parseInt(request.getParameter("idStage")));
-					return;
-				}
-				response.sendRedirect(request.getContextPath() + "/addtask?idStage="
-						+ Integer.parseInt(request.getParameter("idStage")));
+                String companyName = request.getParameter("companyname");
+                String companyMail = request.getParameter("companymail");
+                if (companyMail == null || companyMail.trim().isEmpty() || !UtilityFunctions.isValidMail(companyMail)) {
+                    messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-developer.jsp");
+                    dispatcher.forward(request, response);
+                    return;
+                }
+                int idSupervisor = (Integer) request.getSession().getAttribute("idUser");
+                int idStage = Integer.parseInt(request.getParameter("idStage"));
+                StageBean stage = new StageBean();
+                stage.setIdSupervisor(idSupervisor);
+                stage.setIdStage(idStage);
+                stage.setOutsourcing("True");
+                // TODO Modify message
+                String object = "[OUTSOURCING]";
+                String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
 
-			}
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during setting developers", e);
-		}
-	}
+                TaskDAO.getInstance().removeTasksWhenOutsourcing(idStage);
+                StageDAO.getInstance().addSupervisor(stage);
+
+                controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
+
+                request.getSession().removeAttribute("candidates");
+                response.sendRedirect(request.getContextPath() + "/stage?idStage="
+                        + Integer.parseInt(request.getParameter("idStage")));
+                return;
+
+            }
+
+            TaskBean task = new TaskBean();
+            int idTask = Integer.parseInt(request.getParameter("idTask"));
+            int indexDeveloper = Integer.parseInt(request.getParameter("index")) - 1;
+            long taskHoursRequired = Long.parseLong(request.getParameter("task-hours-required"));
+            @SuppressWarnings("unchecked")
+            List<UserBean> candidatesFromPage = (List<UserBean>) request.getSession().getAttribute("candidates");
+
+            long developerFreeHours = candidatesFromPage.get(indexDeveloper).getTemporaryHoursAvailable();
+            long updatedTaskHoursRequired = taskHoursRequired - developerFreeHours;
+
+            task.setIdDeveloper(candidatesFromPage.get(indexDeveloper).getIdUser());
+            task.setIdTask(idTask);
+
+            if (updatedTaskHoursRequired > 0) {
+                TaskDAO.getInstance().addDeveloper(task, developerFreeHours);
+                request.setAttribute("taskHoursRequired", updatedTaskHoursRequired);
+                request.getSession().removeAttribute("candidates");
+                doGet(request, response);
+            } else {
+                TaskDAO.getInstance().addDeveloper(task, taskHoursRequired);
+                request.getSession().removeAttribute("candidates");
+                if (request.getParameter("completed") != null) {
+                    List<TaskBean> tasks = TaskDAO.getInstance()
+                            .getTasksByStageId(Integer.parseInt(request.getParameter("idStage")));
+                    CalculateWeights.computeTasksWeight(tasks);
+                    response.sendRedirect(request.getContextPath() + "/stage?idStage="
+                            + Integer.parseInt(request.getParameter("idStage")));
+                    return;
+                }
+                response.sendRedirect(request.getContextPath() + "/addtask?idStage="
+                        + Integer.parseInt(request.getParameter("idStage")));
+
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during setting developers", e);
+        }
+    }
 }

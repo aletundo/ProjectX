@@ -18,44 +18,44 @@ import models.ClientDAO;
 
 @WebServlet(name = "SearchClientsServlet", urlPatterns = { "/searchclients" })
 public class SearchClientsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(SearchClientsServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(SearchClientsServlet.class.getName());
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
+                return;
 
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/search-clients.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting search clients page", e);
-		}
-	}
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/search-clients.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during getting search clients page", e);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
+                return;
 
-			String subjectArea = request.getParameter("subject-area");
-			List<ClientBean> clients = ClientDAO.getInstance().getRelatedClients(subjectArea);
-			RequestDispatcher dispatcher;
-			if (clients.isEmpty()) {
-				request.setAttribute("noMatchFound", "No related clients found! Sorry, try again :(");
-			} else {
-				request.setAttribute("clients", clients);
-			}
-			request.setAttribute("subjectArea", subjectArea);
-			dispatcher = getServletContext().getRequestDispatcher("/views/related-clients.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during searching clients", e);
-		}
-	}
+            String subjectArea = request.getParameter("subject-area");
+            List<ClientBean> clients = ClientDAO.getInstance().getRelatedClients(subjectArea);
+            RequestDispatcher dispatcher;
+            if (clients.isEmpty()) {
+                request.setAttribute("noMatchFound", "No related clients found! Sorry, try again :(");
+            } else {
+                request.setAttribute("clients", clients);
+            }
+            request.setAttribute("subjectArea", subjectArea);
+            dispatcher = getServletContext().getRequestDispatcher("/views/related-clients.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during searching clients", e);
+        }
+    }
 
 }

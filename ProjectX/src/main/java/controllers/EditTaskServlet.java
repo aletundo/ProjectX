@@ -25,98 +25,91 @@ import models.TaskDAO;
 @WebServlet("/edittask")
 public class EditTaskServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(EditProjectServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(EditProjectServlet.class.getName());
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			/*
-			 * if (!SecureProjectStrategy.getInstance().isAuthorized(request,
-			 * response, getServletContext())) return;
-			 */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            /*
+             * if (!SecureProjectStrategy.getInstance().isAuthorized(request,
+             * response, getServletContext())) return;
+             */
 
-			int idTask = Integer.parseInt(request.getParameter("idTask"));
-			TaskBean task = TaskDAO.getInstance().getTaskInfo(idTask);
+            int idTask = Integer.parseInt(request.getParameter("idTask"));
+            TaskBean task = TaskDAO.getInstance().getTaskInfo(idTask);
 
-			System.out.println("task: " + task);
-			
-			
-			HttpSession session = request.getSession();
-			request.setAttribute("task", task);
-			session.setAttribute("task", task);
+            System.out.println("task: " + task);
 
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-task.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting edit project page", e);
-		}
-	}
+            HttpSession session = request.getSession();
+            request.setAttribute("task", task);
+            session.setAttribute("task", task);
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-task.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during getting edit project page", e);
+        }
+    }
 
-		try {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
 
-			if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
-				return;
+        try {
 
-			Map<String, String> messages = new HashMap<>();
+            if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
+                return;
 
-			request.setAttribute("messages", messages);
+            Map<String, String> messages = new HashMap<>();
 
-			// TODO re-use of method checkParameters in class addProjectServlet
-			/*
-			 * if (!checkParameters(request, messages)) { RequestDispatcher
-			 * dispatcher = getServletContext().getRequestDispatcher(
-			 * "/views/edit-project.jsp"); dispatcher.forward(request,
-			 * response); return; }
-			 */
-			
-			
-			
-			
-			
-			String name = request.getParameter("name");
-			System.out.println(name);
+            request.setAttribute("messages", messages);
 
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			
+            // TODO re-use of method checkParameters in class addProjectServlet
+            /*
+             * if (!checkParameters(request, messages)) { RequestDispatcher
+             * dispatcher = getServletContext().getRequestDispatcher(
+             * "/views/edit-project.jsp"); dispatcher.forward(request,
+             * response); return; }
+             */
 
-			TaskBean task = new TaskBean();
-			
+            String name = request.getParameter("name");
+            System.out.println(name);
 
-			int idTask = Integer.parseInt(request.getParameter("idTask"));
-			task.setIdTask(idTask);
-			System.out.println("idTask : " + idTask);
+            int idStage = Integer.parseInt(request.getParameter("idStage"));
 
-			Map<String, Object> attributes = new HashMap<>();
+            TaskBean task = new TaskBean();
 
-			attributes.put("name", name);
-			String finishDay = request.getParameter("finishday");
-			attributes.put("finishDay", finishDay);
-			System.out.println(finishDay);
-			String startDay = request.getParameter("startday");
-			System.out.println(startDay);
-			attributes.put("startDay", startDay);
+            int idTask = Integer.parseInt(request.getParameter("idTask"));
+            task.setIdTask(idTask);
+            System.out.println("idTask : " + idTask);
 
-			TaskBean oldTask = (TaskBean) request.getSession().getAttribute("task");
-			System.out.println("oldTask: " + oldTask);
-			String oldFinishDay = oldTask.getFinishDay();
+            Map<String, Object> attributes = new HashMap<>();
 
-			request.getSession().removeAttribute("task");
+            attributes.put("name", name);
+            String finishDay = request.getParameter("finishday");
+            attributes.put("finishDay", finishDay);
+            System.out.println(finishDay);
+            String startDay = request.getParameter("startday");
+            System.out.println(startDay);
+            attributes.put("startDay", startDay);
 
-			TaskDAO.getInstance().updateTask(task, attributes);
-			if (idTask != Integer.MIN_VALUE)
-				response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
-						+ idTask + "&startDay=" + oldFinishDay + "&finishDay=" + finishDay);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during editing task", e);
-		}
+            TaskBean oldTask = (TaskBean) request.getSession().getAttribute("task");
+            System.out.println("oldTask: " + oldTask);
+            String oldFinishDay = oldTask.getFinishDay();
 
-	}
+            request.getSession().removeAttribute("task");
+
+            TaskDAO.getInstance().updateTask(task, attributes);
+            if (idTask != Integer.MIN_VALUE)
+                response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
+                        + idTask + "&startDay=" + oldFinishDay + "&finishDay=" + finishDay);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during editing task", e);
+        }
+
+    }
 
 }

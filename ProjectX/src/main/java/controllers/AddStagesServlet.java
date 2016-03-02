@@ -20,102 +20,101 @@ import models.StageDAO;
 
 @WebServlet(name = "AddStagesServlet", urlPatterns = { "/addstages" })
 public class AddStagesServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(AddStagesServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(AddStagesServlet.class.getName());
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting create stage page", e);
-		}
-	}
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during getting create stage page", e);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
-			
-			Map<String, String> messages = new HashMap<>();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			request.setAttribute("messages", messages);
+            Map<String, String> messages = new HashMap<>();
 
-			if (!checkParameters(request, messages)) {
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
-				dispatcher.forward(request, response);
-				return;
-			}
+            request.setAttribute("messages", messages);
 
-			StageBean stage = new StageBean();
-			// Get parameters
-			int idProject = Integer.parseInt(request.getParameter("idProject")); 
-			String name = request.getParameter("name");
-			String goals = request.getParameter("goals");
-			String requirements = request.getParameter("requirements");
-			String startDay = request.getParameter("startday");
-			String finishDay = request.getParameter("finishday");
+            if (!checkParameters(request, messages)) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-stage.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
 
-			// Set the bean
-			stage.setName(name);
-			stage.setGoals(goals);
-			stage.setRequirements(requirements);
-			stage.setStartDay(startDay);
-			stage.setFinishDay(finishDay);
-			stage.setIdProject(idProject);
+            StageBean stage = new StageBean();
+            // Get parameters
+            int idProject = Integer.parseInt(request.getParameter("idProject"));
+            String name = request.getParameter("name");
+            String goals = request.getParameter("goals");
+            String requirements = request.getParameter("requirements");
+            String startDay = request.getParameter("startday");
+            String finishDay = request.getParameter("finishday");
 
-			int idStage = StageDAO.getInstance().createStage(stage);
+            // Set the bean
+            stage.setName(name);
+            stage.setGoals(goals);
+            stage.setRequirements(requirements);
+            stage.setStartDay(startDay);
+            stage.setFinishDay(finishDay);
+            stage.setIdProject(idProject);
 
-			if (idStage != Integer.MIN_VALUE)
-				response.sendRedirect(request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage="
-						+ idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during adding stages to project", e);
-		}
-	}
-	
-	private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+            int idStage = StageDAO.getInstance().createStage(stage);
 
-		String name = request.getParameter("name");
-		String goals = request.getParameter("goals");
-		String requirements = request.getParameter("requirements");
-		String finishDay = request.getParameter("finishday");
-		String startDay = request.getParameter("startday");
+            if (idStage != Integer.MIN_VALUE)
+                response.sendRedirect(request.getContextPath() + "/addsupervisor?idProject=" + idProject + "&idStage="
+                        + idStage + "&startDay=" + startDay + "&finishDay=" + finishDay);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during adding stages to project", e);
+        }
+    }
 
-		if (name == null || name.trim().isEmpty()) {
-			messages.put("name", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid name.");
-			return false;
-		}
+    private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
 
-		if (goals == null || goals.trim().isEmpty()) {
-			messages.put("goals", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert goals.");
-			return false;
-		}
+        String name = request.getParameter("name");
+        String goals = request.getParameter("goals");
+        String requirements = request.getParameter("requirements");
+        String finishDay = request.getParameter("finishday");
+        String startDay = request.getParameter("startday");
 
-		if (requirements == null || requirements.trim().isEmpty()) {
-			messages.put("requirements", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert requirements.");
-			return false;
-		}
+        if (name == null || name.trim().isEmpty()) {
+            messages.put("name", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid name.");
+            return false;
+        }
 
-		
-		if (startDay == null || startDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(startDay)) {
+        if (goals == null || goals.trim().isEmpty()) {
+            messages.put("goals", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert goals.");
+            return false;
+        }
 
-			messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
-			return false;
-		}
+        if (requirements == null || requirements.trim().isEmpty()) {
+            messages.put("requirements", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert requirements.");
+            return false;
+        }
 
-		if (finishDay == null || finishDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(finishDay)) {
-			messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
-			return false;
-		}
+        if (startDay == null || startDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(startDay)) {
 
-		return true;
-	}
+            messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        if (finishDay == null || finishDay.trim().isEmpty() || !UtilityFunctions.isValidDateFormat(finishDay)) {
+            messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        return true;
+    }
 }

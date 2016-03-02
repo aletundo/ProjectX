@@ -1,7 +1,8 @@
 package context;
-@FunctionalInterface
+
 public interface Observer {
-	
-	public void update();
-	
+
+    public static void update() {
+    }
+
 }

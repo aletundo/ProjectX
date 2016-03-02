@@ -12,38 +12,32 @@ import controllers.utils.UtilityFunctions;
 import models.StageBean;
 
 public class StagesNonCriticalObserver implements Observer {
-	private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
 
-	private Subject subj;
+    // private Subject subj;
+    //
+    // public StagesNonCriticalObserver(Subject subj) {
+    // this.subj = subj;
+    // }
 
-	public StagesNonCriticalObserver(Subject subj) {
-		this.subj = subj;
-	}
+    public static void update() {
 
-	@Override
-	public void update() {
-		List<StageBean> stagesNonCritical = subj.getStagesNonCritical();
+        try {
+            /*
+             * toAddress =
+             * models.UserDAO.getInstance().getGenericUserMailById(stage.
+             * getIdSupervisor()); final String userName =
+             * stage.getSupervisorFullname(); final String subject =
+             * "[STAGE DELAY]"; final String message =
+             * "The stage should have ended but it has not yet done it.";
+             * controllers.utils.SendEmail.sendEmail(host, port, userName, pw,
+             * toAddress, subject, message);
+             */
 
-		if (stagesNonCritical.isEmpty()) {
-			return;
-		}
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during manding an email", e);
 
-		try {
-			/*
-			 * toAddress =
-			 * models.UserDAO.getInstance().getGenericUserMailById(stage.
-			 * getIdSupervisor()); final String userName =
-			 * stage.getSupervisorFullname(); final String subject =
-			 * "[STAGE DELAY]"; final String message =
-			 * "The stage should have ended but it has not yet done it.";
-			 * controllers.utils.SendEmail.sendEmail(host, port, userName, pw,
-			 * toAddress, subject, message);
-			 */
+        }
 
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during manding an email", e);
-
-		}
-
-	}
+    }
 }

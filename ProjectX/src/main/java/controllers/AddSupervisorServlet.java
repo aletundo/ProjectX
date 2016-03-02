@@ -24,94 +24,94 @@ import models.UserBean;
 
 @WebServlet(name = "AddSupervisorServlet", urlPatterns = { "/addsupervisor" })
 public class AddSupervisorServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(AddSupervisorServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(AddSupervisorServlet.class.getName());
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			String startDay = request.getParameter("startDay");
-			String finishDay = request.getParameter("finishDay");
+            int idStage = Integer.parseInt(request.getParameter("idStage"));
+            String startDay = request.getParameter("startDay");
+            String finishDay = request.getParameter("finishDay");
 
-			StageBean stage = new StageBean();
-			stage.setIdStage(idStage);
-			stage.setStartDay(startDay);
-			stage.setFinishDay(finishDay);
+            StageBean stage = new StageBean();
+            stage.setIdStage(idStage);
+            stage.setStartDay(startDay);
+            stage.setFinishDay(finishDay);
 
-			Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateSupervisors();
-			List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, stage);
-			candidates = UserDAO.getInstance().getUsersInfo(candidates);
-			if (candidates.isEmpty()) {
-				request.setAttribute("outsourcing", "True");
-			} else {
-				request.setAttribute("candidates", candidates);
-			}
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-supervisor.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during adding supervisors", e);
-		}
-	}
+            Map<Integer, List<Object>> workMap = UserDAO.getInstance().getCandidateSupervisors();
+            List<UserBean> candidates = CalculateAvailableUsers.calculate(workMap, stage);
+            candidates = UserDAO.getInstance().getUsersInfo(candidates);
+            if (candidates.isEmpty()) {
+                request.setAttribute("outsourcing", "True");
+            } else {
+                request.setAttribute("candidates", candidates);
+            }
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/add-supervisor.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during adding supervisors", e);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		String host = "localhost";
-		String port = ""; /* TODO check port */
-		final String pw = ""; /* TODO check password */
-		String userName = "";
-		Map<String, String> messages = new HashMap<>();
-		request.setAttribute("messages", messages);
+        String host = "localhost";
+        String port = ""; /* TODO check port */
+        final String pw = ""; /* TODO check password */
+        String userName = "";
+        Map<String, String> messages = new HashMap<>();
+        request.setAttribute("messages", messages);
 
-		try {
-			if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;
+        try {
+            if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
+                return;
 
-			StageBean stage = new StageBean();
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-			int idProject = Integer.parseInt(request.getParameter("idProject"));
-			int idSupervisor;
-			if (request.getParameter("companyname") != null) {
+            StageBean stage = new StageBean();
+            int idStage = Integer.parseInt(request.getParameter("idStage"));
+            int idProject = Integer.parseInt(request.getParameter("idProject"));
+            int idSupervisor;
+            if (request.getParameter("companyname") != null) {
 
-				String companyName = request.getParameter("companyname");
-				String companyMail = request.getParameter("companymail");
-				if (companyMail == null || companyMail.trim().isEmpty() || !UtilityFunctions.isValidMail(companyMail)) {
-					messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
-					RequestDispatcher dispatcher = getServletContext()
-							.getRequestDispatcher("/views/add-supervisor.jsp");
-					dispatcher.forward(request, response);
-					return;
-				}
-				idSupervisor = (Integer) request.getSession().getAttribute("idUser");
-				stage.setIdSupervisor(idSupervisor);
-				stage.setOutsourcing("True");
-				// TODO Modify message
-				String object = "[OUTSOURCING]";
-				String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
-				controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
+                String companyName = request.getParameter("companyname");
+                String companyMail = request.getParameter("companymail");
+                if (companyMail == null || companyMail.trim().isEmpty() || !UtilityFunctions.isValidMail(companyMail)) {
+                    messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
+                    RequestDispatcher dispatcher = getServletContext()
+                            .getRequestDispatcher("/views/add-supervisor.jsp");
+                    dispatcher.forward(request, response);
+                    return;
+                }
+                idSupervisor = (Integer) request.getSession().getAttribute("idUser");
+                stage.setIdSupervisor(idSupervisor);
+                stage.setOutsourcing("True");
+                // TODO Modify message
+                String object = "[OUTSOURCING]";
+                String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
+                controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
 
-			} else {
-				idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
-				stage.setOutsourcing("False");
-				stage.setIdSupervisor(idSupervisor);
-			}
-			stage.setIdStage(idStage);
-			stage.setIdProject(idProject);
-			StageDAO.getInstance().addSupervisor(stage);
+            } else {
+                idSupervisor = Integer.parseInt(request.getParameter("id-supervisor"));
+                stage.setOutsourcing("False");
+                stage.setIdSupervisor(idSupervisor);
+            }
+            stage.setIdStage(idStage);
+            stage.setIdProject(idProject);
+            StageDAO.getInstance().addSupervisor(stage);
 
-			if (request.getParameter("completed") == null) {
-				response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
-			} else {
-				response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
-			}
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during adding supervisors", e);
-		}
-	}
+            if (request.getParameter("completed") == null) {
+                response.sendRedirect(request.getContextPath() + "/addstages?idProject=" + idProject);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/addprecedences?idProject=" + idProject);
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during adding supervisors", e);
+        }
+    }
 }

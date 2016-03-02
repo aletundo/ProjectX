@@ -19,28 +19,28 @@ import models.UserBean;
 
 @WebServlet("/task")
 public class TaskDetailsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(TaskDetailsServlet.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(TaskDetailsServlet.class.getName());
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			if (!SecureTaskStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
-				return;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if (!SecureTaskStrategy.getInstance().isAuthorizedVisualize(request, response, getServletContext()))
+                return;
 
-			RequestDispatcher dispatcher;
-			int idTask = Integer.parseInt(request.getParameter("idTask"));
+            RequestDispatcher dispatcher;
+            int idTask = Integer.parseInt(request.getParameter("idTask"));
 
-			TaskBean taskInfo = TaskDAO.getInstance().getTaskInfo(idTask);
-			List<UserBean> developers = TaskDAO.getInstance().getAllDevelopersByIdTask(idTask);
+            TaskBean taskInfo = TaskDAO.getInstance().getTaskInfo(idTask);
+            List<UserBean> developers = TaskDAO.getInstance().getAllDevelopersByIdTask(idTask);
 
-			request.setAttribute("task", taskInfo);
-			request.setAttribute("developers", developers);
-			dispatcher = getServletContext().getRequestDispatcher("/views/visualize-task.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting task details", e);
-		}
-	}
+            request.setAttribute("task", taskInfo);
+            request.setAttribute("developers", developers);
+            dispatcher = getServletContext().getRequestDispatcher("/views/visualize-task.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during getting task details", e);
+        }
+    }
 }

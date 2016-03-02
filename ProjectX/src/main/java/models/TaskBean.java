@@ -2,86 +2,86 @@ package models;
 
 public class TaskBean {
 
-	private int idTask;
-	private int idStage;
-	private int idDeveloper;
-	private String name;
-	private String startDay;
-	private String finishDay;
-	private String completed;
-	private float relativeWeight;
+    private int idTask;
+    private int idStage;
+    private int idDeveloper;
+    private String name;
+    private String startDay;
+    private String finishDay;
+    private String completed;
+    private float relativeWeight;
 
-	public TaskBean() {
-		/* Say why it's empty */
-	}
+    public TaskBean() {
+        /* Say why it's empty */
+    }
 
-	public int getIdTask() {
-		return idTask;
-	}
+    public int getIdTask() {
+        return idTask;
+    }
 
-	public void setIdTask(int idTask) {
-		this.idTask = idTask;
-	}
+    public void setIdTask(int idTask) {
+        this.idTask = idTask;
+    }
 
-	public int getIdStage() {
-		return idStage;
-	}
+    public int getIdStage() {
+        return idStage;
+    }
 
-	public void setIdStage(int idProject) {
-		this.idStage = idProject;
-	}
+    public void setIdStage(int idProject) {
+        this.idStage = idProject;
+    }
 
-	public int getIdDeveloper() {
-		return idDeveloper;
-	}
+    public int getIdDeveloper() {
+        return idDeveloper;
+    }
 
-	public void setIdDeveloper(int idDeveloper) {
-		this.idDeveloper = idDeveloper;
-	}
+    public void setIdDeveloper(int idDeveloper) {
+        this.idDeveloper = idDeveloper;
+    }
 
-	public String getStartDay() {
-		return startDay;
-	}
+    public String getStartDay() {
+        return startDay;
+    }
 
-	public void setStartDay(String startDay) {
-		this.startDay = startDay;
-	}
+    public void setStartDay(String startDay) {
+        this.startDay = startDay;
+    }
 
-	public String getFinishDay() {
-		return finishDay;
-	}
+    public String getFinishDay() {
+        return finishDay;
+    }
 
-	public void setFinishDay(String finishDay) {
-		this.finishDay = finishDay;
-	}
+    public void setFinishDay(String finishDay) {
+        this.finishDay = finishDay;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getCompleted() {
-		return completed;
-	}
+    public String getCompleted() {
+        return completed;
+    }
 
-	public void setCompleted(String completed) {
-		this.completed = completed;
-	}
+    public void setCompleted(String completed) {
+        this.completed = completed;
+    }
 
-	@Override
-	public String toString() {
-		return "TaskBean [idTask=" + idTask + ", idStage=" + idStage + ", idDeveloper=" + idDeveloper + ", name=" + name
-				+ ", startDay=" + startDay + ", finishDay=" + finishDay + ", completed=" + completed + "]";
-	}
+    @Override
+    public String toString() {
+        return "TaskBean [idTask=" + idTask + ", idStage=" + idStage + ", idDeveloper=" + idDeveloper + ", name=" + name
+                + ", startDay=" + startDay + ", finishDay=" + finishDay + ", completed=" + completed + "]";
+    }
 
-	public float getRelativeWeight() {
-		return relativeWeight;
-	}
+    public float getRelativeWeight() {
+        return relativeWeight;
+    }
 
-	public void setRelativeWeight(float relativeWeight) {
-		this.relativeWeight = relativeWeight;
-	}
+    public void setRelativeWeight(float relativeWeight) {
+        this.relativeWeight = relativeWeight;
+    }
 }
