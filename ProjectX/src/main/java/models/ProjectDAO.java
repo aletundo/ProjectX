@@ -25,9 +25,8 @@ public class ProjectDAO {
 	}
 	
 	
-	public void updateProject(ProjectBean project, Map<String, Object> attributes){
-		PreparedStatement statement = null;
-		Connection currentConn = DbConnection.connect();
+	public static String createUpdateProjectQuery(ProjectBean project, Map<String, Object> attributes){
+		
 		String query = "UPDATE project AS P SET";
 		
 		for(Map.Entry<String, Object> pair : attributes.entrySet()){
@@ -42,32 +41,37 @@ public class ProjectDAO {
 		
 		query = query + " WHERE P.idProject = ?";
 
-		if (currentConn != null) {
-			queryUpdateProject(project, attributes, statement, currentConn, query);
+		return query;
 		}
-	}
+	
 
-	private static void queryUpdateProject(ProjectBean project, Map<String, Object> attributes, PreparedStatement statement,
-			Connection currentConn, String query) {
-		PreparedStatement statementTmp = statement;
+	public void updateProject(ProjectBean project, Map<String, Object> attributes) {
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		String query = createUpdateProjectQuery(project, attributes);
+		
 		final String updateProjectQuery = query;
 		try {
-			statementTmp = currentConn.prepareStatement(updateProjectQuery);
+			statement = currentConn.prepareStatement(updateProjectQuery);
 			int i = 1;
 			for(Map.Entry<String, Object> pair : attributes.entrySet()){
 				if(pair.getValue() != ""){
-					statementTmp.setObject(i, pair.getValue());
+					statement.setObject(i, pair.getValue());
 					++i;
 				}
 			}
-			statementTmp.setInt(i, project.getIdProject());
-			statementTmp.executeUpdate();
+			statement.setInt(i, project.getIdProject());
+			if(!"UPDATE project AS P SET WHERE P.idProject = ?".equals(query)){
+				statement.executeUpdate();
+			}
+			
 
 		} catch (SQLException e) {
 			LOGGER.log(Level.SEVERE,
 					"Something went wrong during updating project " + project.getIdProject(), e);
 		} finally {
-			DbConnection.disconnect(currentConn, statementTmp);
+			DbConnection.disconnect(currentConn, statement);
 		}
 	}
 

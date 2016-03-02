@@ -24,14 +24,12 @@ public class TaskDAO {
 		return INSTANCE;
 	}
 	
-	public void updateTask(TaskBean task, Map<String, Object> attributes){
-		PreparedStatement statement = null;
-		Connection currentConn = DbConnection.connect();
-		String query = "UPDATE task AS P SET";
+	private static String createUpdateTaskQuery(TaskBean task, Map<String, Object> attributes){
+		String query = "UPDATE task AS T SET";
 		
 		for(Map.Entry<String, Object> pair : attributes.entrySet()){
 			if(pair.getValue() != ""){
-				query = query + " P." + pair.getKey() + " = ?,";
+				query = query + " T." + pair.getKey() + " = ?,";
 			}
 		}
 		
@@ -39,35 +37,47 @@ public class TaskDAO {
 			query = query.substring(0,query.length() - 1);
 		}
 		
-		query = query + " WHERE P.idTask = ?";
-
-		if (currentConn != null) {
-			updateProjectQuesry(task, attributes, statement, currentConn, query);
-		}
+		query = query + " WHERE T.idTask = ?";
+		
+		return query;
 	}
 
-	private static void updateProjectQuesry(TaskBean task, Map<String, Object> attributes, PreparedStatement statement,
-			Connection currentConn, String query) {
-		PreparedStatement statementTmp = statement;
+	public void updateTask(TaskBean task, Map<String, Object> attributes) {
+		PreparedStatement statement = null;
+		Connection currentConn = DbConnection.connect();
+		
+		String query = createUpdateTaskQuery(task, attributes);
+		
 		final String updateProjectQuery = query;
 		try {
-			statementTmp = currentConn.prepareStatement(updateProjectQuery);
+			statement = currentConn.prepareStatement(updateProjectQuery);
 			int i = 1;
 			for(Map.Entry<String, Object> pair : attributes.entrySet()){
 				if(pair.getValue() != ""){
-					statementTmp.setObject(i, pair.getValue());
+					statement.setObject(i, pair.getValue());
 					++i;
 				}
 			}
-			statementTmp.setInt(i, task.getIdTask());
-			statementTmp.executeUpdate();
+			statement.setInt(i, task.getIdTask());
+			if(!"UPDATE task AS T SET WHERE T.idTask = ?".equals(query) && checkForNotNull(attributes)){
+				statement.executeUpdate();
+			}
 
 		} catch (SQLException e) {
 			LOGGER.log(Level.SEVERE,
 					"Something went wrong during updating task " + task.getIdTask(), e);
 		} finally {
-			DbConnection.disconnect(currentConn, statementTmp);
+			DbConnection.disconnect(currentConn, statement);
 		}
+	}
+	
+	private static boolean checkForNotNull(Map<String, Object> attributes){
+		for(Map.Entry<String, Object> pair : attributes.entrySet()){
+			if(pair.getValue() == null){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public void removeTasksWhenOutsourcing(int idStage){

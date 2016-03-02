@@ -14,7 +14,7 @@
 			Enter your changes and update the task.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="./edittask?idTask=${requestScope.task.idTask}" method="POST" role="form"
+				action="${pageContext.request.contextPath}/edittask?idTask=${requestScope.task.idTask}&idStage=${requestScope.task.idStage}" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"

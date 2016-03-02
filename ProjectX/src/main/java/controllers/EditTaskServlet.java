@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import controllers.utils.security.SecureProjectStrategy;
 import models.ClientBean;
@@ -31,13 +32,21 @@ public class EditTaskServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			/*if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
-				return;*/
-			
+			/*
+			 * if (!SecureProjectStrategy.getInstance().isAuthorized(request,
+			 * response, getServletContext())) return;
+			 */
+
 			int idTask = Integer.parseInt(request.getParameter("idTask"));
 			TaskBean task = TaskDAO.getInstance().getTaskInfo(idTask);
-			request.setAttribute("task", task);
+
+			System.out.println("task: " + task);
 			
+			
+			HttpSession session = request.getSession();
+			request.setAttribute("task", task);
+			session.setAttribute("task", task);
+
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-task.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
@@ -49,55 +58,65 @@ public class EditTaskServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
 		try {
 
-			try {
+			if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
+				return;
 
-				if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
-					return;
+			Map<String, String> messages = new HashMap<>();
 
-				Map<String, String> messages = new HashMap<>();
+			request.setAttribute("messages", messages);
 
-				request.setAttribute("messages", messages);
-				
-				//TODO re-use of method checkParameters in class addProjectServlet
-				/*if (!checkParameters(request, messages)) {
-					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-project.jsp");
-					dispatcher.forward(request, response);
-					return;
-				}*/
-		
-				String name = request.getParameter("name");
-				
+			// TODO re-use of method checkParameters in class addProjectServlet
+			/*
+			 * if (!checkParameters(request, messages)) { RequestDispatcher
+			 * dispatcher = getServletContext().getRequestDispatcher(
+			 * "/views/edit-project.jsp"); dispatcher.forward(request,
+			 * response); return; }
+			 */
+			
+			
+			
+			
+			
+			String name = request.getParameter("name");
+			System.out.println(name);
 
-				TaskBean task = new TaskBean();
-				
-				int idTask = Integer.parseInt(request.getParameter("idTask"));
-				task.setIdTask(idTask);
-				
-				Map<String, Object> attributes = new HashMap<>();
-				
-				attributes.put("name",name);
-				String finishDay = request.getParameter("finishDay");
-				attributes.put("finishDay",finishDay);
-				String startDay = request.getParameter("startDay");
-				attributes.put("startDay",startDay);
-				
-				TaskBean oldTask = (TaskBean)request.getAttribute("task");
-				String oldFinishDay = oldTask.getFinishDay();
+			int idStage = Integer.parseInt(request.getParameter("idStage"));
+			
 
-				TaskDAO.getInstance().updateTask(task, attributes);
-				if (idTask != Integer.MIN_VALUE)
-					response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idTask + "&idTask="
-							+ idTask + "&startDay=" + oldFinishDay + "&finishDay=" + finishDay);
-			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, "Something went wrong during adding a project", e);
-			}
-		
+			TaskBean task = new TaskBean();
+			
+
+			int idTask = Integer.parseInt(request.getParameter("idTask"));
+			task.setIdTask(idTask);
+			System.out.println("idTask : " + idTask);
+
+			Map<String, Object> attributes = new HashMap<>();
+
+			attributes.put("name", name);
+			String finishDay = request.getParameter("finishday");
+			attributes.put("finishDay", finishDay);
+			System.out.println(finishDay);
+			String startDay = request.getParameter("startday");
+			System.out.println(startDay);
+			attributes.put("startDay", startDay);
+
+			TaskBean oldTask = (TaskBean) request.getSession().getAttribute("task");
+			System.out.println("oldTask: " + oldTask);
+			String oldFinishDay = oldTask.getFinishDay();
+
+			request.getSession().removeAttribute("task");
+
+			TaskDAO.getInstance().updateTask(task, attributes);
+			if (idTask != Integer.MIN_VALUE)
+				response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
+						+ idTask + "&startDay=" + oldFinishDay + "&finishDay=" + finishDay);
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during editing a project", e);
+			LOGGER.log(Level.SEVERE, "Something went wrong during editing task", e);
 		}
+
 	}
-	
 
 }
