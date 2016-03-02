@@ -308,8 +308,6 @@ public class CalculateAvailableUsers {
             throws ParseException {
         if (work instanceof models.ProjectBean) {
             ProjectBean workProject = (ProjectBean) work;
-            // check if the referenced project does not collide through time
-            // with the newStage to assign
             if (!(format.parse(workProject.getDeadline()).before(format.parse(newStage.getStartDay()))
                     || format.parse(workProject.getStart()).after(format.parse(newStage.getFinishDay())))) {
                 calculateMinMaxTOT(format.parse(workProject.getStart()), format.parse(workProject.getDeadline()));

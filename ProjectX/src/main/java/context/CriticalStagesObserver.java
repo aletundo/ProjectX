@@ -13,8 +13,8 @@ public class CriticalStagesObserver implements Observer {
     static String host = "localhost";
     static String port = "0";
     static String toAddress;
-    final static String pw = null; 
-    final static String userName = "";
+    static final  String PW = null; 
+    static final  String USERNAME = "";
     
     private CriticalStagesObserver(){
         
@@ -28,8 +28,8 @@ public class CriticalStagesObserver implements Observer {
             final String subject = "[PROJECT DELAY]";
             final String message = "A critical stage should have ended but it has not yet done it and now the entire project is delaying.";
 
-            controllers.utils.SendEmail.sendEmail(host, port, userName, pw, toAddress, subject, message);
-            controllers.utils.SendEmail.sendEmail(host, port, userName, pw, projectManagerMail, subject, message);
+            controllers.utils.SendEmail.sendEmail(host, port, USERNAME, PW, toAddress, subject, message);
+            controllers.utils.SendEmail.sendEmail(host, port, USERNAME, PW, projectManagerMail, subject, message);
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Something went wrong during manding an email", e);

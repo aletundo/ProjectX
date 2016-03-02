@@ -11,8 +11,8 @@ public class StagesNonCriticalObserver implements Observer {
     static String host = "localhost";
     static String port = "";
     static String toAddress;
-    final static String Pw = null;
-    final static String UserName = "";
+    static final  String PW = null;
+    static final  String USERNAME = "";
 
     private StagesNonCriticalObserver() {
 
@@ -25,7 +25,7 @@ public class StagesNonCriticalObserver implements Observer {
             toAddress = models.UserDAO.getInstance().getGenericUserMailById(idSupervisor);
             final String subject = "[STAGE DELAY]";
             final String message = "The stage should have ended but it has not yet done it.";
-            controllers.utils.SendEmail.sendEmail(host, port, UserName, Pw, toAddress, subject, message);
+            controllers.utils.SendEmail.sendEmail(host, port, USERNAME, PW, toAddress, subject, message);
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Something went wrong during manding an email", e);

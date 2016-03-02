@@ -12,8 +12,8 @@ public class DelayStartStagesObserver implements Observer {
     static String host = "localhost";
     static String port = "";
     static String toAddress;
-    final static String Pw = null;
-    final static String UserName = "";
+    static final  String PW = null;
+    static final  String USERNAME = "";
 
     private DelayStartStagesObserver() {
 
@@ -26,7 +26,7 @@ public class DelayStartStagesObserver implements Observer {
             final String subject = "[PROJECT DELAY]";
             final String message = "A stage should have started but one precedent stage has not yet finished";
 
-            controllers.utils.SendEmail.sendEmail(host, port, UserName, Pw, toAddress, subject, message);
+            controllers.utils.SendEmail.sendEmail(host, port, USERNAME, PW, toAddress, subject, message);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Something went wrong during manding an email", e);
 

@@ -25,7 +25,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(OrganizeMeetingServlet.class.getName());
     static String host = "localhost";
     static String port = "";
-    static final String Pw = null;
+    static final String PW = null;
     static String userName = "";
 
     @Override
@@ -107,9 +107,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
             List<String> developersMail) throws MessagingException {
         UserDAO.getInstance().getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
         for (String mails : developersMail) {
-            controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, mails, object, message);
+            controllers.utils.SendEmail.sendEmail(host, port, userName, PW, mails, object, message);
         }
-        controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, supervisorMail, object, message);
+        controllers.utils.SendEmail.sendEmail(host, port, userName, PW, supervisorMail, object, message);
     }
 
     private static void sendEmailToSupervisors(HttpServletRequest request, String pmMail, String clientMail, String object,
@@ -117,10 +117,10 @@ public class OrganizeMeetingServlet extends HttpServlet {
         List<String> supervisorsMail = UserDAO.getInstance()
                 .getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
         for (String mails : supervisorsMail) {
-            controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, mails, object, message);
+            controllers.utils.SendEmail.sendEmail(host, port, userName, PW, mails, object, message);
         }
-        controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, pmMail, object, message);
-        controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, clientMail, object, message);
+        controllers.utils.SendEmail.sendEmail(host, port, userName, PW, pmMail, object, message);
+        controllers.utils.SendEmail.sendEmail(host, port, userName, PW, clientMail, object, message);
     }
 
     /**

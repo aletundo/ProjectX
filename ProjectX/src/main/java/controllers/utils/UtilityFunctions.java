@@ -86,7 +86,7 @@ public class UtilityFunctions {
         return 1 + diff;
     }
 
-    public static String GetCurrentDateTime() {
+    public static String getCurrentDateTime() {
         /* get current date time with Calendar() */
         Date date = new Date();
         return sdf.format(date);

@@ -22,10 +22,6 @@ public class SchedulerEventsThread implements Runnable {
     private int idProject;
     static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    String host = "localhost";
-    static String port = "8080"; /* TODO check port */
-    final String pw = "bla"; /* TODO check password */
-    String toAddress = "asd@mail.com";
     private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
 
     public SchedulerEventsThread(int idProject) {
@@ -52,34 +48,36 @@ public class SchedulerEventsThread implements Runnable {
         for (StageBean stage : stages) {
             try {
                 criticalDate = getDifferenceDays(format.parse(stage.getFinishDay()),
-                        format.parse(UtilityFunctions.GetCurrentDateTime()));
+                        format.parse(UtilityFunctions.getCurrentDateTime()));
                 startDate = getDifferenceDays(format.parse(stage.getStartDay()),
-                        format.parse(UtilityFunctions.GetCurrentDateTime()));
+                        format.parse(UtilityFunctions.getCurrentDateTime()));
                 if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())
                         && !"Delay".equals(stage.getStatus())) {
                     StageDAO.setStatusStage(stage.getIdStage(), "Delay");
                     StagesNonCriticalObserver.update(stage.getIdSupervisor());
-                } else if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "True".equals(stage.getCritical())
-                        && !"CriticalDelay".equals(stage.getStatus())) {
-                    StageDAO.setStatusStage(stage.getIdStage(), "CriticalDelay");
-                    String projectManagerMail = UserDAO.getInstance().getProjectManagerMailByIdStage(stage.getIdStage());
-                    CriticalStagesObserver.update(stage.getIdSupervisor(), projectManagerMail);
-                } else if (startDate == 0 && !"Started".equals(stage.getStatus())) {
-                    helperStartDayCheck(mapPrecedences, stage);
-
-                }
+                } else
+                    helperRunMethod(criticalDate, startDate, mapPrecedences, stage);
             } catch (ParseException e) {
                 LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
             }
         }
     }
 
-    private void helperStartDayCheck(Map<StageBean, List<StageBean>> mapPrecedences, StageBean stage) {
-        if (arePrecedencesCompleted(mapPrecedences, stage)) {
-            StageDAO.setStatusStage(stage.getIdStage(), "Started");
-            StartStagesObserver.update(stage.getIdSupervisor());
-        } else {
-            DelayStartStagesObserver.update(stage.getIdSupervisor());
+    private void helperRunMethod(long criticalDate, long startDate, Map<StageBean, List<StageBean>> mapPrecedences,
+            StageBean stage) {
+        if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "True".equals(stage.getCritical())
+                && !"CriticalDelay".equals(stage.getStatus())) {
+            StageDAO.setStatusStage(stage.getIdStage(), "CriticalDelay");
+            String projectManagerMail = UserDAO.getInstance().getProjectManagerMailByIdStage(stage.getIdStage());
+            CriticalStagesObserver.update(stage.getIdSupervisor(), projectManagerMail);
+        } else if (startDate == 0 && !"Started".equals(stage.getStatus())) {
+            if (arePrecedencesCompleted(mapPrecedences, stage)) {
+                StageDAO.setStatusStage(stage.getIdStage(), "Started");
+                StartStagesObserver.update(stage.getIdSupervisor());
+            } else {
+                DelayStartStagesObserver.update(stage.getIdSupervisor());
+            }
+
         }
     }
 

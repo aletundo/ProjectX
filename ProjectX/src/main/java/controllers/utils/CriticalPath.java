@@ -100,8 +100,8 @@ public class CriticalPath {
         for (StageBean precedence : precedences) {
             long duration = 8 * UtilityFunctions.getDifferenceDays(format.parse(precedence.getStartDay()),
                     format.parse(precedence.getFinishDay()));
-            long ES = mapES.get(precedence.getIdStage());
-            result = ES + duration;
+            long es = mapES.get(precedence.getIdStage());
+            result = es + duration;
             results.add(result);
             if (result > max) {
                 max = result;
