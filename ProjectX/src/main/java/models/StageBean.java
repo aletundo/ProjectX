@@ -17,6 +17,9 @@ public class StageBean {
     private float relativeWeight;
     private float rateWorkCompleted;
     private String critical;
+    private String status;
+
+    
 
     public StageBean() {
         // public constructor
@@ -29,7 +32,15 @@ public class StageBean {
     public void setCritical(String critical) {
         this.critical = critical;
     }
+    
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
     public int getIdStage() {
         return idStage;
     }

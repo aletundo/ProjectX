@@ -47,6 +47,78 @@ public class StageDAO {
             }
         }
     }
+    
+    public static void setDelayStatusStage(int idStage) {
+        PreparedStatement statement = null;
+        Connection currentConn = DbConnection.connect();
+
+        if (currentConn != null) {
+            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = 'Delay' WHERE S.idStage = ?";
+            try {
+                
+                    statement = currentConn.prepareStatement(setStatusStagesQuery);
+                    statement.setInt(1, idStage);
+                    statement.executeUpdate();
+                    statement.close();
+                
+
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE,
+                        "Something went wrong during setting the status of the stage",
+                        e);
+            } finally {
+                DbConnection.disconnect(currentConn, statement);
+            }
+        }
+    }
+    
+    public static void setCriticalDelayStatusStage(int idStage) {
+        PreparedStatement statement = null;
+        Connection currentConn = DbConnection.connect();
+
+        if (currentConn != null) {
+            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = 'CriticalDelay' WHERE S.idStage = ?";
+            try {
+                
+                    statement = currentConn.prepareStatement(setStatusStagesQuery);
+                    statement.setInt(1, idStage);
+                    statement.executeUpdate();
+                    statement.close();
+                
+
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE,
+                        "Something went wrong during setting the status of the stage",
+                        e);
+            } finally {
+                DbConnection.disconnect(currentConn, statement);
+            }
+        }
+    }
+    
+    public static void setStartStatusStage(int idStage) {
+        PreparedStatement statement = null;
+        Connection currentConn = DbConnection.connect();
+
+        if (currentConn != null) {
+            final String setStatusStagesQuery = "UPDATE stage AS S SET S.status = 'Started' WHERE S.idStage = ?";
+            try {
+                
+                    statement = currentConn.prepareStatement(setStatusStagesQuery);
+                    statement.setInt(1, idStage);
+                    statement.executeUpdate();
+                    statement.close();
+                
+
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE,
+                        "Something went wrong during setting the status of the stage",
+                        e);
+            } finally {
+                DbConnection.disconnect(currentConn, statement);
+            }
+        }
+    }
 
     public Map<StageBean, List<StageBean>> getPrecedences(int idProject) {
 

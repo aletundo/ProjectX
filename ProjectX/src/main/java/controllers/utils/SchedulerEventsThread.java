@@ -3,19 +3,17 @@ package controllers.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import context.CriticalStagesObserver;
 import context.StagesNonCriticalObserver;
-import context.Subject;
+import context.StartStagesObserver;
 import models.StageBean;
+import models.StageDAO;
 
 public class SchedulerEventsThread implements Runnable {
     private int idProject;
@@ -50,18 +48,27 @@ public class SchedulerEventsThread implements Runnable {
     @Override
     public void run() {
         List<StageBean> stages;
-        stages = getStages();
+        stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
         long criticalDate;
+        long startDate;
 
         for (StageBean stage : stages) {
             try {
                 criticalDate = getDifferenceDays(format.parse(stage.getFinishDay()),
                         format.parse(UtilityFunctions.GetCurrentDateTime()));
-                if (criticalDate < 0 && stage.getRateWorkCompleted() < 100) {
-                    StagesNonCriticalObserver.update();
-                } else if (criticalDate < 0 && stage.getRateWorkCompleted() < 99
-                        && "True".equals(stage.getCritical())) {
-                    CriticalStagesObserver.update();
+                startDate = getDifferenceDays(format.parse(stage.getStartDay()),
+                        format.parse(UtilityFunctions.GetCurrentDateTime()));
+                if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "False".equals(stage.getCritical())
+                        && !"Delay".equals(stage.getStatus())) {
+                    StageDAO.setDelayStatusStage(stage.getIdStage());
+                    StagesNonCriticalObserver.update(stage.getIdSupervisor());
+                } else if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "True".equals(stage.getCritical())
+                        && !"CriticalDelay".equals(stage.getStatus())) {
+                    StageDAO.setCriticalDelayStatusStage(stage.getIdStage());
+                    CriticalStagesObserver.update(stage.getIdSupervisor(), stage.getIdProject());
+                } else if (startDate < 0 && !"Started".equals(stage.getStatus())) {
+                    StageDAO.setStartStatusStage(stage.getIdStage());
+                    StartStagesObserver.update(stage.getIdSupervisor());
                 }
             } catch (ParseException e) {
                 LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
@@ -78,11 +85,5 @@ public class SchedulerEventsThread implements Runnable {
             return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)) + 1;
         }
         return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-    }
-
-    public List<StageBean> getStages() {
-        List<StageBean> stages;
-        stages = models.StageDAO.getInstance().getStagesByIdProject(this.getIdProject());
-        return stages;
     }
 }
