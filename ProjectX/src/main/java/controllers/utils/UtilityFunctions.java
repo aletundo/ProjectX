@@ -19,9 +19,7 @@ public class UtilityFunctions {
 
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    private UtilityFunctions() {
-        // private constructor
-    };
+    private UtilityFunctions() {};
 
     public static long getHoursRequestedTask(String startDay, String finishDay) {
         long hourRequested = 0;
@@ -91,8 +89,8 @@ public class UtilityFunctions {
     public static String GetCurrentDateTime() {
         /* get current date time with Calendar() */
         Date date = new Date();
-        String dateStr = sdf.format(date);
-        return dateStr;
+        return sdf.format(date);
+
     }
 
 }

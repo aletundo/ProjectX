@@ -24,7 +24,7 @@ public class TaskDAO {
         return INSTANCE;
     }
 
-    private static String createUpdateTaskQuery(TaskBean task, Map<String, Object> attributes) {
+    private static String createUpdateTaskQuery(Map<String, Object> attributes) {
         String query = "UPDATE task AS T SET";
 
         for (Map.Entry<String, Object> pair : attributes.entrySet()) {
@@ -46,7 +46,7 @@ public class TaskDAO {
         PreparedStatement statement = null;
         Connection currentConn = DbConnection.connect();
 
-        String query = createUpdateTaskQuery(task, attributes);
+        String query = createUpdateTaskQuery(attributes);
 
         final String updateProjectQuery = query;
         try {

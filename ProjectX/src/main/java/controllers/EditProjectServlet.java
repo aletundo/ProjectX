@@ -45,8 +45,6 @@ public class EditProjectServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
-
         try {
 
             if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
@@ -57,12 +55,6 @@ public class EditProjectServlet extends HttpServlet {
             request.setAttribute("messages", messages);
 
             // TODO re-use of method checkParameters in class addProjectServlet
-            /*
-             * if (!checkParameters(request, messages)) { RequestDispatcher
-             * dispatcher = getServletContext().getRequestDispatcher(
-             * "/views/edit-project.jsp"); dispatcher.forward(request,
-             * response); return; }
-             */
 
             String name = request.getParameter("name");
 
@@ -76,8 +68,7 @@ public class EditProjectServlet extends HttpServlet {
 
             ProjectBean project = new ProjectBean();
             ClientBean client = new ClientBean();
-            Integer idProjectManager = (Integer) request.getSession().getAttribute("idUser");
-
+            
             int idProject = Integer.parseInt(request.getParameter("idProject"));
             project.setIdProject(idProject);
 

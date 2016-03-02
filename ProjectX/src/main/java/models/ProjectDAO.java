@@ -24,7 +24,7 @@ public class ProjectDAO {
 
     }
 
-    public static String createUpdateProjectQuery(ProjectBean project, Map<String, Object> attributes) {
+    public static String createUpdateProjectQuery(Map<String, Object> attributes) {
 
         String query = "UPDATE project AS P SET";
 
@@ -47,7 +47,7 @@ public class ProjectDAO {
         PreparedStatement statement = null;
         Connection currentConn = DbConnection.connect();
 
-        String query = createUpdateProjectQuery(project, attributes);
+        String query = createUpdateProjectQuery(attributes);
 
         final String updateProjectQuery = query;
         try {

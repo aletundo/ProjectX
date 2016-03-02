@@ -33,9 +33,7 @@ public class CalculateAvailableUsers {
 
     private static final Logger LOGGER = Logger.getLogger(CalculateAvailableUsers.class.getName());
 
-    private CalculateAvailableUsers() {
-        // private constructor
-    };
+    private CalculateAvailableUsers() {};
 
     // calculate the available users for a new TASK
     public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
@@ -147,9 +145,7 @@ public class CalculateAvailableUsers {
         long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart,
                 format.parse(newTask.getStartDay()))
                 + (UtilityFunctions.getDifferenceDaysExclusive(format.parse(newTask.getFinishDay()), maxFinish)));
-        return (workingHoursTOT - hoursCriticalWorks - hourSlack);
-
-        // return availableHoursUser;
+        return workingHoursTOT - hoursCriticalWorks - hourSlack;
     }
 
     // calculate the critical works (the ones who conflict) of a user for a new
@@ -303,10 +299,7 @@ public class CalculateAvailableUsers {
         long hourSlack = HOURPERDAY * (UtilityFunctions.getDifferenceDaysExclusive(minStart,
                 format.parse(newStage.getStartDay()))
                 + (UtilityFunctions.getDifferenceDaysExclusive(format.parse(newStage.getFinishDay()), maxFinish)));
-        return (workingHoursTOT - hoursCriticalWorks - hourSlack);
-
-        // return availableHoursUser;
-
+        return workingHoursTOT - hoursCriticalWorks - hourSlack;
     }
 
     // calculate the critical works (the ones who conflict) of a user for a new

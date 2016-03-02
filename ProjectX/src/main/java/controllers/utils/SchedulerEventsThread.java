@@ -16,13 +16,14 @@ import context.StagesNonCriticalObserver;
 import context.StartStagesObserver;
 import models.StageBean;
 import models.StageDAO;
+import models.UserDAO;
 
 public class SchedulerEventsThread implements Runnable {
     private int idProject;
     static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     String host = "localhost";
-    String port = "8080"; /* TODO check port */
+    static String port = "8080"; /* TODO check port */
     final String pw = "bla"; /* TODO check password */
     String toAddress = "asd@mail.com";
     private static final Logger LOGGER = Logger.getLogger(SchedulerEventsThread.class.getName());
@@ -61,19 +62,24 @@ public class SchedulerEventsThread implements Runnable {
                 } else if (criticalDate < 0 && stage.getRateWorkCompleted() < 100 && "True".equals(stage.getCritical())
                         && !"CriticalDelay".equals(stage.getStatus())) {
                     StageDAO.setStatusStage(stage.getIdStage(), "CriticalDelay");
-                    CriticalStagesObserver.update(stage.getIdSupervisor(), stage.getIdProject());
+                    String projectManagerMail = UserDAO.getInstance().getProjectManagerMailByIdStage(stage.getIdStage());
+                    CriticalStagesObserver.update(stage.getIdSupervisor(), projectManagerMail);
                 } else if (startDate == 0 && !"Started".equals(stage.getStatus())) {
-                    if (arePrecedencesCompleted(mapPrecedences, stage)) {
-                        StageDAO.setStatusStage(stage.getIdStage(), "Started");
-                        StartStagesObserver.update(stage.getIdSupervisor());
-                    } else {
-                        DelayStartStagesObserver.update(stage.getIdSupervisor());
-                    }
+                    helperStartDayCheck(mapPrecedences, stage);
 
                 }
             } catch (ParseException e) {
                 LOGGER.log(Level.SEVERE, "Something went wrong during parsing a date", e);
             }
+        }
+    }
+
+    private void helperStartDayCheck(Map<StageBean, List<StageBean>> mapPrecedences, StageBean stage) {
+        if (arePrecedencesCompleted(mapPrecedences, stage)) {
+            StageDAO.setStatusStage(stage.getIdStage(), "Started");
+            StartStagesObserver.update(stage.getIdSupervisor());
+        } else {
+            DelayStartStagesObserver.update(stage.getIdSupervisor());
         }
     }
 
@@ -95,6 +101,6 @@ public class SchedulerEventsThread implements Runnable {
         if (diff > 0) {
             return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)) + 1;
         }
-        return (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 }

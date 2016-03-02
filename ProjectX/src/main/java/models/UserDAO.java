@@ -439,25 +439,16 @@ public class UserDAO {
         user.setHashPw(hashedPassword);
 
         Connection currentConn = DbConnection.connect();
-        /* PreparedStatement statement; */
         Statement statement = null;
 
         if (currentConn != null) {
-            /*
-             * String signUpQuery = "INSERT INTO User(username, salt, hashpw)
-             * VALUES(?, ?, ?)";
-             */
+
             final String signUpQuery = "INSERT INTO user(username, fullname, mail, skills, salt, hashpw, type) VALUES('"
                     + user.getUsername() + "','" + user.getFullname() + "','" + user.getMail() + "','"
                     + user.getSkills() + "','" + user.getSalt() + "','" + user.getHashPw() + "','" + user.getType()
                     + "')";
             try {
-                /*
-                 * statement = currentConn.prepareStatement(signUpQuery);
-                 * statement.setString(1, user.getUsername());
-                 * statement.setString(2, user.getSalt());
-                 * statement.setString(3, user.getHashPw());
-                 */
+
                 statement = currentConn.prepareStatement(signUpQuery);
 
                 statement.executeUpdate(signUpQuery);

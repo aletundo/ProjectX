@@ -83,8 +83,6 @@ public class StageDAO {
             mapPrecedences.put(stage, precedences);
         }
 
-        System.out.println(mapPrecedences);
-
         PreparedStatement statement = null;
         ResultSet rs = null;
         Connection currentConn = DbConnection.connect();

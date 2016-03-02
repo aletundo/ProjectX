@@ -24,8 +24,8 @@ public class OrganizeMeetingServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(OrganizeMeetingServlet.class.getName());
     static String host = "localhost";
-    static String port = ""; /* TODO check port */
-    static final String pw = ""; /* TODO check password */
+    static String port = "";
+    static final String Pw = null;
     static String userName = "";
 
     @Override
@@ -103,24 +103,24 @@ public class OrganizeMeetingServlet extends HttpServlet {
         }
     }
 
-    private void sendEmailToDevelopers(HttpServletRequest request, String supervisorMail, String object, String message,
+    private static void sendEmailToDevelopers(HttpServletRequest request, String supervisorMail, String object, String message,
             List<String> developersMail) throws MessagingException {
         UserDAO.getInstance().getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
         for (String mails : developersMail) {
-            controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
+            controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, mails, object, message);
         }
-        controllers.utils.SendEmail.sendEmail(host, port, userName, pw, supervisorMail, object, message);
+        controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, supervisorMail, object, message);
     }
 
-    private void sendEmailToSupervisors(HttpServletRequest request, String pmMail, String clientMail, String object,
+    private static void sendEmailToSupervisors(HttpServletRequest request, String pmMail, String clientMail, String object,
             String message) throws MessagingException {
         List<String> supervisorsMail = UserDAO.getInstance()
                 .getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
         for (String mails : supervisorsMail) {
-            controllers.utils.SendEmail.sendEmail(host, port, userName, pw, mails, object, message);
+            controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, mails, object, message);
         }
-        controllers.utils.SendEmail.sendEmail(host, port, userName, pw, pmMail, object, message);
-        controllers.utils.SendEmail.sendEmail(host, port, userName, pw, clientMail, object, message);
+        controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, pmMail, object, message);
+        controllers.utils.SendEmail.sendEmail(host, port, userName, Pw, clientMail, object, message);
     }
 
     /**

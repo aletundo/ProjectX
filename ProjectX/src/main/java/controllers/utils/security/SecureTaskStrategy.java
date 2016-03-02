@@ -1,6 +1,5 @@
 package controllers.utils.security;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,7 +33,7 @@ public class SecureTaskStrategy implements SecureResourcesStrategy {
 
     @Override
     public boolean isAuthorizedVisualize(HttpServletRequest request, HttpServletResponse response,
-            ServletContext context) throws ServletException, IOException {
+            ServletContext context) throws ServletException{
         try {
             HttpSession session = request.getSession();
             // If the session is not valid redirect to login
@@ -59,7 +58,7 @@ public class SecureTaskStrategy implements SecureResourcesStrategy {
 
     @Override
     public boolean isAuthorized(HttpServletRequest request, HttpServletResponse response, ServletContext context)
-            throws IOException, ServletException {
+            throws ServletException {
         try {
             HttpSession session = request.getSession();
             // If the session is not valid redirect to login
