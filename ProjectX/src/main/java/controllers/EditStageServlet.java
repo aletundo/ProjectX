@@ -15,10 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import controllers.utils.security.SecureProjectStrategy;
 import controllers.utils.security.SecureStageStrategy;
-import models.ClientBean;
-import models.ClientDAO;
-import models.ProjectBean;
-import models.ProjectDAO;
 import models.StageBean;
 import models.StageDAO;
 
