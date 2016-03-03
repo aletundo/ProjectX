@@ -16,7 +16,8 @@
 			<form class="form col-md-12 center-block"
 				action="./addphysicalresources?idProject=${param.idProject }"
 				method="POST" role="form" autocomplete="off">
-				<c:forEach items="${requestScope.resources}" var="resource" varStatus="k">
+				<span class="help-block">${messages.error}</span>
+				<c:forEach items="${sessionScope.resources}" var="resource" varStatus="k">
 				<div class="input-group">
 					<span class="input-group-addon"><c:out value="${resource.type }"></c:out></span> <input type="text"
 						class="form-control" name="${k.count }" placeholder="Insert the quantity" />
