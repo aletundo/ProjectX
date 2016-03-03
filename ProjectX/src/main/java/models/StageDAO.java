@@ -23,7 +23,55 @@ public class StageDAO {
 
         return INSTANCE;
     }
+    
+    public static String createUpdateStageQuery(StageBean stage, Map<String, Object> attributes) {
 
+        String query = "UPDATE stage AS S SET";
+
+        for (Map.Entry<String, Object> pair : attributes.entrySet()) {
+            if (pair.getValue() != "") {
+                query = query + " S." + pair.getKey() + " = ?,";
+            }
+        }
+
+        if (query.charAt(query.length() - 1) == ',') {
+            query = query.substring(0, query.length() - 1);
+        }
+
+        query = query + " WHERE S.idStage = ?";
+
+        return query;
+    }
+    
+    public void updateStage(StageBean stage, Map<String, Object> attributes) {
+        PreparedStatement statement = null;
+        Connection currentConn = DbConnection.connect();
+
+        String query = createUpdateStageQuery(stage, attributes);
+
+        final String updateStageQuery = query;
+        try {
+            statement = currentConn.prepareStatement(updateStageQuery);
+            int i = 1;
+            for (Map.Entry<String, Object> pair : attributes.entrySet()) {
+                if (pair.getValue() != "") {
+                    statement.setObject(i, pair.getValue());
+                    ++i;
+                }
+            }
+            statement.setInt(i, stage.getIdStage());
+            if (!"UPDATE stage AS S SET WHERE S.idStage = ?".equals(query)) {
+                statement.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Something went wrong during updating project " + stage.getIdStage(), e);
+        } finally {
+            DbConnection.disconnect(currentConn, statement);
+        }
+    }
+
+    
     public void setCriticalStages(List<StageBean> criticalStages) {
         PreparedStatement statement = null;
         Connection currentConn = DbConnection.connect();
