@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controllers.utils.UtilityFunctions;
-import controllers.utils.security.SecureProjectStrategy;
 import controllers.utils.security.SecureStageStrategy;
 import models.StageBean;
 import models.StageDAO;
@@ -48,7 +47,7 @@ public class EditStageServlet extends HttpServlet {
         // TODO Auto-generated method stub
         try {
 
-            if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
+            if (!SecureStageStrategy.getInstance().isAuthorized(request, response, getServletContext()))
                 return;
 
             Map<String, String> messages = new HashMap<>();
@@ -95,12 +94,12 @@ public class EditStageServlet extends HttpServlet {
         String finishDay = request.getParameter("finishday");
         String startDay = request.getParameter("startday");
 
-        if (startDay != "" && !UtilityFunctions.isValidDateFormat(startDay)) {
+        if (!startDay.equals("") && !UtilityFunctions.isValidDateFormat(startDay)) {
             messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
             return false;
         }
 
-        if (finishDay != "" && !UtilityFunctions.isValidDateFormat(finishDay)) {
+        if (!finishDay.equals("") && !UtilityFunctions.isValidDateFormat(finishDay)) {
             messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
             return false;
         }

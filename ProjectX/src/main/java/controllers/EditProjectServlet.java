@@ -49,7 +49,7 @@ public class EditProjectServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
 
-            if (!SecureProjectStrategy.getInstance().isAuthorizedCreate(request, response, getServletContext()))
+            if (!SecureProjectStrategy.getInstance().isAuthorized(request, response, getServletContext()))
                 return;
 
             Map<String, String> messages = new HashMap<>();
@@ -131,18 +131,18 @@ public class EditProjectServlet extends HttpServlet {
         String start = request.getParameter("start");
 
         
-        if (clientMail != "" && !UtilityFunctions.isValidMail(clientMail)) {
+        if (!clientMail.equals("") && !UtilityFunctions.isValidMail(clientMail)) {
             messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
             return false;
         }
 
-        if (start != "" && !UtilityFunctions.isValidDateFormat(start)) {
+        if (!start.equals("") && !UtilityFunctions.isValidDateFormat(start)) {
 
             messages.put("start", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
             return false;
         }
 
-        if (deadline != "" && !UtilityFunctions.isValidDateFormat(deadline)) {
+        if (!deadline.equals("") && !UtilityFunctions.isValidDateFormat(deadline)) {
             messages.put("deadline", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
             return false;
         }
