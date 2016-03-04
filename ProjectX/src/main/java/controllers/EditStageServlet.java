@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureProjectStrategy;
 import controllers.utils.security.SecureStageStrategy;
 import models.StageBean;
@@ -54,13 +55,12 @@ public class EditStageServlet extends HttpServlet {
 
             request.setAttribute("messages", messages);
 
-            // TODO re-use of method checkParameters in class addProjectServlet
-            /*
-             * if (!checkParameters(request, messages)) { RequestDispatcher
-             * dispatcher = getServletContext().getRequestDispatcher(
-             * "/views/edit-project.jsp"); dispatcher.forward(request,
-             * response); return; }
-             */
+            if (!checkParameters(request, messages)) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-stage.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+             
 
             String name = request.getParameter("name");
 
@@ -89,5 +89,22 @@ public class EditStageServlet extends HttpServlet {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Something went wrong during editing project page", e);
         }
+    }
+    
+    private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+        String finishDay = request.getParameter("finishday");
+        String startDay = request.getParameter("startday");
+
+        if (startDay != "" && !UtilityFunctions.isValidDateFormat(startDay)) {
+            messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        if (finishDay != "" && !UtilityFunctions.isValidDateFormat(finishDay)) {
+            messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+        
+        return true;
     }
 }

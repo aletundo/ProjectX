@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureProjectStrategy;
 import models.ClientBean;
 import models.ClientDAO;
@@ -54,14 +56,18 @@ public class EditProjectServlet extends HttpServlet {
 
             request.setAttribute("messages", messages);
 
-            // TODO re-use of method checkParameters in class addProjectServlet
+            if (!checkParameters(request, messages)) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-project.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
 
             String name = request.getParameter("name");
 
             if (ProjectDAO.getInstance().checkNameAlreadyExist(name)) {
                 messages.put("name",
                         "<i class='fa fa-frown-o'></i>&nbsp;Oops! Sorry, name already exist. Try another one.");
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/create-project.jsp");
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-project.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
@@ -117,6 +123,31 @@ public class EditProjectServlet extends HttpServlet {
             LOGGER.log(Level.SEVERE, "Something went wrong during editing a project", e);
         }
 
+    }
+    
+    private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+        String clientMail = request.getParameter("clientmail");
+        String deadline = request.getParameter("deadline");
+        String start = request.getParameter("start");
+
+        
+        if (clientMail != "" && !UtilityFunctions.isValidMail(clientMail)) {
+            messages.put("clientmail", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid mail.");
+            return false;
+        }
+
+        if (start != "" && !UtilityFunctions.isValidDateFormat(start)) {
+
+            messages.put("start", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        if (deadline != "" && !UtilityFunctions.isValidDateFormat(deadline)) {
+            messages.put("deadline", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+        
+        return true;
     }
 
 }

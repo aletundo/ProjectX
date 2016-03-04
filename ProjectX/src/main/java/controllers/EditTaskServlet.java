@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controllers.utils.UtilityFunctions;
 import controllers.utils.security.SecureProjectStrategy;
 import models.TaskBean;
 import models.TaskDAO;
@@ -33,11 +34,10 @@ public class EditTaskServlet extends HttpServlet {
             int idTask = Integer.parseInt(request.getParameter("idTask"));
             TaskBean task = TaskDAO.getInstance().getTaskInfo(idTask);
             
-            Serializable taskSer = (Serializable)task;
             
             HttpSession session = request.getSession();
             request.setAttribute("task", task);
-            session.setAttribute("task", taskSer);
+            session.setAttribute("task", task);
 
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-task.jsp");
             dispatcher.forward(request, response);
@@ -58,7 +58,11 @@ public class EditTaskServlet extends HttpServlet {
 
             request.setAttribute("messages", messages);
 
-            // TODO re-use of method checkParameters in class addProjectServlet
+            if (!checkParameters(request, messages)) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-task.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
 
             String name = request.getParameter("name");
 
@@ -91,5 +95,22 @@ public class EditTaskServlet extends HttpServlet {
         }
 
     }
+    
+    private static boolean checkParameters(HttpServletRequest request, Map<String, String> messages) {
+        String finishDay = request.getParameter("finishday");
+        String startDay = request.getParameter("startday");
 
+        if (startDay != "" && !UtilityFunctions.isValidDateFormat(startDay)) {
+
+            messages.put("startday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        if (finishDay != "" && !UtilityFunctions.isValidDateFormat(finishDay)) {
+            messages.put("finishday", "<i class='fa fa-exclamation'></i>&nbsp;Please, insert a valid one.");
+            return false;
+        }
+
+        return true;
+    }
 }
