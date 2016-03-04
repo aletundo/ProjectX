@@ -68,7 +68,7 @@ public class AddPhysicalResourcesServlet extends HttpServlet {
 				
 				String insertedResource = request.getParameter(index.toString());
 				
-				if(insertedResource.equals("")){
+				if("".equals(insertedResource)){
 					//doNothing
 				}else if(Integer.parseInt(insertedResource) > resources.get(index - 1).getQuantity()){
 					messages.put("error",
