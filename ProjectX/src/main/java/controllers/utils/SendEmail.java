@@ -19,13 +19,14 @@ public class SendEmail {
 
     }
 
-    public static void sendEmail(String to, String from, String subject, String message, String host) throws MessagingException {
+    public static boolean sendEmail(String to, String from, String subject, String message, String host) throws MessagingException {
 
     	MimeMessage msg;
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.user", "myuser");
 		properties.put("mail.password", "mypw");
+		boolean sent = false;
 
         Session session = Session.getInstance(properties);
         
@@ -37,9 +38,12 @@ public class SendEmail {
 			msg.setSubject(subject);
 			msg.setText(message);
 		/*	Transport.send(msg); */
+			sent = true;
 		} catch (MessagingException e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during sending mail", e);
 		}
+		
+		return sent;
 
     }
 

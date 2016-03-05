@@ -1,7 +1,9 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,6 +68,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during authorize to organize a meeting", e);
 		}
+		
+		Map<String, String> messages = new HashMap<>();
+        request.setAttribute("messages", messages);
 
 		try {
 			if (request.getParameter("idProject") != null) {
@@ -75,7 +80,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 						.getClientMail(Integer.parseInt(request.getParameter("idProject")));
 				String object = request.getParameter("object");
 				String message = request.getParameter("message");
-				sendEmailToSupervisors(request, pmMail, clientMail, object, message);
+				sendEmailToSupervisors(request, pmMail, clientMail, object, message, messages);
 
 			} else if (request.getParameter("idStage") != null) {
 				String supervisorMail = UserDAO.getInstance()
@@ -84,38 +89,53 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				String message = request.getParameter("message");
 				List<String> developersMail = UserDAO.getInstance()
 						.getAllDevelopersMail(Integer.parseInt(request.getParameter("idStage")));
-				sendEmailToDevelopers(request, supervisorMail, object, message, developersMail);
+				sendEmailToDevelopers(request, supervisorMail, object, message, developersMail, messages);
 			}
+			
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/organize-stage-meeting.jsp");
+			dispatcher.forward(request, response);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during organize a meeting", e);
 		}
 	}
 
 	private static void sendEmailToDevelopers(HttpServletRequest request, String supervisorMail, String object,
-			String message, List<String> developersMail) throws MessagingException {
+			String message, List<String> developersMail, Map<String, String> messages) throws MessagingException {
 		String host = "localhost";
+		boolean sent = false;
 		for (String to : developersMail) {
-			controllers.utils.SendEmail.sendEmail(to, supervisorMail, object, message, host);
+			sent = controllers.utils.SendEmail.sendEmail(to, supervisorMail, object, message, host);
 		}
 		if ("Yes".equals(request.getParameter("invite-project-manager"))) {
 			String pmMail = UserDAO.getInstance()
 					.getProjectManagerMailByIdStage(Integer.parseInt(request.getParameter("idStage")));
-			controllers.utils.SendEmail.sendEmail(pmMail, supervisorMail, object, message, host);
+			sent = controllers.utils.SendEmail.sendEmail(pmMail, supervisorMail, object, message, host);
+		}
+		if(sent){
+			messages.put("status", "<i class='fa fa-thumbs-o-up'></i>&nbsp;Your e-mail(s) is(are) successuful sent");
+		}else{
+			messages.put("status", "<i class='fa fa-frown-o'></i>&nbsp;Sorry, something went wrong, try again!");
 		}
 	}
 
 	private static void sendEmailToSupervisors(HttpServletRequest request, String pmMail, String clientMail,
-			String object, String message) throws MessagingException {
+			String object, String message, Map<String, String> messages) throws MessagingException {
 		String host = "localhost";
-		
-		controllers.utils.SendEmail.sendEmail(clientMail, pmMail, object, message, host);
+		boolean sent = false;
+		sent = controllers.utils.SendEmail.sendEmail(clientMail, pmMail, object, message, host);
 		
 		if ("Yes".equals(request.getParameter("invite-supervisors"))) {
 			List<String> supervisorsMail = UserDAO.getInstance()
 					.getAllSupervisorsMail(Integer.parseInt(request.getParameter("idProject")));
 			for (String mail : supervisorsMail) {
-				controllers.utils.SendEmail.sendEmail(mail, pmMail, object, message, host);
+				sent = controllers.utils.SendEmail.sendEmail(mail, pmMail, object, message, host);
 			}
+		}
+		
+		if(sent){
+			messages.put("status", "<i class='fa fa-thumbs-o-up'></i>&nbsp;Your e-mail(s) is(are) successuful sent!");
+		}else{
+			messages.put("status", "<i class='fa fa-frown-o'></i>&nbsp;Sorry, something went wrong, try again!");
 		}
 		
 	}

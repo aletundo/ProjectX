@@ -42,6 +42,8 @@
 
 				<br>
 				<br>
+				
+				<span class="help-block">${messages.status }</span>
 
 				<div class="input-group pull-right">
 					<button type="submit" class="btn btn-success">
