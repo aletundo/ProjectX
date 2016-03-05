@@ -37,7 +37,6 @@ public class GetDbConnProperties implements GetPropertiesAbstract {
                 throw new FileNotFoundException("Property file '" + propFileName + "' not found in the classpath");
             }
 
-            // Get the property value
             String dbUrl = prop.getProperty("DB_URL");
             String user = prop.getProperty("USER");
             String pw = prop.getProperty("PW");

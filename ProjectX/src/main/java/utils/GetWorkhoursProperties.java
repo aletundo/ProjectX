@@ -37,7 +37,6 @@ public class GetWorkhoursProperties implements GetPropertiesAbstract {
                 throw new FileNotFoundException("Property file '" + propFileName + "' not found in the classpath");
             }
 
-            // Get the property value
             int hourPerDay = Integer.parseInt(prop.getProperty("HOURPERDAY"));
             int projectHourPerDay = Integer.parseInt(prop.getProperty("PROJECTHOURPERDAY"));
             int stageHourPerDay = Integer.parseInt(prop.getProperty("STAGEHOURPERDAY"));
