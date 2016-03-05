@@ -12,6 +12,10 @@ import java.util.logging.Logger;
 import models.StageBean;
 import models.StageDAO;
 
+/**
+ * This class check every 24 hours the state of the stages (start, finish, delay)
+ *
+ */
 public class SchedulerEventsThread implements Runnable {
 	private int idProject;
 	static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");

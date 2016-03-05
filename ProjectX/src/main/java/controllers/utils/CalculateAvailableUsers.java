@@ -21,6 +21,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author alessandro
+ * The class computes the available users in order to assign to them supervision of a stage or develop a task
+ */
 public class CalculateAvailableUsers {
     private static int HOURPERDAY;
     private static int PROJECTHOURPERDAY;
@@ -35,7 +39,13 @@ public class CalculateAvailableUsers {
 
     private CalculateAvailableUsers() {};
 
-    // calculate the available users for a new TASK
+    
+    /**
+     * @param workMap
+     * @param newTask
+     * @return list of UserBean
+     * Calculate the list of the available users for a task
+     */
     public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, TaskBean newTask) {
 
         getProperties();
@@ -59,7 +69,15 @@ public class CalculateAvailableUsers {
         return availableUsers;
     }
 
-    // return the list of available users for a TASK
+    
+    /**
+     * @param newTask
+     * @param availableUsers
+     * @param pair
+     * @param arrayListIterator
+     * @return
+     * @throws ParseException
+     */
     private static List<UserBean> getAvailableUsers(TaskBean newTask, List<UserBean> availableUsers,
             Map.Entry<Integer, List<Object>> pair, Iterator<Object> arrayListIterator) throws ParseException {
         List<Object> criticalWorks = new ArrayList<>();
@@ -87,7 +105,13 @@ public class CalculateAvailableUsers {
         return availableUsers;
     }
 
-    // calculate the availability of a user for a new TASK
+    
+    /**
+     * @param newTask
+     * @param pair
+     * @param criticalWorks
+     * @return
+     */
     private static UserBean isAvailable(TaskBean newTask, Map.Entry<Integer, List<Object>> pair,
             List<Object> criticalWorks) {
         long hourAvailable = Long.MIN_VALUE;
@@ -110,7 +134,14 @@ public class CalculateAvailableUsers {
 
     }
 
-    // calculate the available hours of a user for a new TASK
+    
+    /**
+     * @param criticalWorks
+     * @param newTask
+     * @param pair
+     * @return a long that contains the available hours of a user
+     * @throws ParseException
+     */
     private static long getAvailableHours(List<Object> criticalWorks, TaskBean newTask,
             Map.Entry<Integer, List<Object>> pair) throws ParseException {
         long dateDiffTOT = UtilityFunctions.getDifferenceDays(minStart, maxFinish);
@@ -148,8 +179,15 @@ public class CalculateAvailableUsers {
         return workingHoursTOT - hoursCriticalWorks - hourSlack;
     }
 
-    // calculate the critical works (the ones who conflict) of a user for a new
-    // TASK
+    
+    /**
+     * @param work
+     * @param newTask
+     * @param format
+     * @return boolean
+     * @throws ParseException
+     * 
+     */
     private static boolean calculateCriticalWork(Object work, TaskBean newTask, DateFormat format)
             throws ParseException {
         if (work instanceof models.StageBean) {
@@ -172,7 +210,12 @@ public class CalculateAvailableUsers {
         return false;
     }
 
-    // calculate the available users for a new STAGE
+    
+    /**
+     * @param workMap
+     * @param newStage
+     * @return a list of UserBean
+     */
     public static List<UserBean> calculate(Map<Integer, List<Object>> workMap, StageBean newStage) {
 
         getProperties();
@@ -196,7 +239,15 @@ public class CalculateAvailableUsers {
         return availableUsers;
     }
 
-    // return the list of available users for a STAGE
+    
+    /**
+     * @param newStage
+     * @param availableUsers
+     * @param pair
+     * @param arrayListIterator
+     * @return a list of users available for a stage
+     * @throws ParseException
+     */
     private static List<UserBean> getAvailableUsers(StageBean newStage, List<UserBean> availableUsers,
             Map.Entry<Integer, List<Object>> pair, Iterator<Object> arrayListIterator) throws ParseException {
         List<Object> criticalWorks = new ArrayList<>();
@@ -223,7 +274,13 @@ public class CalculateAvailableUsers {
         return availableUsers;
     }
 
-    // calculate the availability of a user for a new STAGE
+    
+    /**
+     * @param newStage
+     * @param pair
+     * @param criticalWorks
+     * @return a user if he/she is available
+     */
     private static UserBean isAvailable(StageBean newStage, Map.Entry<Integer, List<Object>> pair,
             List<Object> criticalWorks) {
         long hourAvailable = Long.MIN_VALUE;
@@ -246,7 +303,14 @@ public class CalculateAvailableUsers {
         return null;
     }
 
-    // calculate the available hours of a user for a new STAGE
+    
+    /**
+     * @param criticalWorks
+     * @param newStage
+     * @param pair
+     * @return a long that contains the available hours of a user
+     * @throws ParseException
+     */
     private static long getAvailableHours(List<Object> criticalWorks, StageBean newStage,
             Map.Entry<Integer, List<Object>> pair) throws ParseException {
         long dateDiffTOT = UtilityFunctions.getDifferenceDays(minStart, maxFinish);
@@ -302,48 +366,61 @@ public class CalculateAvailableUsers {
         return workingHoursTOT - hoursCriticalWorks - hourSlack;
     }
 
-    // calculate the critical works (the ones who conflict) of a user for a new
-    // STAGE
-    private static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
-            throws ParseException {
-        if (work instanceof models.ProjectBean) {
-            ProjectBean workProject = (ProjectBean) work;
-            if (!(format.parse(workProject.getDeadline()).before(format.parse(newStage.getStartDay()))
-                    || format.parse(workProject.getStart()).after(format.parse(newStage.getFinishDay())))) {
-                calculateMinMaxTOT(format.parse(workProject.getStart()), format.parse(workProject.getDeadline()));
-                return true;
-            }
-        }
+   
+	/**
+	 * @param work
+	 * @param newStage
+	 * @param format
+	 * @return boolean
+	 * @throws ParseException
+	 */
+	private static boolean calculateCriticalWork(Object work, StageBean newStage, DateFormat format)
+			throws ParseException {
+		if (work instanceof models.ProjectBean) {
+			ProjectBean workProject = (ProjectBean) work;
+			if (!(format.parse(workProject.getDeadline()).before(format.parse(newStage.getStartDay()))
+					|| format.parse(workProject.getStart()).after(format.parse(newStage.getFinishDay())))) {
+				calculateMinMaxTOT(format.parse(workProject.getStart()), format.parse(workProject.getDeadline()));
+				return true;
+			}
+		}
 
-        if (work instanceof models.StageBean) {
-            StageBean workStage = (StageBean) work;
-            if (!(format.parse(workStage.getFinishDay()).before(format.parse(newStage.getStartDay()))
-                    || format.parse(workStage.getStartDay()).after(format.parse(newStage.getFinishDay())))) {
-                calculateMinMaxTOT(format.parse(workStage.getStartDay()), format.parse(workStage.getFinishDay()));
-                return true;
-            }
-        }
-        if (work instanceof models.TaskBean) {
-            TaskBean workTask = (TaskBean) work;
-            if (!(format.parse(workTask.getFinishDay()).before(format.parse(newStage.getStartDay()))
-                    || format.parse(workTask.getStartDay()).after(format.parse(newStage.getFinishDay())))) {
-                calculateMinMaxTOT(format.parse(workTask.getStartDay()), format.parse(workTask.getFinishDay()));
-                return true;
-            }
-        }
-        return false;
-    }
+		if (work instanceof models.StageBean) {
+			StageBean workStage = (StageBean) work;
+			if (!(format.parse(workStage.getFinishDay()).before(format.parse(newStage.getStartDay()))
+					|| format.parse(workStage.getStartDay()).after(format.parse(newStage.getFinishDay())))) {
+				calculateMinMaxTOT(format.parse(workStage.getStartDay()), format.parse(workStage.getFinishDay()));
+				return true;
+			}
+		}
+		if (work instanceof models.TaskBean) {
+			TaskBean workTask = (TaskBean) work;
+			if (!(format.parse(workTask.getFinishDay()).before(format.parse(newStage.getStartDay()))
+					|| format.parse(workTask.getStartDay()).after(format.parse(newStage.getFinishDay())))) {
+				calculateMinMaxTOT(format.parse(workTask.getStartDay()), format.parse(workTask.getFinishDay()));
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public static void calculateMinMaxTOT(Date start, Date finish) {
-        if (start.before(minStart)) {
-            minStart = start;
-        }
+	/**
+	 * @param start
+	 * @param finish
+	 */
+	public static void calculateMinMaxTOT(Date start, Date finish) {
+		if (start.before(minStart)) {
+			minStart = start;
+		}
 
-        if (finish.after(maxFinish)) {
-            maxFinish = finish;
-        }
-    }
+		if (finish.after(maxFinish)) {
+			maxFinish = finish;
+		}
+	}
 
+    /**
+     * Get work hours properties from a configuration file
+     */
     private static void getProperties() {
         try {
             Integer[] propertiesValues = GetWorkhoursProperties.getInstance().getPropValues();

@@ -34,7 +34,6 @@ public class SecureStageStrategy implements SecureResourcesStrategy {
             ServletContext context) throws ServletException{
         try {
             HttpSession session = request.getSession();
-            // If the session is not valid redirect to login
             if (session == null || session.getAttribute("idUser") == null) {
                 response.sendError(403, "Your session is not valid! Try again.");
                 return false;
@@ -66,7 +65,6 @@ public class SecureStageStrategy implements SecureResourcesStrategy {
             throws ServletException {
         try {
             HttpSession session = request.getSession();
-            // If the session is not valid redirect to login
             if (session == null || session.getAttribute("idUser") == null) {
                 response.sendError(403, "Your session is not valid! Try again.");
                 return false;

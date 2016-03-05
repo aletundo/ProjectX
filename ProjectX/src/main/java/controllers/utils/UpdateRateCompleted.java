@@ -40,8 +40,9 @@ public class UpdateRateCompleted {
 
 	/**
 	 * @param idTask
-	 *            Update the rate work completed of a stage and call
-	 *            updateProjectRateCompleted.
+	 *            Update the rate work completed of a stage, call
+	 *            updateProjectRateCompleted and notify to its supervisor if the
+	 *            rate is 100%
 	 */
 	private static void updateStageRateCompleted(int idTask) {
 		TaskBean task = TaskDAO.getInstance().getRelativeWeight(idTask);
@@ -49,6 +50,8 @@ public class UpdateRateCompleted {
 				+ task.getRelativeWeight();
 		if (rateWorkCompletedToUpdate > 99) {
 			rateWorkCompletedToUpdate = 100;
+			int[] idAuthorizedUsers = StageDAO.getInstance().checkIdProjectManagerOrSupervisor(task.getIdStage());
+			NotifyManager.notifyStageCompleted(idAuthorizedUsers[0]);
 		}
 		StageDAO.getInstance().setRateWorkCompleted(task.getIdStage(), rateWorkCompletedToUpdate);
 		updateProjectRatecompleted(task.getIdStage());
