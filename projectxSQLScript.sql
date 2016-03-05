@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `projectx` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `projectx`;
+-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: projectx
 -- ------------------------------------------------------
--- Server version	5.7.9
+-- Server version	5.5.46-0+deb8u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,7 +29,7 @@ CREATE TABLE `client` (
   `name` varchar(45) DEFAULT NULL,
   `mail` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +38,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (66,'Arcelli','arcelli.disco@unimib.com'),(67,'Rabulet','rabu@gmail.com'),(68,'Clientela','clientela@aol.com'),(69,'ClientPazzo','pazzopazzo@pazzo.com'),(70,'Clientelissimo','clientesissimo@gmail.com'),(71,'Clientelissimo','clientesissimo@gmail.com'),(72,'Puzza','djhfdhdf@fjjf.com'),(73,'client','client@mail.com'),(74,'a','a@mail.com'),(75,'c','c@mail.it'),(76,'cliente','c@mail.it'),(77,'arcellix','cicciottino@mail.com'),(78,'arce','arce@gmail.com'),(79,'','');
+INSERT INTO `client` VALUES (1,'TechCorp','techcorp@infos.com'),(2,'Findomestic','findomesticspa@findomestic.it');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +54,7 @@ CREATE TABLE `physicalresource` (
   `type` varchar(45) NOT NULL,
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`idPhysicalResource`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,6 +63,7 @@ CREATE TABLE `physicalresource` (
 
 LOCK TABLES `physicalresource` WRITE;
 /*!40000 ALTER TABLE `physicalresource` DISABLE KEYS */;
+INSERT INTO `physicalresource` VALUES (1,'Server',24),(2,'Laptop',80),(3,'Amazon EC2 Instance',8),(4,'Amazon RDS Instance',16),(5,'Amazon DynamoDB',3);
 /*!40000 ALTER TABLE `physicalresource` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -75,8 +78,11 @@ CREATE TABLE `physicalresourceuse` (
   `idProject` int(11) NOT NULL,
   `idPhysicalResource` int(11) NOT NULL,
   `quantityUsed` int(11) NOT NULL,
-  PRIMARY KEY (`idProject`,`idPhysicalResource`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`idProject`,`idPhysicalResource`),
+  KEY `idPhysRes_physicalResUse_idx` (`idPhysicalResource`),
+  CONSTRAINT `idProject_physicalResyUse` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idPhysRes_physicalResUse` FOREIGN KEY (`idPhysicalResource`) REFERENCES `physicalresource` (`idPhysicalResource`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,6 +91,7 @@ CREATE TABLE `physicalresourceuse` (
 
 LOCK TABLES `physicalresourceuse` WRITE;
 /*!40000 ALTER TABLE `physicalresourceuse` DISABLE KEYS */;
+INSERT INTO `physicalresourceuse` VALUES (1,1,2),(1,2,20),(1,3,3),(1,4,1),(1,5,1),(2,1,4),(2,2,50),(2,3,4),(2,4,3),(2,5,2);
 /*!40000 ALTER TABLE `physicalresourceuse` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,7 +118,7 @@ CREATE TABLE `precedences` (
 
 LOCK TABLES `precedences` WRITE;
 /*!40000 ALTER TABLE `precedences` DISABLE KEYS */;
-INSERT INTO `precedences` VALUES (55,56),(60,56),(57,58),(59,60),(62,61),(63,62),(65,64),(66,65),(68,69),(73,72),(75,74),(76,74),(77,75),(77,76),(89,83),(86,85),(87,86),(57,92),(96,95),(97,96),(99,98),(100,99);
+INSERT INTO `precedences` VALUES (3,1),(3,2),(5,4),(7,6),(8,7);
 /*!40000 ALTER TABLE `precedences` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +147,7 @@ CREATE TABLE `project` (
   KEY `ClientProject_idx` (`idClient`),
   CONSTRAINT `ClientProject` FOREIGN KEY (`idClient`) REFERENCES `client` (`idClient`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ProjectManagerProject` FOREIGN KEY (`idProjectManager`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +156,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (60,'Progetto1',200000,9,66,'Finirlo magari','Troppe robe','Software Engeneering','2016-07-01','2016-01-01',0,NULL),(61,'progetto2Modified',20000,10,67,'boooh','bvooogogo','tech','2016-08-30','2016-02-01',0,NULL),(62,'ProvaCalcoloPesi',12345,9,68,'Speriamo','eeeeee','Nature','2016-07-01','2016-01-01',0,NULL),(63,'ProvaPesi2',12334,9,69,'pesiiii','qdhdhdh','Tech','2016-12-01','2016-09-01',0,NULL),(64,'ProvaDopoModifiche',12345,9,71,'shhdshs','dhhdhd','nature','2016-10-01','2016-05-01',0,1234),(65,'prova2',1234,10,72,'swjsjjs','hdhdh','tech','2017-02-03','2017-01-01',100,123),(66,'test',10000,9,73,'iufda','oigf','tech','2016-05-01','2016-03-01',0,1000),(67,'provaprecedence',12314,9,74,'a','a','tech','2016-07-30','2016-01-01',0,123),(68,'mao',10000,9,73,'zxczxc','zxc','tech','2016-09-01','2016-05-01',0,100),(69,'mao',123,9,74,'a','a','tech','2016-03-20','2016-03-03',0,123),(70,'progetto1',123,9,74,'a','a','nature','2016-05-03','2016-03-30',0,12),(71,'jumboooo',1234,9,66,'a','a','tech','2016-04-02','2016-03-03',0,13),(72,'test calcolo',1234,9,76,'as','as','tech','2016-12-01','2016-07-01',0,123),(74,'provaScheduler',1234,9,73,'a','a','nature','2016-05-01','2016-01-01',0,123),(75,'provaSchedulerEOutsourcing',1234,10,77,'asd','zxc','nature','2016-05-01','2016-01-01',0,123),(76,'progettoEdit',12345,9,78,'sd','zx','tech','2016-06-02','2016-03-30',0,234),(77,'testiamoAddDeveloper',100000,10,66,'zxc','asd','tech','2017-06-02','2017-01-02',0,100),(78,'testttttttttttttttttt',100000,9,66,'asd','asd','tech','2018-06-01','2018-01-01',0,123),(79,'Scheduler2',123,9,66,'asd','asd','tech','2016-05-01','2016-01-01',0,123),(80,'scheduler3',123,9,66,'asd','asd','tech','2016-05-01','2016-01-01',0,123);
+INSERT INTO `project` VALUES (1,'Progetto1',30000,9,1,'Vari ed eventuali obiettivi','Vari ed eventuali requisiti','Biologia, Natura, TeleControllo','2016-08-07','2016-03-07',0,29000),(2,'Progetto2InCorso',50000,9,2,'Vari obiettivi','Vari requisiti','Finanza, Business Intelligece','2016-06-01','2016-02-01',36.6723,45000);
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,13 +180,13 @@ CREATE TABLE `stage` (
   `rateWorkCompleted` float DEFAULT '0',
   `relativeWeight` float DEFAULT '0',
   `critical` enum('True','False') DEFAULT 'False',
-  `status` enum('Started','Delay','CriticalDelay','NotStarted') DEFAULT 'NotStarted',
+  `status` enum('Started','Delay','CriticalDelay','NotStarted','Finished') DEFAULT 'NotStarted',
   PRIMARY KEY (`idStage`),
   KEY `fk_Stage_Project_idx` (`idProject`),
   KEY `SupervisorStage_idx` (`idSupervisor`),
   CONSTRAINT `ProjectStage` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `SupervisorStage` FOREIGN KEY (`idSupervisor`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +195,7 @@ CREATE TABLE `stage` (
 
 LOCK TABLES `stage` WRITE;
 /*!40000 ALTER TABLE `stage` DISABLE KEYS */;
-INSERT INTO `stage` VALUES (55,'Requirements Analysis','2016-01-01','2016-01-07',12,60,'Requirements table','The project requirements by the client','False',50,NULL,'False','NotStarted'),(56,'Domain Model','2016-01-08','2016-01-17',11,60,'The domain model diagram','Requirements analysis','False',0,NULL,'False','NotStarted'),(57,'Stageee','2016-02-01','2016-03-01',14,61,'djjd','djjdj','False',0,44.7761,'True','NotStarted'),(58,'stagerrr','2016-03-02','2016-03-20',11,61,'erthygdf','ertghy','False',0,28.3582,'True','NotStarted'),(59,'Stage2','2016-01-04','2016-01-31',15,60,'hdhdhd','hdhdhd','False',100,NULL,'False','NotStarted'),(60,'Stage3','2016-01-31','2016-02-28',14,60,'hdhdh','eehhe','False',0,NULL,'False','NotStarted'),(61,'Analisi dei requisiti','2016-01-01','2016-01-15',14,62,'tabella dei requisiti, casi d\'uso','testo progetto','False',0,0,'False','NotStarted'),(62,'Modello di dominio','2016-01-15','2016-01-31',13,62,'diagramma del modello di dominio','casi d\'uso','False',0,0,'False','NotStarted'),(63,'Diagrammi SSD','2016-02-01','2016-02-15',12,62,'diagrammi ssd','modello di dominio, contratti delle operazioni','False',0,0,'False','NotStarted'),(64,'Faccio la spesa','2016-09-01','2016-09-15',11,63,'spesa','niente','False',0,33.3333,'False','NotStarted'),(65,'Calo la pasta','2016-09-16','2016-09-30',15,63,'pasta cotta','spesa, acqua sul fuoco','False',0,33.3333,'False','NotStarted'),(66,'Cucino l\'uovo','2016-10-01','2016-10-15',15,63,'uovo cotto','pasta nell\'acqua','False',0,33.3333,'False','NotStarted'),(67,'Dipo','2016-03-01','2016-03-30',9,60,'fhhf','fhhfhf','True',0,0,'False','NotStarted'),(68,'stage233234','2016-05-01','2016-05-30',14,64,'stage242jjdhfhd','dhhdhdhd','False',0,66.6667,'False','NotStarted'),(69,'Stageg48474','2016-06-01','2016-06-15',13,64,'dhfhkjdfhjk','fhjhddj','False',0,33.3333,'False','NotStarted'),(70,'Provaupdate1','2017-01-01','2017-01-10',10,65,'jdd','qhfhfh','False',100,29.4118,'False','NotStarted'),(71,'Provastageupdate2','2017-01-08','2017-01-31',16,65,'jdd','djjjdsjds','False',100,70.5882,'False','NotStarted'),(72,'stage1','2016-03-02','2016-03-20',10,66,'oahgÃ²','idausgi','False',0,38.7755,'False','NotStarted'),(73,'stage2','2016-04-01','2016-04-30',11,66,'Ã²gfaÃ aihgo','akfyugtyeg','False',0,61.2245,'False','NotStarted'),(74,'stagea','2016-01-01','2016-01-05',16,67,'a','a','False',0,31.25,'True','NotStarted'),(75,'stageB','2016-01-06','2016-01-11',10,67,'b','b','False',0,37.5,'True','NotStarted'),(76,'stageC','2016-01-07','2016-01-08',11,67,'c','c','False',0,12.5,'False','NotStarted'),(77,'stageD','2016-01-12','2016-01-14',12,67,'d','d','False',0,18.75,'True','NotStarted'),(78,'stage1','2016-07-02','2016-08-01',10,72,'asd','zxc','False',0,100,'False','NotStarted'),(82,'A','2016-01-01','2016-01-15',16,74,'a','a','False',0,12.0968,'True','NotStarted'),(83,'B','2016-01-16','2016-02-27',12,74,'b','b','False',0,34.6774,'True','NotStarted'),(84,'C','2016-02-28','2016-04-30',12,74,'c','c','False',0,50,'True','NotStarted'),(85,'A','2016-01-01','2016-01-15',16,75,'a','a','False',0,16.4835,'True','NotStarted'),(86,'B','2016-01-16','2016-02-27',11,75,'b','b','False',0,47.2527,'True','NotStarted'),(87,'C','2016-02-28','2016-04-01',11,75,'c','c','False',0,36.2637,'True','NotStarted'),(88,'nuovoStageDijumbo','2016-03-02','2016-03-20',11,71,'s','s','False',0,100,'True','NotStarted'),(89,'stageTestPrecedencesEdit','2016-02-28','2016-03-02',13,74,'asd','zxc','False',0,3.22581,'True','NotStarted'),(90,'stagenuovo','2016-02-02','2016-02-29',NULL,61,'s','s','False',0,0,'False','NotStarted'),(91,'stagenuovo','2016-02-02','2016-05-06',NULL,61,'s','s','False',0,0,'False','NotStarted'),(92,'newStage','2016-03-03','2016-03-20',12,61,'a','a','False',0,26.8657,'False','NotStarted'),(93,'stage1','2017-01-03','2017-01-30',10,77,'asd','zxc','False',0,100,'True','NotStarted'),(94,'stage1','2018-01-01','2018-01-30',12,78,'asd','zxc','False',0,100,'True','NotStarted'),(95,'A','2016-01-01','2016-01-15',10,79,'a','a','False',0,20,'True','CriticalDelay'),(96,'B','2016-01-16','2016-02-27',11,79,'B','B','False',0,57.3333,'True','CriticalDelay'),(97,'C','2016-02-28','2016-03-15',11,79,'C','C','False',0,22.6667,'True','Started'),(98,'A','2016-01-01','2016-01-15',11,80,'A','A','False',0,16.8539,'True','CriticalDelay'),(99,'B','2016-01-16','2016-02-27',11,80,'B','B','False',0,48.3146,'True','CriticalDelay'),(100,'C','2016-02-28','2016-03-30',11,80,'C','C','False',0,34.8315,'True','NotStarted');
+INSERT INTO `stage` VALUES (1,'Stage1','2016-03-07','2016-04-07',14,1,'Vari ed eventuali obiettivi','Vari ed eventuali requisiti','False',0,17.9191,'True','NotStarted'),(2,'Stage2','2016-03-07','2016-03-25',13,1,'vari ed eventuali obiettivi','vari ed eventuali requisiti','False',0,10.9827,'False','NotStarted'),(3,'Stage3','2016-04-07','2016-08-07',15,1,'vari','vari','False',0,71.0983,'True','NotStarted'),(4,'Prima fase','2016-02-01','2016-02-15',10,2,'Vari obiettivi','Vari requisiti','False',100,10.3448,'True','Finished'),(5,'Seconda fase','2016-02-15','2016-03-01',12,2,'Vari obiettivi','Vari requisiti','False',100,11.0345,'True','Finished'),(6,'Terza fase','2016-02-10','2016-03-15',11,2,'Vari obiettivi','Vari requisiti','False',30.5556,24.1379,'True','Started'),(7,'Quarta fase','2016-03-15','2016-04-15',13,2,'Vari obiettivi','Vari requisiti','False',0,21.3793,'True','NotStarted'),(8,'Quinta fase','2016-04-15','2016-06-01',16,2,'Vari obiettivi','Vari requisiti','False',0,33.1034,'True','NotStarted');
 /*!40000 ALTER TABLE `stage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +217,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`idTask`),
   KEY `fk_Task_Stage1_idx` (`idStage`),
   CONSTRAINT `StageTask` FOREIGN KEY (`idStage`) REFERENCES `stage` (`idStage`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +226,7 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
-INSERT INTO `task` VALUES (1,'2016-02-01','2016-02-05',55,'True','Task1',21.875),(2,'2016-02-05','2016-02-10',55,'False','Task2',25),(3,'2016-01-01','2016-01-10',56,'False','fhfhfhd',NULL),(4,'2016-09-01','2016-09-03',64,'False',NULL,NULL),(5,'2016-09-04','2016-09-08',64,'False','compro la pasta',NULL),(6,'2016-09-16','2016-09-18',65,'False','riempio la pentola',NULL),(7,'2016-10-01','2016-10-05',66,'False','boooh',NULL),(8,'2016-01-08','2016-01-10',56,'False','task2234',NULL),(9,'2016-01-10','2016-01-13',56,'False','task57755',NULL),(10,'2016-01-04','2016-01-07',59,'True','taskerello',28.5714),(11,'2016-01-08','2016-01-11',59,'True','taskerello2',28.5714),(12,'2016-01-12','2016-01-17',59,'True','taskerello3',42.8571),(14,'2016-05-01','2016-05-05',68,'False','tasker',50),(15,'2016-05-06','2016-05-10',68,'False','tasker2',50),(16,'2017-01-01','2017-01-05',70,'True','provataskupdate1',50),(17,'2017-01-06','2017-01-10',70,'True','provataskupdat2',50),(18,'2017-01-08','2017-01-15',71,'True','taskissimo1',33.3333),(19,'2017-01-16','2017-01-31',71,'True','taskerello2',66.6667),(20,'2016-02-20','2016-03-10',78,'False','task1',15.3846),(21,'2016-07-20','2016-07-25',78,'False','task2',15.3846),(22,'2016-09-01','2016-09-20',78,'False','task3',38.4615),(23,'2016-09-22','2016-09-30',78,'False','task4',17.3077),(24,'2016-09-24','2016-09-30',78,'False','task5',13.4615),(40,'2016-02-01','2016-02-20',85,'False','task15',100),(41,'2016-05-05','2016-05-10',70,'False','nuovoTask',NULL),(42,'2017-01-05','2017-01-07',93,'False','task',NULL),(43,'2018-01-05','2018-01-10',94,'False','task1',17.6471),(44,'2018-02-02','2018-02-10',94,'False','provacazzo',26.4706),(45,'2018-02-02','2018-02-20',94,'False','vediamo',55.8824);
+INSERT INTO `task` VALUES (1,'2016-03-07','2016-03-15',1,'False','Task1',27.2727),(2,'2016-03-15','2016-03-25',1,'False','Task2',33.3333),(3,'2016-03-25','2016-04-07',1,'False','Task3',39.3939),(4,'2016-03-07','2016-03-10',2,'False','Task4',21.0526),(5,'2016-03-11','2016-03-25',2,'False','Task5',78.9474),(6,'2016-04-07','2016-05-07',3,'False','Task6',24.4094),(7,'2016-05-07','2016-05-20',3,'False','Task7',11.0236),(8,'2016-05-20','2016-06-10',3,'False','Task8',17.3228),(9,'2016-06-10','2016-06-30',3,'False','Task9',16.5354),(10,'2016-07-01','2016-07-15',3,'False','Task10',11.811),(11,'2016-07-15','2016-08-07',3,'False','Task11',18.8976),(12,'2016-02-01','2016-02-07',4,'True','Primo task',38.8889),(13,'2016-02-05','2016-02-15',4,'True','Secondo task',61.1111),(14,'2016-02-15','2016-02-20',5,'True','Terzo task',35.2941),(15,'2016-02-20','2016-03-01',5,'True','Quarto task',64.7059),(16,'2016-02-10','2016-02-20',6,'True','FooTask',30.5556),(17,'2016-02-20','2016-03-15',6,'False','FooBarTask',69.4444),(18,'2016-03-15','2016-03-30',7,'False','BazTask',44.1176),(19,'2016-03-28','2016-04-15',7,'False','FooBar42',55.8824);
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,7 +255,7 @@ CREATE TABLE `taskdevelopment` (
 
 LOCK TABLES `taskdevelopment` WRITE;
 /*!40000 ALTER TABLE `taskdevelopment` DISABLE KEYS */;
-INSERT INTO `taskdevelopment` VALUES (12,1,'False',30),(12,11,'True',32),(12,20,'False',64),(12,24,'False',56),(13,21,'False',64),(14,8,'False',18),(14,9,'False',6),(14,12,'True',34),(14,15,'False',30),(14,23,'False',18),(15,1,'False',10),(15,6,'False',18),(15,8,'False',6),(15,9,'False',18),(15,10,'True',24),(15,12,'True',14),(15,23,'False',54),(16,10,'True',8),(16,22,'False',160),(18,14,'False',40),(18,40,'False',88),(23,15,'False',10),(23,18,'True',64),(24,16,'True',40),(25,9,'False',8),(25,17,'True',40),(25,45,'False',152),(26,19,'True',128);
+INSERT INTO `taskdevelopment` VALUES (12,7,'False',28),(12,14,'True',36),(13,17,'True',96),(14,3,'False',84),(14,14,'True',12),(14,19,'False',46),(15,7,'False',84),(15,8,'False',48),(16,4,'False',32),(16,15,'True',88),(16,17,'False',80),(18,19,'False',106),(19,6,'False',248),(19,18,'False',120),(20,2,'False',88),(21,9,'False',168),(22,3,'False',20),(22,13,'True',56),(22,16,'True',32),(23,8,'False',128),(23,12,'True',56),(23,13,'True',32),(24,11,'False',120),(25,5,'False',120),(25,16,'True',56),(25,17,'True',24),(26,1,'False',72),(26,10,'False',120),(26,11,'False',72);
 /*!40000 ALTER TABLE `taskdevelopment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +276,7 @@ CREATE TABLE `user` (
   `skills` varchar(300) DEFAULT NULL,
   `mail` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,4 +298,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-03 11:25:26
+-- Dump completed on 2016-03-05 21:02:38
