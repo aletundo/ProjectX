@@ -31,7 +31,7 @@ public class CompleteWorkServlet extends HttpServlet {
             task.setIdTask(Integer.parseInt(request.getParameter("idTask")));
             task.setIdDeveloper((Integer) request.getSession().getAttribute("idUser"));
 
-            TaskDAO.getInstance().setPieceWorkCompleted(task);
+            TaskDAO.getInstance().setPieceWorkCompleted(task, "True");
             UpdateRateCompleted.checkTaskCompleted(task.getIdTask());
 
             response.sendRedirect(request.getContextPath() + "/task?idTask=" + task.getIdTask());

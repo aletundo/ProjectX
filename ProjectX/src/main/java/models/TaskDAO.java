@@ -103,16 +103,17 @@ public class TaskDAO {
 
     }
 
-    public void setPieceWorkCompleted(TaskBean task) {
+    public void setPieceWorkCompleted(TaskBean task, String status) {
         PreparedStatement statement = null;
         Connection currentConn = DbConnection.connect();
 
         if (currentConn != null) {
-            final String setTasksWeight = "UPDATE taskdevelopment AS TD SET TD.workCompleted = 'True' WHERE TD.idTask = ? AND TD.idDeveloper = ?";
+            final String setTasksWeight = "UPDATE taskdevelopment AS TD SET TD.workCompleted = ? WHERE TD.idTask = ? AND TD.idDeveloper = ?";
             try {
                 statement = currentConn.prepareStatement(setTasksWeight);
-                statement.setInt(1, task.getIdTask());
-                statement.setInt(2, task.getIdDeveloper());
+                statement.setString(1, status);
+                statement.setInt(2, task.getIdTask());
+                statement.setInt(3, task.getIdDeveloper());
                 statement.executeUpdate();
 
             } catch (SQLException e) {
@@ -322,12 +323,49 @@ public class TaskDAO {
     }
 
     public boolean addDeveloper(TaskBean task, long hoursRequired) {
+        List<UserBean> developers = getAllDevelopersByIdTask(task.getIdTask());
+        String status = "";
+        String query = "";
+        for(UserBean developer : developers){
+            if(task.getIdDeveloper() == developer.getIdUser()){
+                query = "UPDATE taskdevelopment AS T SET T.hoursRequired = T.hoursRequired + ? "
+                        + "WHERE T.idTask = ? AND T.idDeveloper = ?";
+            }
+        }
+        
         PreparedStatement statement = null;
+        ResultSet rs = null;
         boolean updated = false;
         Connection currentConn = DbConnection.connect();
+        final String updateTaskDevelopmentQuery = query;
+        final String getWorkStatusQuery = "SELECT TS.workCompleted AS WorkCompleted FROM taskdevelopment AS TS "
+                + "WHERE TS.idTask = ? AND TS.idDeveloper = ?";
         final String addDeveloperQuery = "INSERT INTO taskdevelopment (idDeveloper, idTask, hoursRequired) VALUES (?, ?, ?)";
         if (currentConn != null) {
             try {
+                if(!query.equals("")){
+                    statement = currentConn.prepareStatement(updateTaskDevelopmentQuery);
+                    statement.setInt(1, (int) hoursRequired);
+                    statement.setInt(2, task.getIdTask());
+                    statement.setInt(3, task.getIdDeveloper());
+                    
+                    statement.executeUpdate();
+                    updated = true;
+                    
+                    statement.close();
+                    
+                    statement = currentConn.prepareStatement(getWorkStatusQuery);
+                    statement.setInt(1, task.getIdTask());
+                    statement.setInt(2, task.getIdDeveloper());
+                    
+                    rs = statement.executeQuery();
+                    
+                    while(rs.next()){
+                        status = rs.getString("WorkCompleted");
+                    }
+                    rs.close();
+                }
+                else{
                 statement = currentConn.prepareStatement(addDeveloperQuery);
                 statement.setInt(1, task.getIdDeveloper());
                 statement.setInt(2, task.getIdTask());
@@ -335,6 +373,12 @@ public class TaskDAO {
 
                 statement.executeUpdate();
                 updated = true;
+                statement.close();
+                }
+                
+                if(status.equals("True")){
+                    setPieceWorkCompleted(task, "False");
+                }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Something went wrong during setting developer of task " + task.toString(), e);
             } finally {
