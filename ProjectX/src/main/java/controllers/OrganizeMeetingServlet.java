@@ -70,6 +70,7 @@ public class OrganizeMeetingServlet extends HttpServlet {
 		}
 		
 		Map<String, String> messages = new HashMap<>();
+		RequestDispatcher dispatcher;
         request.setAttribute("messages", messages);
 
 		try {
@@ -81,6 +82,8 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				String object = request.getParameter("object");
 				String message = request.getParameter("message");
 				sendEmailToSupervisors(request, pmMail, clientMail, object, message, messages);
+				dispatcher = getServletContext().getRequestDispatcher("/views/organize-client-meeting.jsp");
+				dispatcher.forward(request, response);
 
 			} else if (request.getParameter("idStage") != null) {
 				String supervisorMail = UserDAO.getInstance()
@@ -90,10 +93,9 @@ public class OrganizeMeetingServlet extends HttpServlet {
 				List<String> developersMail = UserDAO.getInstance()
 						.getAllDevelopersMail(Integer.parseInt(request.getParameter("idStage")));
 				sendEmailToDevelopers(request, supervisorMail, object, message, developersMail, messages);
+				dispatcher = getServletContext().getRequestDispatcher("/views/organize-stage-meeting.jsp");
+				dispatcher.forward(request, response);
 			}
-			
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/organize-stage-meeting.jsp");
-			dispatcher.forward(request, response);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during organize a meeting", e);
 		}
