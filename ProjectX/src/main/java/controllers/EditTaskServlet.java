@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -36,15 +35,13 @@ public class EditTaskServlet extends HttpServlet {
 
 			int idTask = Integer.parseInt(request.getParameter("idTask"));
 			TaskBean task = TaskDAO.getInstance().getTaskInfo(idTask);
-
 			HttpSession session = request.getSession();
-			request.setAttribute("task", task);
 			session.setAttribute("task", task);
 
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/edit-task.jsp");
 			dispatcher.forward(request, response);
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Something went wrong during getting edit project page", e);
+			LOGGER.log(Level.SEVERE, "Something went wrong during getting edit task page", e);
 		}
 	}
 
@@ -65,14 +62,13 @@ public class EditTaskServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 				return;
 			}
-
+			
+			TaskBean oldTask = (TaskBean) request.getSession().getAttribute("task");
 			String name = request.getParameter("name");
-
-			int idStage = Integer.parseInt(request.getParameter("idStage"));
-
+			int idStage = oldTask.getIdStage();
+			int idTask = oldTask.getIdTask();
+			
 			TaskBean task = new TaskBean();
-
-			int idTask = Integer.parseInt(request.getParameter("idTask"));
 			task.setIdTask(idTask);
 
 			Map<String, Object> attributes = new HashMap<>();
@@ -83,15 +79,14 @@ public class EditTaskServlet extends HttpServlet {
 			String startDay = request.getParameter("startday");
 			attributes.put("startDay", startDay);
 
-			TaskBean oldTask = (TaskBean) request.getSession().getAttribute("task");
 			String oldFinishDay = oldTask.getFinishDay();
 
 			request.getSession().removeAttribute("task");
 
 			TaskDAO.getInstance().updateTask(task, attributes);
-			if (idTask != Integer.MIN_VALUE)
-				response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask="
-						+ idTask + "&startDay=" + oldFinishDay + "&finishDay=" + finishDay);
+
+			response.sendRedirect(request.getContextPath() + "/adddeveloper?idStage=" + idStage + "&idTask=" + idTask
+					+ "&startDay=" + oldFinishDay + "&finishDay=" + finishDay);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Something went wrong during editing task", e);
 		}

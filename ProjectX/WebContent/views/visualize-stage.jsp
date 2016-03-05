@@ -23,7 +23,7 @@
 						href="./addtask?idStage=${requestScope.stage.idStage }"><i
 						class="fa fa-plus"></i>&nbsp;Add tasks</a> <a
 						class="btn btn-danger btn-sm pull-right"
-						href="./editstage?idStage=${requestScope.stage.idStage }"><i
+						href="./editstage?idProject=${requestScope.stage.idProject }&idStage=${requestScope.stage.idStage }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a> <a
 						class="btn btn-info btn-sm pull-right"
 						href="./organizemeeting?idStage=${requestScope.stage.idStage }"><i

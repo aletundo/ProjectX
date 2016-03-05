@@ -3,14 +3,12 @@ package controllers.utils;
 import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
 import controllers.utils.CalculateAvailableUsers;
-import models.ProjectBean;
 import models.StageBean;
 import models.TaskBean;
 import models.UserBean;

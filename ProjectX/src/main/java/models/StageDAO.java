@@ -24,7 +24,7 @@ public class StageDAO {
         return INSTANCE;
     }
     
-    public static String createUpdateStageQuery(Map<String, Object> attributes) {
+    public String createUpdateStageQuery(Map<String, Object> attributes) {
 
         String query = "UPDATE stage AS S SET";
 
@@ -96,7 +96,7 @@ public class StageDAO {
         }
     }
     
-    public static void setStatusStage(int idStage, String status) {
+    public void setStatusStage(int idStage, String status) {
         PreparedStatement statement = null;
         Connection currentConn = DbConnection.connect();
 

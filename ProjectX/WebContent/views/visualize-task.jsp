@@ -20,7 +20,7 @@
 						<c:out value="${requestScope.task.name }"></c:out>
 					</h3>
 					<a class="btn btn-danger btn-sm pull-right"
-						href="./edittask?idTask=${requestScope.task.idTask }"><i
+						href="./edittask?idStage=${requestScope.task.idStage }&idTask=${requestScope.task.idTask }"><i
 						class="fa fa-pencil"></i>&nbsp;Edit</a>
 					<form action="./setworkcompleted?idTask=${requestScope.task.idTask }" method="POST">
 					<button class="btn btn-success btn-sm pull-right" type="submit"><i

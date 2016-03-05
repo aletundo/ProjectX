@@ -14,29 +14,28 @@
 			Enter your changes and update the task.
 			<hr>
 			<form class="form col-md-12 center-block"
-				action="${pageContext.request.contextPath}/edittask?idTask=${requestScope.task.idTask}&idStage=${requestScope.task.idStage}" method="POST" role="form"
+				action="./edittask?idStage=${sessionScope.task.idStage }" method="POST" role="form"
 				autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">Name</span> <input type="text"
-						class="form-control" placeholder="${requestScope.task.name}" name="name"  value="${fn:escapeXml(param.name)}" />
+						class="form-control" placeholder="${sessionScope.task.name}" name="name"  value="${fn:escapeXml(param.name)}" />
 				</div>
 				<span class="help-block">${messages.name}</span> <br>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Start day</span> <input
 						class="form-control" type="text"
-						placeholder="${requestScope.task.startDay}" name="startday"  value="${fn:escapeXml(param.startday)}" />
+						placeholder="${sessionScope.task.startDay}" name="startday"  value="${fn:escapeXml(param.startday)}" />
 				</div>
 				<span class="help-block">${messages.startday}</span> <br>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Finish day</span> <input
 						class="form-control" type="text"
-						placeholder="${requestScope.task.finishDay}" name="finishday"  value="${fn:escapeXml(param.finishday)}" />
+						placeholder="${sessionScope.task.finishDay}" name="finishday"  value="${fn:escapeXml(param.finishday)}" />
 				</div>
 				<span class="help-block">${messages.finishday}</span> <br>
 				<br>
-				<input type="hidden" value="${param.idTask}" name="id-task"/>
 				
 				<br> <br>
 				<div class="input-group pull-right">

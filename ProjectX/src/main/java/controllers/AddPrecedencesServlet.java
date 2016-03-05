@@ -96,8 +96,6 @@ public class AddPrecedencesServlet extends HttpServlet {
                 service.scheduleAtFixedRate(scheduler, 0, 24, TimeUnit.HOURS);
                 request.getSession().removeAttribute("stages");
                 request.getSession().removeAttribute("stagesQueue");
-                /*response.sendRedirect(request.getContextPath() + "/project?idProject="
-                        + Integer.parseInt(request.getParameter("idProject")));*/
                 response.sendRedirect(request.getContextPath() + "/addphysicalresources?idProject="
                 + Integer.parseInt(request.getParameter("idProject")));
             }

@@ -78,10 +78,7 @@ public class AddDeveloperServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String host = "localhost";
-        String port = ""; /* TODO check port */
-        final String pw = ""; /* TODO check password */
-        String userName = "";
+    	
         Map<String, String> messages = new HashMap<>();
         request.setAttribute("messages", messages);
 
@@ -105,14 +102,15 @@ public class AddDeveloperServlet extends HttpServlet {
                 stage.setIdSupervisor(idSupervisor);
                 stage.setIdStage(idStage);
                 stage.setOutsourcing("True");
-                // TODO Modify message
-                String object = "[OUTSOURCING]";
-                String message = "Can i ask you," + companyName + " , if you can outsorce some resources to us?";
 
                 TaskDAO.getInstance().removeTasksWhenOutsourcing(idStage);
                 StageDAO.getInstance().addSupervisor(stage);
-
-                controllers.utils.SendEmail.sendEmail(host, port, userName, pw, companyMail, object, message);
+                
+                String host = "localhost";
+                String from = "fooCompany@bar.baz";
+                String subject = "[OUTSOURCING]";
+                String message = "Dear " + companyName + ", We are writing to ask you to carry out a stage of our project...";
+                controllers.utils.SendEmail.sendEmail(companyMail, from, subject, message, host);
 
                 request.getSession().removeAttribute("candidates");
                 response.sendRedirect(request.getContextPath() + "/stage?idStage="
