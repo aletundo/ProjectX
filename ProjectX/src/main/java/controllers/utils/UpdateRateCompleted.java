@@ -52,6 +52,7 @@ public class UpdateRateCompleted {
 			rateWorkCompletedToUpdate = 100;
 			int[] idAuthorizedUsers = StageDAO.getInstance().checkIdProjectManagerOrSupervisor(task.getIdStage());
 			NotifyManager.notifyStageCompleted(idAuthorizedUsers[0]);
+			StageDAO.getInstance().setStatusStage(task.getIdStage(), "Finished");
 		}
 		StageDAO.getInstance().setRateWorkCompleted(task.getIdStage(), rateWorkCompletedToUpdate);
 		updateProjectRatecompleted(task.getIdStage());

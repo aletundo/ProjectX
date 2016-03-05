@@ -69,14 +69,17 @@ public class OrganizeMeetingServlet extends HttpServlet {
 
 		try {
 			if (request.getParameter("idProject") != null) {
-				String pmMail = request.getParameter("pm-mail");
-				String clientMail = request.getParameter("client-mail");
+				String pmMail = UserDAO.getInstance()
+						.getGenericUserMailById((Integer) request.getSession().getAttribute("idUser"));
+				String clientMail = ClientDAO.getInstance()
+						.getClientMail(Integer.parseInt(request.getParameter("idProject")));
 				String object = request.getParameter("object");
 				String message = request.getParameter("message");
 				sendEmailToSupervisors(request, pmMail, clientMail, object, message);
 
 			} else if (request.getParameter("idStage") != null) {
-				String supervisorMail = request.getParameter("supervisor-mail");
+				String supervisorMail = UserDAO.getInstance()
+						.getGenericUserMailById((Integer) request.getSession().getAttribute("idUser"));
 				String object = request.getParameter("object");
 				String message = request.getParameter("message");
 				List<String> developersMail = UserDAO.getInstance()

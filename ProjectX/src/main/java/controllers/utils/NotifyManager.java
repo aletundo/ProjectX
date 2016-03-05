@@ -78,7 +78,7 @@ public class NotifyManager {
 	public static void notifyCriticalStages(StageBean stage) {
 		try {
 
-			String to = UserDAO.getInstance().getGenericUserMailById(stage.getIdStage());
+			String to = UserDAO.getInstance().getGenericUserMailById(stage.getIdSupervisor());
 			String pmMail = UserDAO.getInstance().getProjectManagerMailByIdStage(stage.getIdStage());
 			String subject = "[PROJECT DELAY]";
 			String message = "A critical stage should have ended but it has not yet done it and now the entire project is delaying.";
